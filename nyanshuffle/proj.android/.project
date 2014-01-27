@@ -49,7 +49,7 @@
 		<link>
 			<name>cocos2dx</name>
 			<type>2</type>
-			<locationURI>COCOS2DX</locationURI>
+			<locationURI>COCOS2DX/cocos2dx</locationURI>
 		</link>
 		<link>
 			<name>extensions</name>
@@ -59,7 +59,7 @@
 		<link>
 			<name>scripting</name>
 			<type>2</type>
-			<locationURI>COCOS2DX/projects/nyanshuffle/cocos2d/cocos/scripting</locationURI>
+			<locationURI>COCOS2DX/scripting</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
