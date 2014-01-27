@@ -44,12 +44,12 @@
 		<link>
 			<name>Classes</name>
 			<type>2</type>
-			<locationURI>COCOS2DX/projects/nyanshuffle/Classes</locationURI>
+			<locationURI>COCOS2DX/projects/native_test/nyanshuffle/Classes</locationURI>
 		</link>
 		<link>
 			<name>cocos2dx</name>
 			<type>2</type>
-			<locationURI>COCOS2DX/cocos2dx</locationURI>
+			<locationURI>COCOS2DX</locationURI>
 		</link>
 		<link>
 			<name>extensions</name>
@@ -59,7 +59,7 @@
 		<link>
 			<name>scripting</name>
 			<type>2</type>
-			<locationURI>COCOS2DX/scripting</locationURI>
+			<locationURI>COCOS2DX/projects/native_test/nyanshuffle/cocos2d/cocos/scripting</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

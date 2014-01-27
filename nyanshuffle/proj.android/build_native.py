@@ -15,7 +15,7 @@ def check_environment_variables_sdk():
     try:
         SDK_ROOT = os.environ['ANDROID_SDK_ROOT']
     except Exception:
-        print "ANDROID_SDK_ROOT not defined. Please define ANDROID_SDK_ROOT in your environment"
+        print("ANDROID_SDK_ROOT not defined. Please define ANDROID_SDK_ROOT in your environment")
         sys.exit(1)
 
     return SDK_ROOT
@@ -27,7 +27,7 @@ def check_environment_variables():
     try:
         NDK_ROOT = os.environ['NDK_ROOT']
     except Exception:
-        print "NDK_ROOT not defined. Please define NDK_ROOT in your environment"
+        print("NDK_ROOT not defined. Please define NDK_ROOT in your environment")
         sys.exit(1)
 
     return NDK_ROOT
@@ -43,12 +43,12 @@ def select_toolchain_version():
     ndk_root = check_environment_variables()
     if os.path.isdir(os.path.join(ndk_root,"toolchains/arm-linux-androideabi-4.8")):
         os.environ['NDK_TOOLCHAIN_VERSION'] = '4.8'
-        print "The Selected NDK toolchain version was 4.8 !"
+        print("The Selected NDK toolchain version was 4.8 !")
     elif os.path.isdir(os.path.join(ndk_root,"toolchains/arm-linux-androideabi-4.7")):
         os.environ['NDK_TOOLCHAIN_VERSION'] = '4.7'
-        print "The Selected NDK toolchain version was 4.7 !"
+        print("The Selected NDK toolchain version was 4.7 !")
     else:
-        print "Couldn't find the gcc toolchain."
+        print("Couldn't find the gcc toolchain.")
         exit(1)
 
 def do_build(cocos_root, ndk_root, app_android_root,ndk_build_param,sdk_root,android_platform,build_mode):
@@ -69,17 +69,17 @@ def do_build(cocos_root, ndk_root, app_android_root,ndk_build_param,sdk_root,and
     if os.system(command) != 0:
         raise Exception("Build dynamic library for project [ " + app_android_root + " ] fails!")
     elif android_platform is not None:
-    	  sdk_tool_path = os.path.join(sdk_root, "tools/android")
-    	  cocoslib_path = os.path.join(cocos_root, "cocos/2d/platform/android/java")
-    	  command = '%s update lib-project -t %s -p %s' % (sdk_tool_path,android_platform,cocoslib_path) 
-    	  if os.system(command) != 0:
-    	  	  raise Exception("update cocos lib-project [ " + cocoslib_path + " ] fails!")  	  
-    	  command = '%s update project -t %s -p %s -s' % (sdk_tool_path,android_platform,app_android_root)
-    	  if os.system(command) != 0:
-    	  	  raise Exception("update project [ " + app_android_root + " ] fails!")    	  	  
-    	  buildfile_path = os.path.join(app_android_root, "build.xml")
-    	  command = 'ant clean %s -f %s -Dsdk.dir=%s' % (build_mode,buildfile_path,sdk_root)
-    	  os.system(command)
+          sdk_tool_path = os.path.join(sdk_root, "tools/android")
+          cocoslib_path = os.path.join(cocos_root, "cocos/2d/platform/android/java")
+          command = '%s update lib-project -t %s -p %s' % (sdk_tool_path,android_platform,cocoslib_path) 
+          if os.system(command) != 0:
+                raise Exception("update cocos lib-project [ " + cocoslib_path + " ] fails!")        
+          command = '%s update project -t %s -p %s -s' % (sdk_tool_path,android_platform,app_android_root)
+          if os.system(command) != 0:
+                raise Exception("update project [ " + app_android_root + " ] fails!")                
+          buildfile_path = os.path.join(app_android_root, "build.xml")
+          command = 'ant clean %s -f %s -Dsdk.dir=%s' % (build_mode,buildfile_path,sdk_root)
+          os.system(command)
 
 def copy_files(src, dst):
 
@@ -119,15 +119,15 @@ def build(ndk_build_param,android_platform,build_mode):
     copy_resources(app_android_root)
     
     if android_platform is not None:
-				sdk_root = check_environment_variables_sdk()
-				if android_platform.isdigit():
-						android_platform = 'android-'+android_platform
-				else:
-						print 'please use vaild android platform'
-						exit(1)
-		
+                sdk_root = check_environment_variables_sdk()
+                if android_platform.isdigit():
+                        android_platform = 'android-'+android_platform
+                else:
+                        print('please use vaild android platform')
+                        exit(1)
+        
     if build_mode is None:
-    	  build_mode = 'debug'
+          build_mode = 'debug'
     elif build_mode != 'release':
         build_mode = 'debug'
     
