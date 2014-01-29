@@ -9,11 +9,11 @@ typedef struct tagResource
     char directory[100];
 } Resource;
 
-static Resource smallResource  = { cocos2d::SizeMake( 512,  384), "S"};
-static Resource mediumResource = { cocos2d::SizeMake(1024,  768), "M"};
-static Resource largeResource  = { cocos2d::SizeMake(2048, 1536), "L"};
+static Resource smallResource  = { cocos2d::CCSizeMake( 512,  384), "S"};
+static Resource mediumResource = { cocos2d::CCSizeMake(1024,  768), "M"};
+static Resource largeResource  = { cocos2d::CCSizeMake(2048, 1536), "L"};
 
-static cocos2d::Size designResolutionSize = cocos2d::SizeMake(1024, 768);
+static cocos2d::Size designResolutionSize = cocos2d::CCSizeMake(1024, 768);
 
 #define LEVEL_FONT_SIZE (cocos2d::EGLView::sharedOpenGLView()->getDesignResolutionSize().width / mediumResource.size.width * 48)
 

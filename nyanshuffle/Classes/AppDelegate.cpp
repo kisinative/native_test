@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "AppMacros.h"
+#include "TitleScene.h"
 
 USING_NS_CC;
 
@@ -12,23 +13,44 @@ AppDelegate::~AppDelegate()
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
-    // initialize director
-    auto director = Director::getInstance();
-    auto eglView = EGLView::getInstance();
+    Director* pDirector = Director::sharedDirector();
+    EGLView* pEGLView   = EGLView::sharedOpenGLView();
 
-    director->setOpenGLView(eglView);
+    pDirector->setOpenGLView(pEGLView);
 	
-    // turn on display FPS
-    director->setDisplayStats(true);
+    // デザインサイズの設定
+    pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionExactFit);
 
-    // set FPS. the default value is 1.0/60 if you don't call this
-    director->setAnimationInterval(1.0 / 60);
+    Size frameSize = pEGLView->getFrameSize();
 
-    // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+    std::vector<std::string> searchPath;
 
-    // run
-    director->runWithScene(scene);
+    if (frameSize.height > mediumResource.size.height)
+    {
+        // 「L」ディレクトリのリソースを使用
+        searchPath.push_back(largeResource.directory);
+        pDirector->setContentScaleFactor(MIN(largeResource.size.height / designResolutionSize.height, largeResource.size.width / designResolutionSize.width));
+    }
+    else if (frameSize.height > smallResource.size.height)
+    {
+        // 「M」ディレクトリのリソースを使用
+        searchPath.push_back(mediumResource.directory);
+        pDirector->setContentScaleFactor(MIN(mediumResource.size.height / designResolutionSize.height, mediumResource.size.width / designResolutionSize.width));
+    }
+    else
+    {
+        // 「S」ディレクトリのリソースを使用
+        searchPath.push_back(smallResource.directory);
+        pDirector->setContentScaleFactor(MIN(smallResource.size.height / designResolutionSize.height, smallResource.size.width / designResolutionSize.width));
+    }
+
+    // リソースディレクトリを指定
+    FileUtils::sharedFileUtils()->setSearchPaths(searchPath);
+    pDirector->setDisplayStats(true);
+    pDirector->setAnimationInterval(1.0 / 60);
+
+    Scene *pScene = TitleScene::scene();
+    pDirector->runWithScene(pScene);
 
     return true;
 }
