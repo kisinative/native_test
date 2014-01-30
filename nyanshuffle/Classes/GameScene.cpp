@@ -98,6 +98,7 @@ void GameScene::onEnterTransitionDidFinish()
     // 箱を表示する
     String* boxFileName = String::createWithFormat("box%d.png", randum % 2 + 1);
     m_pBox1 = MenuItemImage::create(boxFileName->getCString(), boxFileName->getCString(), NULL, NULL);
+    CCLOG("box1=%p",m_pBox1);
     m_pBox1->setPosition(ccp(size.width * 0.2, size.height * 0.5 + size.height));
     m_pBox1->runAction(KSAnimation::boxesStartAction(this, callfunc_selector(GameScene::playDroppingSound)));
     m_pBox1->setTag(kBoxLocation_Left);
@@ -333,15 +334,15 @@ void GameScene::afterShuffle(float time)
     // ネコの表示
     m_pCat->setPosition(m_pBox2->getPosition());
     m_pCat->runAction(KSAnimation::catEndAction());
-
     // 箱をタップ可能にする
 //    m_pBox1->setTarget(this, menu_selector(GameScene::selectBox));
 //    m_pBox2->setTarget(this, menu_selector(GameScene::selectBox));
 //    m_pBox3->setTarget(this, menu_selector(GameScene::selectBox));
-//    m_pBox1->setCallback(CC_CALLBACK1(GameScene::selectBox,this));
-//    m_pBox2->setCallback(CC_CALLBACK1(GameScene::selectBox,this));
-//    m_pBox3->setCallback(CC_CALLBACK1(GameScene::selectBox,this));
-    
+    m_pBox1->setCallback(CC_CALLBACK_1(GameScene::selectBox, this));
+    m_pBox2->setCallback(CC_CALLBACK_1(GameScene::selectBox, this));
+    m_pBox3->setCallback(CC_CALLBACK_1(GameScene::selectBox, this));
+//    m_pBox2->setCallback(CC_CALLBACK_1(GameScene::selectBox,this));
+//    m_pBox3->setCallback(CC_CALLBACK_1(GameScene::selectBox,this));
     this->schedule(schedule_selector(GameScene::boxVibration), 1);
 }
 
@@ -357,8 +358,18 @@ void GameScene::boxVibration(float time)
         m_pBox3->runAction(KSAnimation::vibrationAnimation());
 }
 
-void GameScene::selectBox(Node* target)
+//void GameScene::backCallback(Object* sender)
+//{
+//	log("override back!");
+//}
+
+
+//void GameScene::selectBox(Node* target)
+void GameScene::selectBox(Object* sender)
 {
+	MenuItemImage* sender_Box = (MenuItemImage*)sender;
+
+	CCLOG("tapped-1");
     // 箱のタップを無効とする
     m_pBox1->setEnabled(false);
     m_pBox2->setEnabled(false);
@@ -368,18 +379,25 @@ void GameScene::selectBox(Node* target)
     this->unschedule(schedule_selector(GameScene::boxVibration));
     
     SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
+	CCLOG("tapped0");
     
     Size size = Director::sharedDirector()->getWinSize();
     
     // 選択された箱のアニメーションを開始する
-    MoveBy* move = MoveBy::create(1, ccp(0, target->getContentSize().height * target-> getScaleY()));
-    target->runAction(move);
+	CCLOG("tapped1");
+    MoveBy* move = MoveBy::create(1, ccp(0, sender_Box->getContentSize().height * sender_Box->getScaleY()));
+	CCLOG("tapped2");
+	sender_Box->runAction(move);
+	CCLOG("tapped3");
     
     string answerFilePath;
+	CCLOG("tapped4");
     string seFileName;
+	CCLOG("tapped5");
     SEL_CallFunc selector;
+	CCLOG("tapped6");
     
-    if (target == m_pBox2)
+    if (sender_Box == m_pBox2)
     {
         // 正解の場合の処理
         answerFilePath = "success.png";

@@ -41,7 +41,8 @@ protected:
     void afterShuffle(float time);
 
     // Chapter 6.8で追記する内容
-    void selectBox(Node* target);
+    void selectBox(Object* sender);
+//    void selectBox(Node* target);
     void boxVibration(float time);
     void correctAnswer();
     void incorrectAnswer();
