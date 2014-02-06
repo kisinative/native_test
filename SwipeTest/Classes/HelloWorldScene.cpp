@@ -102,8 +102,8 @@ void HelloWorld::showArrow(float time)
 
 //	//ゲーム時間を文字列に変換する
 //	String* timeString = String::createWithFormat("%8.1fs",gametime);
-//	String* arrowString = arrowArray[randum];
-    cocos2d::String arrowString = "右";
+	String arrowString = arrowArray[randum];
+//    cocos2d::String arrowString = "右";
 
 	//ゲーム時間ラベルを取得
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
@@ -111,14 +111,14 @@ void HelloWorld::showArrow(float time)
 	{
 		//ゲーム時間を更新する
 //		arrowLabel->setString(arrowArray[randum]->m_sString.c_str());
-		arrowLabel->setString(arrowString);
+		arrowLabel->setString(arrowString.getCString());
 
 	} else {
 		//画面サイズを取得する
 		Size winSize = Director::sharedDirector()->getWinSize();
 
 		//ゲーム時間ラベルを生成する
-		arrowLabel = LabelTTF::create(arrowString, "Arial", 45.0);
+		arrowLabel = LabelTTF::create(arrowString.getCString(), "Arial", 45.0);
 		arrowLabel->setPosition(ccp(winSize.width * 0.9,
 								    winSize.height * 0.9));
 		arrowLabel->setTag(tagArrowLabel);
