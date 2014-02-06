@@ -98,7 +98,6 @@ void GameScene::onEnterTransitionDidFinish()
     // 箱を表示する
     String* boxFileName = String::createWithFormat("box%d.png", randum % 2 + 1);
     m_pBox1 = MenuItemImage::create(boxFileName->getCString(), boxFileName->getCString(), NULL, NULL);
-    CCLOG("box1=%p",m_pBox1);
     m_pBox1->setPosition(ccp(size.width * 0.2, size.height * 0.5 + size.height));
     m_pBox1->runAction(KSAnimation::boxesStartAction(this, callfunc_selector(GameScene::playDroppingSound)));
     m_pBox1->setTag(kBoxLocation_Left);
@@ -302,9 +301,9 @@ void GameScene::boxesShuffle(float time)
         return;
     }
     
-    float shuffleTime = 0.5 - 0.01 * m_level;
-    if (shuffleTime < 0.3) {
-        shuffleTime = 0.3;
+    float shuffleTime = 0.5 - 0.05 * m_level;
+    if (shuffleTime < 0.1) {
+        shuffleTime = 0.1;
     }
     float activeShufflingTime;
     
@@ -317,7 +316,7 @@ void GameScene::boxesShuffle(float time)
         case 3:  activeShufflingTime = shuffleTime * 1.05; break;
         default: activeShufflingTime = shuffleTime * 1.10; break;
     }
-    
+
     // シャッフルパターンの指定
     switch (rand() % 5)
     {
@@ -369,7 +368,6 @@ void GameScene::selectBox(Object* sender)
 {
 	MenuItemImage* sender_Box = (MenuItemImage*)sender;
 
-	CCLOG("tapped-1");
     // 箱のタップを無効とする
     m_pBox1->setEnabled(false);
     m_pBox2->setEnabled(false);
@@ -379,23 +377,16 @@ void GameScene::selectBox(Object* sender)
     this->unschedule(schedule_selector(GameScene::boxVibration));
     
     SimpleAudioEngine::sharedEngine()->stopBackgroundMusic();
-	CCLOG("tapped0");
     
     Size size = Director::sharedDirector()->getWinSize();
     
     // 選択された箱のアニメーションを開始する
-	CCLOG("tapped1");
     MoveBy* move = MoveBy::create(1, ccp(0, sender_Box->getContentSize().height * sender_Box->getScaleY()));
-	CCLOG("tapped2");
 	sender_Box->runAction(move);
-	CCLOG("tapped3");
     
     string answerFilePath;
-	CCLOG("tapped4");
     string seFileName;
-	CCLOG("tapped5");
     SEL_CallFunc selector;
-	CCLOG("tapped6");
     
     if (sender_Box == m_pBox2)
     {

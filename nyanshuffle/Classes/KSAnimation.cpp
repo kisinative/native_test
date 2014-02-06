@@ -169,7 +169,7 @@ FiniteTimeAction* KSAnimation::moveFromRightToLeft(float time)
     
     FiniteTimeAction* action = BezierTo::create(time, bezier);
     action->setTag(TAG_ACTION);
-    
+
     return action;
 }
 
