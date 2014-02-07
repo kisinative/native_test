@@ -1,6 +1,7 @@
 #include "HelloWorldScene.h"
 
 USING_NS_CC;
+String arrowArray[] = {"右", "左", "上", "下"};
 
 Scene* HelloWorld::createScene()
 {
@@ -54,33 +55,26 @@ bool HelloWorld::init()
     menu->setPosition(Point::ZERO);
     this->addChild(menu, 1);
 
-    /////////////////////////////
-    // 3. add your codes below...
+    //初期化
+    NowHp = MaxHp;
+    NowEnemyHp = defaultEnemyStrong;
+    nowGesture = 99;
+    enemyStrongLv = 1;
+    enemypowerLv = 1;
+    enemySpeedLv = 1;
 
-    // add a label shows "Hello World"
-    // create and initialize a label
-    
-    auto label = LabelTTF::create("Hello World", "Arial", 24);
-    
-    // position the label on the center of the screen
-    label->setPosition(Point(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
 
-    // add the label as a child to this layer
-    this->addChild(label, 1);
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-
-    // position the sprite on the center of the screen
-    sprite->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
-    
-//    UILayer* pUILayer = UILayer::create();
-//    pUILayer->addWidget(UIHELPER->createWidgetFromJsonFile("test_1.json"));
-//    this->addChild(pUILayer, 100);
+    //HP表示
+    Size winSize = Director::sharedDirector()->getWinSize();
+    LabelTTF* Hp = LabelTTF::create(String::createWithFormat("残りHP:%d", NowHp)->getCString(), "Arial", 50.0);
+    Hp->setPosition(ccp(winSize.width * 0.15,winSize.height * 0.95));
+    Hp->setTag(tagHp);
+	this->addChild(Hp,2);
+	//敵HP表示
+    LabelTTF* enemyHp = LabelTTF::create(String::createWithFormat("敵残りHP:%d", NowEnemyHp)->getCString(), "Arial", 50.0);
+    enemyHp->setPosition(ccp(winSize.width * 0.8,winSize.height * 0.95));
+    enemyHp->setTag(tagEnemyHp);
+	this->addChild(enemyHp,2);
 
     this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 1);
 
@@ -93,41 +87,47 @@ bool HelloWorld::init()
 //void HelloWorld::showArrow()
 void HelloWorld::showArrow(float time)
 {
-
-	String arrowArray[] = {"右", "左", "上", "下"};
-
-	//矢印ラベル用タグ
-	const int tagArrowLabel = 100;
+	//ジェスチャー抽選
     int randum = rand() % 4;
+    nowGesture = randum;
 
-//	//ゲーム時間を文字列に変換する
-//	String* timeString = String::createWithFormat("%8.1fs",gametime);
-	String arrowString = arrowArray[randum];
-//    cocos2d::String arrowString = "右";
-
-	//ゲーム時間ラベルを取得
+	//矢印ラベルを取得
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
 	if (arrowLabel)
 	{
-		//ゲーム時間を更新する
-//		arrowLabel->setString(arrowArray[randum]->m_sString.c_str());
-		arrowLabel->setString(arrowString.getCString());
-
+		//矢印ラベルを更新する
+		arrowLabel->setString(arrowArray[randum].getCString());
 	} else {
 		//画面サイズを取得する
-		Size winSize = Director::sharedDirector()->getWinSize();
+	    Size visibleSize = Director::getInstance()->getVisibleSize();
+	    Point origin = Director::getInstance()->getVisibleOrigin();
 
-		//ゲーム時間ラベルを生成する
-		arrowLabel = LabelTTF::create(arrowString.getCString(), "Arial", 45.0);
-		arrowLabel->setPosition(ccp(winSize.width * 0.9,
-								    winSize.height * 0.9));
+		//矢印ラベルを生成する
+		arrowLabel = LabelTTF::create(arrowArray[randum].getCString(), "Arial", 90.0);
+		arrowLabel->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 		arrowLabel->setTag(tagArrowLabel);
 		this->addChild(arrowLabel,2);
-
 	}
+	this->scheduleOnce(schedule_selector(HelloWorld::timeOver), (float)defaultEnemySpeed - enemySpeedLv / 10.0);
 
-	this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 2);
+}
 
+void HelloWorld::timeOver(float time)
+{
+	nowGesture = 99;
+	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
+	arrowLabel->setString("timeOut");
+
+	//HP更新
+	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagHp);
+	NowHp = NowHp - defaultEnemyPower * enemypowerLv;
+	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
+	if (NowHp < 1){
+		hpLabel->setString(String::createWithFormat("残りHP:%d", 0)->getCString());
+		arrowLabel->setString("GameOver");
+	} else {
+		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 1);
+	}
 }
 
 
@@ -157,37 +157,60 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* event)
 
 void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 {
-    Point point = touch->getLocation();
-    this->xtGestureEndPoint= point;
+	if (nowGesture < 99){
+		//タイムアウトチェックタイマーを停止する
+		this->unschedule(schedule_selector(HelloWorld::timeOver));
 
-    float deltaX = this->xtGestureStartPoint.x - this->xtGestureEndPoint.x;
-    float deltaY = this->xtGestureStartPoint.y - this->xtGestureEndPoint.y;
+		Point point = touch->getLocation();
+		this->xtGestureEndPoint= point;
 
-    if (fabs(deltaX) > fabs(deltaY)) {
-        if (deltaX + 200 < 0) {
-        	CCLOG("RIGHT");
-        	return;
-        }
+		float deltaX = this->xtGestureStartPoint.x - this->xtGestureEndPoint.x;
+		float deltaY = this->xtGestureStartPoint.y - this->xtGestureEndPoint.y;
 
-        if (deltaX - 200 > 0){
-        	CCLOG("LEFT");
-        	return;
-        }
-        CCLOG("NG");
-    } else {
-        if (deltaY + 200 < 0){
-        	CCLOG("UP");
-        	return;
-        }
-        if (deltaY - 200 > 0){
-        	CCLOG("DOWN");
-        	return;
-        }
-        CCLOG("NG");
-    }
+		bool wkGesture = false;
+		if (fabs(deltaX) > fabs(deltaY)) {
+			if ((deltaX + 200 < 0 && nowGesture == 0) || (deltaX - 200 > 0 && nowGesture == 1)) wkGesture = true;
+		} else {
+			if ((deltaY + 200 < 0 && nowGesture == 2) || (deltaY - 200 > 0 && nowGesture == 3)) wkGesture = true;
+		}
 
-
-//    CCLOG("X = %f, y = %f", point.x, point.y);
+		nowGesture = 99;
+		if (wkGesture){
+			attack();
+		} else {
+			miss();
+		}
+	}
 }
 
+void HelloWorld::attack()
+{
+	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
+	arrowLabel->setString("ぬこぱーんち");
+
+	//HP更新
+	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagEnemyHp);
+	hpLabel->setString(String::createWithFormat("敵残りHP:%d", --NowEnemyHp)->getCString());
+	if (NowEnemyHp < 1){
+		arrowLabel->setString("クリア！！");
+	} else {
+		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 0.2);
+	}
+}
+
+void HelloWorld::miss()
+{
+	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
+	arrowLabel->setString("ミス！");
+
+	//HP更新
+	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagHp);
+	NowHp = NowHp - defaultEnemyPower * enemypowerLv;
+	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
+	if (NowHp < 1){
+		arrowLabel->setString("GameOver");
+	} else {
+		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 0.2);
+	}
+}
 

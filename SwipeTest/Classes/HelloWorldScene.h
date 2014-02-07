@@ -10,7 +10,35 @@ protected:
 	cocos2d::Point xtGestureEndPoint;
 
 	void showArrow(float time);
-//	void showArrow();
+	void timeOver(float time);
+	void attack();
+	void miss();
+
+	// tag
+	const int tagHp			= 10;		//HPタグ
+	const int tagEnemyHp	= 20;		//敵HPタグ
+	const int tagArrowLabel = 100;		//矢印タグ
+
+	//敵基本能力
+	const int defaultEnemyStrong = 20;	//体力
+	const int defaultEnemyPower  = 10;	//攻撃力
+	const float defaultEnemySpeed  = 2.1;	//スピード
+
+	//敵レベル
+	int enemyStrongLv;
+	int enemypowerLv;
+	int enemySpeedLv;
+
+	//HP関連
+	const int MaxHp			= 100;		//最大HP
+	int NowHp;							//現在HP
+	int NowEnemyHp;						//敵現在HP
+
+	//フラグ類
+	int nowGesture;						//現在ジェスチャ
+	bool atkDefFlag;					//攻撃防御フラグ
+
+
 
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
