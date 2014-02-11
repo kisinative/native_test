@@ -10,18 +10,26 @@ protected:
 	cocos2d::Point xtGestureEndPoint;
 
 	void showArrow(float time);
+	void nextStage(float time);
 	void timeOver(float time);
 	void attack();
 	void miss();
+	void setup();
+	void createLabel(std::string labelString, float labelSize, float labelWidth, float labelHeight, int labelTag);
 
 	// tag
-	const int tagHp			= 10;		//HPタグ
-	const int tagEnemyHp	= 20;		//敵HPタグ
-	const int tagArrowLabel = 100;		//矢印タグ
+	const int tagHp				= 10;		//HPタグ
+	const int tagEnemyHp		= 20;		//敵HPタグ
+	const int tagEnemyStrong	= 22;		//敵体力タグ
+	const int tagEnemyPower		= 24;		//敵攻撃力タグ
+	const int tagEnemySpeed		= 26;		//敵スピードタグ
+	const int tagArrowImg	 	= 90;		//矢印タグ
+	const int tagArrowLabel 	= 100;		//矢印タグ
+	const int tagRetry		 	= 110;		//リトライタグ
 
 	//敵基本能力
-	const int defaultEnemyStrong = 20;	//体力
-	const int defaultEnemyPower  = 10;	//攻撃力
+	const int defaultEnemyStrong = 15;		//体力
+	const int defaultEnemyPower  = 10;		//攻撃力
 	const float defaultEnemySpeed  = 2.1;	//スピード
 
 	//敵レベル
@@ -35,8 +43,9 @@ protected:
 	int NowEnemyHp;						//敵現在HP
 
 	//フラグ類
-	int nowGesture;						//現在ジェスチャ
+	std::string nowGesture;				//現在ジェスチャ
 	bool atkDefFlag;					//攻撃防御フラグ
+	int nowStage;						//現在ステージ
 
 
 
@@ -52,7 +61,7 @@ public:
 
     // タッチ関係のイベント
     bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-//    void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
+    void onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
     void onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 
     // implement the "static create()" method manually

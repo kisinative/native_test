@@ -1,7 +1,8 @@
 #include "HelloWorldScene.h"
 
 USING_NS_CC;
-String arrowArray[] = {"右", "左", "上", "下"};
+//String arrowArray[] = {"右", "左", "上", "下"};
+String arrowArray[] = {"0", "1", "2", "3","02","03","12","13","20","21","30","31"};
 
 Scene* HelloWorld::createScene()
 {
@@ -57,29 +58,79 @@ bool HelloWorld::init()
 
     //初期化
     NowHp = MaxHp;
-    NowEnemyHp = defaultEnemyStrong;
-    nowGesture = 99;
+    nowGesture = "99";
     enemyStrongLv = 1;
     enemypowerLv = 1;
     enemySpeedLv = 1;
+    nowStage = 1;
 
+//	//画面サイズを取得する
+//    Size visibleSize = Director::getInstance()->getVisibleSize();
+//    Point origin = Director::getInstance()->getVisibleOrigin();
+	//矢印ラベルを生成する
+    LabelTTF* arrowLabel = LabelTTF::create("れでぃ", "Arial", 90.0);
+	arrowLabel->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+	arrowLabel->setTag(tagArrowLabel);
+	this->addChild(arrowLabel,2);
 
-    //HP表示
-    Size winSize = Director::sharedDirector()->getWinSize();
-    LabelTTF* Hp = LabelTTF::create(String::createWithFormat("残りHP:%d", NowHp)->getCString(), "Arial", 50.0);
-    Hp->setPosition(ccp(winSize.width * 0.15,winSize.height * 0.95));
-    Hp->setTag(tagHp);
-	this->addChild(Hp,2);
-	//敵HP表示
-    LabelTTF* enemyHp = LabelTTF::create(String::createWithFormat("敵残りHP:%d", NowEnemyHp)->getCString(), "Arial", 50.0);
-    enemyHp->setPosition(ccp(winSize.width * 0.8,winSize.height * 0.95));
-    enemyHp->setTag(tagEnemyHp);
-	this->addChild(enemyHp,2);
-
-    this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 1);
+	//敵初期ステータス設定
+    setup();
 
     return true;
 }
+
+void HelloWorld::setup()
+{
+    Size winSize = Director::sharedDirector()->getWinSize();
+    //HP表示
+	createLabel(String::createWithFormat("残りHP:%d", NowHp)->getCString(),
+				50.0,
+				winSize.width * 0.15,
+				winSize.height * 0.95,
+				tagHp);
+	//敵HP表示
+	NowEnemyHp = defaultEnemyStrong + (5 * enemyStrongLv);
+	createLabel(String::createWithFormat("敵残りHP:%d", NowEnemyHp)->getCString(),
+				50.0,
+				winSize.width * 0.8,
+				winSize.height * 0.95,
+				tagEnemyHp);
+	//敵LV表示
+	createLabel(String::createWithFormat("タフネスLV:%d", enemyStrongLv)->getCString(),
+				50.0,
+				winSize.width * 0.8,
+				winSize.height * 0.90,
+				tagEnemyStrong);
+	createLabel(String::createWithFormat("パワーLV:%d", enemypowerLv)->getCString(),
+				50.0,
+				winSize.width * 0.8,
+				winSize.height * 0.85,
+				tagEnemyPower);
+	createLabel(String::createWithFormat("スピードLV:%d", enemySpeedLv)->getCString(),
+				50.0,
+				winSize.width * 0.8,
+				winSize.height * 0.80,
+				tagEnemySpeed);
+
+    this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 2);
+
+}
+
+void HelloWorld::createLabel(std::string labelString, float labelSize, float labelWidth, float labelHeight, int labelTag)
+{
+	LabelTTF* wkLabel = (LabelTTF*)this->getChildByTag(labelTag);
+	if (wkLabel)
+	{
+		wkLabel->setString(labelString);
+	} else {
+		wkLabel = LabelTTF::create(labelString, "Arial", labelSize);
+		wkLabel->setPosition(ccp(labelWidth, labelHeight));
+		wkLabel->setTag(labelTag);
+		this->addChild(wkLabel,2);
+	}
+}
+
+
 //****************************************************************************************
 //スケジュール系
 //****************************************************************************************
@@ -88,39 +139,56 @@ bool HelloWorld::init()
 void HelloWorld::showArrow(float time)
 {
 	//ジェスチャー抽選
-    int randum = rand() % 4;
-    nowGesture = randum;
+    int randum = rand() % 12;
+    nowGesture = arrowArray[randum].getCString();
 
-	//矢印ラベルを取得
+//	//矢印ラベルを取得
+//	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
+//	//矢印ラベルを更新する
+//	arrowLabel->setString(arrowArray[randum].getCString());
+
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
-	if (arrowLabel)
-	{
-		//矢印ラベルを更新する
-		arrowLabel->setString(arrowArray[randum].getCString());
-	} else {
-		//画面サイズを取得する
-	    Size visibleSize = Director::getInstance()->getVisibleSize();
-	    Point origin = Director::getInstance()->getVisibleOrigin();
+	arrowLabel->setString("");
 
-		//矢印ラベルを生成する
-		arrowLabel = LabelTTF::create(arrowArray[randum].getCString(), "Arial", 90.0);
-		arrowLabel->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-		arrowLabel->setTag(tagArrowLabel);
-		this->addChild(arrowLabel,2);
-	}
+    Node* pArrow = this->getChildByTag(tagArrowImg);
+    if (pArrow)
+    {
+    	pArrow->removeFromParentAndCleanup(true);
+    }
+	Size size = Director::sharedDirector()->getWinSize();
+//	Sprite* pArrow = Sprite::create(String::createWithFormat("%d.png",randum)->getCString());
+	pArrow = Sprite::create(String::createWithFormat("%s.png",arrowArray[randum].getCString())->getCString());
+	pArrow->setPosition(ccp(size.width * 0.50, size.height * 0.60));
+	pArrow->setTag(tagArrowImg);
+	this->addChild(pArrow);
+
 	this->scheduleOnce(schedule_selector(HelloWorld::timeOver), (float)defaultEnemySpeed - enemySpeedLv / 10.0);
 
 }
 
+/*
+ * 次ステージ
+ */
+void HelloWorld::nextStage(float time)
+{
+	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
+	arrowLabel->setString(String::createWithFormat("%dステージれでぃ！",++nowStage)->getCString());
+	setup();
+}
+
+
+/*
+ * タイムオーバー
+ */
 void HelloWorld::timeOver(float time)
 {
-	nowGesture = 99;
+	nowGesture = "99";
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	arrowLabel->setString("timeOut");
 
 	//HP更新
 	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagHp);
-	NowHp = NowHp - defaultEnemyPower * enemypowerLv;
+	NowHp = NowHp - (defaultEnemyPower + 5 * enemypowerLv);
 	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
 	if (NowHp < 1){
 		hpLabel->setString(String::createWithFormat("残りHP:%d", 0)->getCString());
@@ -140,7 +208,9 @@ void HelloWorld::menuCloseCallback(Object* pSender)
 #endif
 }
 
+//****************************************************************************************
 // タッチ系
+//****************************************************************************************
 bool HelloWorld::onTouchBegan(Touch* touch, Event* event)
 {
     Point point = touch->getLocation();
@@ -149,15 +219,44 @@ bool HelloWorld::onTouchBegan(Touch* touch, Event* event)
     return true;
 }
 
-//void HelloWorld::onTouchMoved(Touch* touch, Event* event)
-//{
+void HelloWorld::onTouchMoved(Touch* touch, Event* event)
+{
 //    Point point = touch->getLocation();
 //    CCLOG("X = %f, y = %f", point.x, point.y);
-//}
+
+	if (nowGesture.size() > 1) {
+		Point point = touch->getLocation();
+		this->xtGestureEndPoint= point;
+
+		float deltaX = this->xtGestureStartPoint.x - this->xtGestureEndPoint.x;
+		float deltaY = this->xtGestureStartPoint.y - this->xtGestureEndPoint.y;
+
+		std::string subGesture = nowGesture.substr(0,1);
+
+//		CCLOG("--------------");
+//		CCLOG("X = %d", subGesture.size());
+//		CCLOG("nowGesture = %s", nowGesture.c_str());
+//		CCLOG("subGesture = %s", subGesture.c_str());
+		if (fabs(deltaX) > fabs(deltaY)) {
+			if ((deltaX + 50 < 0 && subGesture == "0") || (deltaX - 50 > 0 && subGesture == "1"))
+			{
+				nowGesture = nowGesture.substr(1);
+			    this->xtGestureStartPoint= point;
+			}
+		} else {
+			if ((deltaY + 50 < 0 && subGesture == "2") || (deltaY - 50 > 0 && subGesture == "3"))
+			{
+				nowGesture = nowGesture.substr(1);
+			    this->xtGestureStartPoint= point;
+			}
+		}
+//		CCLOG("nowGesture = %s", nowGesture.c_str());
+	}
+}
 
 void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 {
-	if (nowGesture < 99){
+	if (nowGesture < "99"){
 		//タイムアウトチェックタイマーを停止する
 		this->unschedule(schedule_selector(HelloWorld::timeOver));
 
@@ -169,12 +268,12 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 
 		bool wkGesture = false;
 		if (fabs(deltaX) > fabs(deltaY)) {
-			if ((deltaX + 200 < 0 && nowGesture == 0) || (deltaX - 200 > 0 && nowGesture == 1)) wkGesture = true;
+			if ((deltaX + 50 < 0 && nowGesture == "0") || (deltaX - 50 > 0 && nowGesture == "1")) wkGesture = true;
 		} else {
-			if ((deltaY + 200 < 0 && nowGesture == 2) || (deltaY - 200 > 0 && nowGesture == 3)) wkGesture = true;
+			if ((deltaY + 50 < 0 && nowGesture == "2") || (deltaY - 50 > 0 && nowGesture == "3")) wkGesture = true;
 		}
 
-		nowGesture = 99;
+		nowGesture = "99";
 		if (wkGesture){
 			attack();
 		} else {
@@ -183,6 +282,12 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 	}
 }
 
+//****************************************************************************************
+//攻撃成否系
+//****************************************************************************************
+/*
+ *	攻撃成功
+ */
 void HelloWorld::attack()
 {
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
@@ -192,12 +297,33 @@ void HelloWorld::attack()
 	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagEnemyHp);
 	hpLabel->setString(String::createWithFormat("敵残りHP:%d", --NowEnemyHp)->getCString());
 	if (NowEnemyHp < 1){
-		arrowLabel->setString("クリア！！");
+	    Node* pArrow = this->getChildByTag(tagArrowImg);
+    	pArrow->removeFromParentAndCleanup(true);
+
+		arrowLabel->setString(String::createWithFormat("%dステージクリア！！ ",nowStage)->getCString());
+	    int randum = rand() % 3;
+	    switch (randum){
+	    	case 0:
+	    	    enemyStrongLv++;
+	    		break;
+	    	case 1:
+	    	    enemypowerLv++;
+	    		break;
+	    	case 2:
+	    	    enemySpeedLv++;
+	    		break;
+	    }
+	    //HP回復
+	    NowHp += 20;
+		this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 1.3);
 	} else {
 		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 0.2);
 	}
 }
 
+/*
+ *	攻撃失敗
+ */
 void HelloWorld::miss()
 {
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
@@ -205,12 +331,28 @@ void HelloWorld::miss()
 
 	//HP更新
 	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagHp);
-	NowHp = NowHp - defaultEnemyPower * enemypowerLv;
+	NowHp = NowHp - (defaultEnemyPower + 5 * enemypowerLv);
 	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
 	if (NowHp < 1){
 		arrowLabel->setString("GameOver");
 	} else {
-		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 0.2);
+		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 1);
 	}
 }
 
+//****************************************************************************************
+//再挑戦
+//****************************************************************************************
+/*
+ * 再挑戦系ボタン作成
+ */
+//void HelloWorld::makeRetryButton()
+//{
+//    Size visibleSize = Director::getInstance()->getVisibleSize();
+//    Point origin = Director::getInstance()->getVisibleOrigin();
+//    LabelTTF* retryLabel = LabelTTF::create("Retry", "Arial", 90.0);
+//    retryLabel->setPosition(Point(visibleSize.width/2 + origin.x + 5, visibleSize.height/2 + origin.y + 5));
+//    retryLabel->setTag(tagRetry);
+//	this->addChild(retryLabel,2);
+//
+//}
