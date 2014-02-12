@@ -16,6 +16,8 @@ protected:
 	void miss();
 	void setup();
 	void createLabel(std::string labelString, float labelSize, float labelWidth, float labelHeight, int labelTag);
+	void makeRetryButton();
+	void tapRetryButton(Node *node);
 
 	// tag
 	const int tagHp				= 10;		//HPタグ

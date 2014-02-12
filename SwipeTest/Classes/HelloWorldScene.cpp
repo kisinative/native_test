@@ -6,16 +6,10 @@ String arrowArray[] = {"0", "1", "2", "3","02","03","12","13","20","21","30","31
 
 Scene* HelloWorld::createScene()
 {
-    // 'scene' is an autorelease object
     auto scene = Scene::create();
-    
-    // 'layer' is an autorelease object
     auto layer = HelloWorld::create();
-
-    // add layer as a child to scene
     scene->addChild(layer);
 
-    // return the scene
     return scene;
 }
 
@@ -233,10 +227,10 @@ void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 
 		std::string subGesture = nowGesture.substr(0,1);
 
-//		CCLOG("--------------");
-//		CCLOG("X = %d", subGesture.size());
-//		CCLOG("nowGesture = %s", nowGesture.c_str());
-//		CCLOG("subGesture = %s", subGesture.c_str());
+		CCLOG("--------------");
+		CCLOG("X = %d", subGesture.size());
+		CCLOG("nowGesture = %s", nowGesture.c_str());
+		CCLOG("subGesture = %s", subGesture.c_str());
 		if (fabs(deltaX) > fabs(deltaY)) {
 			if ((deltaX + 50 < 0 && subGesture == "0") || (deltaX - 50 > 0 && subGesture == "1"))
 			{
@@ -250,7 +244,7 @@ void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 			    this->xtGestureStartPoint= point;
 			}
 		}
-//		CCLOG("nowGesture = %s", nowGesture.c_str());
+		CCLOG("nowGesture = %s", nowGesture.c_str());
 	}
 }
 
@@ -272,6 +266,10 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 		} else {
 			if ((deltaY + 50 < 0 && nowGesture == "2") || (deltaY - 50 > 0 && nowGesture == "3")) wkGesture = true;
 		}
+		CCLOG("-------end-------");
+		CCLOG("nowGesture = %s", nowGesture.c_str());
+		CCLOG("X = %f, y = %f", deltaX, deltaY);
+		CCLOG("X = %f, y = %f", point.x, point.y);
 
 		nowGesture = "99";
 		if (wkGesture){
@@ -335,6 +333,7 @@ void HelloWorld::miss()
 	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
 	if (NowHp < 1){
 		arrowLabel->setString("GameOver");
+		makeRetryButton();
 	} else {
 		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 1);
 	}
@@ -346,13 +345,35 @@ void HelloWorld::miss()
 /*
  * 再挑戦系ボタン作成
  */
-//void HelloWorld::makeRetryButton()
-//{
-//    Size visibleSize = Director::getInstance()->getVisibleSize();
-//    Point origin = Director::getInstance()->getVisibleOrigin();
-//    LabelTTF* retryLabel = LabelTTF::create("Retry", "Arial", 90.0);
-//    retryLabel->setPosition(Point(visibleSize.width/2 + origin.x + 5, visibleSize.height/2 + origin.y + 5));
-//    retryLabel->setTag(tagRetry);
-//	this->addChild(retryLabel,2);
-//
-//}
+void HelloWorld::makeRetryButton()
+{
+	//画面サイズを取得する
+	Size winSize = Director::sharedDirector()->getWinSize();
+
+	//リトライボタンを作成する
+	LabelTTF* retryLabel = LabelTTF::create("Retry?", "Arial", 80.0);
+    MenuItemLabel* retryItem = MenuItemLabel::create(retryLabel, [&](Object *sender) {
+			//ゲームのシーンを新しく用意する
+			Scene* gameScene = (Scene*)HelloWorld::create();
+			Director::sharedDirector()->replaceScene(gameScene);
+    	});
+
+
+	retryItem->setPosition(ccp(winSize.width * 0.5,winSize.height *0.4));
+
+	//メニューを作成する
+	Menu* menu = Menu::create(retryItem, NULL);
+	menu->setPosition(Point::ZERO);
+	this->addChild(menu,3);
+}
+
+//リトライボタンタップ時の処理
+void HelloWorld::tapRetryButton(Node *node)
+{
+	//ゲームのシーンを新しく用意する
+	Scene* gameScene = (Scene*)HelloWorld::create();
+	Director::sharedDirector()->replaceScene(gameScene);
+}
+
+
+
