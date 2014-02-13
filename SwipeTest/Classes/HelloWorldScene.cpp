@@ -52,11 +52,12 @@ bool HelloWorld::init()
 
     //初期化
     NowHp = MaxHp;
-    nowGesture = "99";
+    targetGesture = "99";
     enemyStrongLv = 1;
     enemypowerLv = 1;
     enemySpeedLv = 1;
     nowStage = 1;
+    nowGesture = "";
 
 //	//画面サイズを取得する
 //    Size visibleSize = Director::getInstance()->getVisibleSize();
@@ -134,7 +135,7 @@ void HelloWorld::showArrow(float time)
 {
 	//ジェスチャー抽選
     int randum = rand() % 12;
-    nowGesture = arrowArray[randum].getCString();
+    targetGesture = arrowArray[randum].getCString();
 
 //	//矢印ラベルを取得
 //	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
@@ -176,7 +177,7 @@ void HelloWorld::nextStage(float time)
  */
 void HelloWorld::timeOver(float time)
 {
-	nowGesture = "99";
+	targetGesture = "99";
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	arrowLabel->setString("timeOut");
 
@@ -218,66 +219,109 @@ void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 //    Point point = touch->getLocation();
 //    CCLOG("X = %f, y = %f", point.x, point.y);
 
-	if (nowGesture.size() > 1) {
+	if (targetGesture.size() > 1) {
 		Point point = touch->getLocation();
 		this->xtGestureEndPoint= point;
 
 		float deltaX = this->xtGestureStartPoint.x - this->xtGestureEndPoint.x;
 		float deltaY = this->xtGestureStartPoint.y - this->xtGestureEndPoint.y;
 
-		std::string subGesture = nowGesture.substr(0,1);
+//		std::string subGesture = targetGesture.substr(0,1);
 
-		CCLOG("--------------");
-		CCLOG("X = %d", subGesture.size());
-		CCLOG("nowGesture = %s", nowGesture.c_str());
-		CCLOG("subGesture = %s", subGesture.c_str());
+//		CCLOG("--------------");
+//		CCLOG("X = %d", subGesture.size());
+//		CCLOG("targetGesture = %s", targetGesture.c_str());
+//		CCLOG("subGesture = %s", subGesture.c_str());
 		if (fabs(deltaX) > fabs(deltaY)) {
-			if ((deltaX + 50 < 0 && subGesture == "0") || (deltaX - 50 > 0 && subGesture == "1"))
+			if ((nowGesture == "") || (nowGesture.substr(-1,1) == "2") || (nowGesture.substr(-1,1) == "3"))
 			{
-				nowGesture = nowGesture.substr(1);
-			    this->xtGestureStartPoint= point;
+				std::string str1 = "hoge";
+				std::string str2 = "piyo";
+				str1 += str2;   // stringにstringを追加
+
+//				if ((deltaX + 100 < 0 && subGesture == "0") || (deltaX - 100 > 0 && subGesture == "1"))
+				if (deltaX + 100 < 0)
+				{
+					CCLOG("aaaaaaaaaaaaaaaaaaaa");
+					nowGesture = nowGesture.getCString() + "0";
+					this->xtGestureStartPoint= point;
+				}
+				if (deltaX - 100 > 0)
+				{
+					CCLOG("aaaaaaaaaaaaaaaaaaaa");
+//					targetGesture = targetGesture.substr(1);
+					nowGesture = nowGesture.getCString() + "1";
+					this->xtGestureStartPoint= point;
+				}
+				CCLOG("--------------");
+				CCLOG("X = %f, y = %f", deltaX, deltaY);
+				CCLOG("targetGesture = %s", targetGesture.c_str());
+				CCLOG("nowGesture = %s", nowGesture.c_str());
 			}
 		} else {
-			if ((deltaY + 50 < 0 && subGesture == "2") || (deltaY - 50 > 0 && subGesture == "3"))
+			if ((nowGesture == "") || (nowGesture.substr(-1,1) == "0") || (nowGesture.substr(-1,1) == "1"))
 			{
-				nowGesture = nowGesture.substr(1);
-			    this->xtGestureStartPoint= point;
+//				if ((deltaY + 100 < 0 && subGesture == "2") || (deltaY - 100 > 0 && subGesture == "3"))
+				if (deltaY + 100 < 0)
+				{
+					CCLOG("aaaaaaaaaaaaaaaaaaaa");
+					nowGesture = nowGesture.getCString() + "2";
+					this->xtGestureStartPoint= point;
+				}
+				if (deltaY - 100 > 0)
+				{
+//					targetGesture = targetGesture.substr(1);
+					CCLOG("aaaaaaaaaaaaaaaaaaaa");
+					nowGesture = nowGesture.getCString() + "3";
+					this->xtGestureStartPoint= point;
+				}
+				CCLOG("--------------");
+				CCLOG("X = %f, y = %f", deltaX, deltaY);
+				CCLOG("targetGesture = %s", targetGesture.c_str());
+				CCLOG("nowGesture = %s", nowGesture.c_str());
 			}
 		}
-		CCLOG("nowGesture = %s", nowGesture.c_str());
+//		CCLOG("targetGesture = %s", targetGesture.c_str());
 	}
 }
 
 void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 {
-	if (nowGesture < "99"){
+	if (targetGesture < "99"){
 		//タイムアウトチェックタイマーを停止する
 		this->unschedule(schedule_selector(HelloWorld::timeOver));
 
-		Point point = touch->getLocation();
-		this->xtGestureEndPoint= point;
-
-		float deltaX = this->xtGestureStartPoint.x - this->xtGestureEndPoint.x;
-		float deltaY = this->xtGestureStartPoint.y - this->xtGestureEndPoint.y;
-
+//		Point point = touch->getLocation();
+//		this->xtGestureEndPoint= point;
+//
+//		float deltaX = this->xtGestureStartPoint.x - this->xtGestureEndPoint.x;
+//		float deltaY = this->xtGestureStartPoint.y - this->xtGestureEndPoint.y;
+//
 		bool wkGesture = false;
-		if (fabs(deltaX) > fabs(deltaY)) {
-			if ((deltaX + 50 < 0 && nowGesture == "0") || (deltaX - 50 > 0 && nowGesture == "1")) wkGesture = true;
-		} else {
-			if ((deltaY + 50 < 0 && nowGesture == "2") || (deltaY - 50 > 0 && nowGesture == "3")) wkGesture = true;
-		}
+//		if (fabs(deltaX) > fabs(deltaY)) {
+//			if ((deltaX + 50 < 0 && targetGesture == "0") || (deltaX - 50 > 0 && targetGesture == "1")) wkGesture = true;
+//		} else {
+//			if ((deltaY + 50 < 0 && targetGesture == "2") || (deltaY - 50 > 0 && targetGesture == "3")) wkGesture = true;
+//		}
 		CCLOG("-------end-------");
+		CCLOG("targetGesture = %s", targetGesture.c_str());
 		CCLOG("nowGesture = %s", nowGesture.c_str());
-		CCLOG("X = %f, y = %f", deltaX, deltaY);
-		CCLOG("X = %f, y = %f", point.x, point.y);
+//		CCLOG("X = %f, y = %f", deltaX, deltaY);
+//		CCLOG("X = %f, y = %f", point.x, point.y);
 
-		nowGesture = "99";
+		if (nowGesture == targetGesture)
+		{
+			wkGesture = true;
+		}
+
+		targetGesture = "99";
 		if (wkGesture){
 			attack();
 		} else {
 			miss();
 		}
 	}
+	nowGesture = "";
 }
 
 //****************************************************************************************

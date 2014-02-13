@@ -45,7 +45,8 @@ protected:
 	int NowEnemyHp;						//敵現在HP
 
 	//フラグ類
-	std::string nowGesture;				//現在ジェスチャ
+	std::string targetGesture;			//現在ジェスチャ
+	std::string nowGesture;				//入力中ジェスチャ
 	bool atkDefFlag;					//攻撃防御フラグ
 	int nowStage;						//現在ステージ
 
