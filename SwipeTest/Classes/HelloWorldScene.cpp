@@ -219,7 +219,7 @@ void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 //    Point point = touch->getLocation();
 //    CCLOG("X = %f, y = %f", point.x, point.y);
 
-	if (targetGesture.size() > 1) {
+//	if (targetGesture.size() > 1) {
 		Point point = touch->getLocation();
 		this->xtGestureEndPoint= point;
 
@@ -282,7 +282,7 @@ void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 			}
 		}
 //		CCLOG("targetGesture = %s", targetGesture.c_str());
-	}
+//	}
 }
 
 void HelloWorld::onTouchEnded(Touch* touch, Event* event)
