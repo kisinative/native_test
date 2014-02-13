@@ -232,53 +232,82 @@ void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 //		CCLOG("X = %d", subGesture.size());
 //		CCLOG("targetGesture = %s", targetGesture.c_str());
 //		CCLOG("subGesture = %s", subGesture.c_str());
-		if (fabs(deltaX) > fabs(deltaY)) {
-			if ((nowGesture == "") || (nowGesture.substr(-1,1) == "2") || (nowGesture.substr(-1,1) == "3"))
-			{
-				std::string str1 = "hoge";
-				std::string str2 = "piyo";
-				str1 += str2;   // stringにstringを追加
-
-//				if ((deltaX + 100 < 0 && subGesture == "0") || (deltaX - 100 > 0 && subGesture == "1"))
+		int wkLen = 0;
+		if (nowGesture.size() > 0)
+		{
+			wkLen = nowGesture.size() - 1;
+			if ((nowGesture.substr(wkLen,1) == "2") || (nowGesture.substr(wkLen,1) == "3")) {
 				if (deltaX + 100 < 0)
 				{
-					CCLOG("aaaaaaaaaaaaaaaaaaaa");
 					nowGesture += migi;
 					this->xtGestureStartPoint= point;
 				}
 				if (deltaX - 100 > 0)
 				{
-					CCLOG("aaaaaaaaaaaaaaaaaaaa");
-//					targetGesture = targetGesture.substr(1);
 					nowGesture += hidari;
 					this->xtGestureStartPoint= point;
 				}
-				CCLOG("--------------");
-				CCLOG("X = %f, y = %f", deltaX, deltaY);
-				CCLOG("targetGesture = %s", targetGesture.c_str());
-				CCLOG("nowGesture = %s", nowGesture.c_str());
-			}
-		} else {
-			if ((nowGesture == "") || (nowGesture.substr(-1,1) == "0") || (nowGesture.substr(-1,1) == "1"))
-			{
-//				if ((deltaY + 100 < 0 && subGesture == "2") || (deltaY - 100 > 0 && subGesture == "3"))
+			} else {
 				if (deltaY + 100 < 0)
 				{
-					CCLOG("aaaaaaaaaaaaaaaaaaaa");
 					nowGesture += ue;
 					this->xtGestureStartPoint= point;
 				}
 				if (deltaY - 100 > 0)
 				{
-//					targetGesture = targetGesture.substr(1);
-					CCLOG("aaaaaaaaaaaaaaaaaaaa");
 					nowGesture += sita;
 					this->xtGestureStartPoint= point;
 				}
-				CCLOG("--------------");
-				CCLOG("X = %f, y = %f", deltaX, deltaY);
-				CCLOG("targetGesture = %s", targetGesture.c_str());
-				CCLOG("nowGesture = %s", nowGesture.c_str());
+			}
+		} else {
+			if (fabs(deltaX) > fabs(deltaY)) {
+				CCLOG("X = %s", nowGesture.substr(wkLen,1).c_str());
+				if (nowGesture == "")
+				{
+	//				if ((deltaX + 100 < 0 && subGesture == "0") || (deltaX - 100 > 0 && subGesture == "1"))
+					if (deltaX + 100 < 0)
+					{
+						CCLOG("aaaaaaaaaaaaaaaaaaaa");
+						nowGesture += migi;
+						this->xtGestureStartPoint= point;
+					}
+					if (deltaX - 100 > 0)
+					{
+						CCLOG("aaaaaaaaaaaaaaaaaaaa");
+	//					targetGesture = targetGesture.substr(1);
+						nowGesture += hidari;
+						this->xtGestureStartPoint= point;
+					}
+					CCLOG("--------------");
+					CCLOG("X = %f, y = %f", deltaX, deltaY);
+					CCLOG("targetGesture = %s", targetGesture.c_str());
+					CCLOG("nowGesture = %s", nowGesture.c_str());
+				}
+				CCLOG("cccccc");
+			} else {
+				CCLOG("Y = %s", nowGesture.substr(wkLen,1).c_str());
+				if (nowGesture == "")
+				{
+	//				if ((deltaY + 100 < 0 && subGesture == "2") || (deltaY - 100 > 0 && subGesture == "3"))
+					if (deltaY + 100 < 0)
+					{
+						CCLOG("aaaaaaaaaaaaaaaaaaaa");
+						nowGesture += ue;
+						this->xtGestureStartPoint= point;
+					}
+					if (deltaY - 100 > 0)
+					{
+	//					targetGesture = targetGesture.substr(1);
+						CCLOG("aaaaaaaaaaaaaaaaaaaa");
+						nowGesture += sita;
+						this->xtGestureStartPoint= point;
+					}
+					CCLOG("--------------");
+					CCLOG("X = %f, y = %f", deltaX, deltaY);
+					CCLOG("targetGesture = %s", targetGesture.c_str());
+					CCLOG("nowGesture = %s", nowGesture.c_str());
+				}
+				CCLOG("ddddddddddd");
 			}
 		}
 //		CCLOG("targetGesture = %s", targetGesture.c_str());
