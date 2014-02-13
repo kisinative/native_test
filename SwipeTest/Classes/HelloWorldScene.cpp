@@ -243,14 +243,14 @@ void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 				if (deltaX + 100 < 0)
 				{
 					CCLOG("aaaaaaaaaaaaaaaaaaaa");
-					nowGesture = nowGesture.getCString() + "0";
+					nowGesture += migi;
 					this->xtGestureStartPoint= point;
 				}
 				if (deltaX - 100 > 0)
 				{
 					CCLOG("aaaaaaaaaaaaaaaaaaaa");
 //					targetGesture = targetGesture.substr(1);
-					nowGesture = nowGesture.getCString() + "1";
+					nowGesture += hidari;
 					this->xtGestureStartPoint= point;
 				}
 				CCLOG("--------------");
@@ -265,14 +265,14 @@ void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 				if (deltaY + 100 < 0)
 				{
 					CCLOG("aaaaaaaaaaaaaaaaaaaa");
-					nowGesture = nowGesture.getCString() + "2";
+					nowGesture += ue;
 					this->xtGestureStartPoint= point;
 				}
 				if (deltaY - 100 > 0)
 				{
 //					targetGesture = targetGesture.substr(1);
 					CCLOG("aaaaaaaaaaaaaaaaaaaa");
-					nowGesture = nowGesture.getCString() + "3";
+					nowGesture += sita;
 					this->xtGestureStartPoint= point;
 				}
 				CCLOG("--------------");
