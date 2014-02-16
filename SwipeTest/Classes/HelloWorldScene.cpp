@@ -1,4 +1,5 @@
 #include "HelloWorldScene.h"
+#include "KSAnimation.h"
 
 USING_NS_CC;
 //String arrowArray[] = {"右", "左", "上", "下"};
@@ -156,6 +157,7 @@ void HelloWorld::showArrow(float time)
 	pArrow->setPosition(ccp(size.width * 0.50, size.height * 0.60));
 	pArrow->setTag(tagArrowImg);
 	this->addChild(pArrow);
+	pArrow->runAction(KSAnimation::vibrationAnimation((float)defaultEnemySpeed - enemySpeedLv / 10.0));
 
 	this->scheduleOnce(schedule_selector(HelloWorld::timeOver), (float)defaultEnemySpeed - enemySpeedLv / 10.0);
 
