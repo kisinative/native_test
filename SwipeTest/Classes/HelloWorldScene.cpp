@@ -29,7 +29,6 @@ bool HelloWorld::init()
     // タッチを有効にする（内部的にEventDispatcherに登録される）
     this->setTouchEnabled(true);
 
-
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
 
@@ -68,6 +67,29 @@ bool HelloWorld::init()
 	arrowLabel->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 	arrowLabel->setTag(tagArrowLabel);
 	this->addChild(arrowLabel,2);
+
+	Node* pTarget = Sprite::create("target.png");
+	pTarget->setPosition(ccp(visibleSize.width * 0.05, visibleSize.height * 0.80));
+	pTarget->setTag(tagTargetImg);
+	this->addChild(pTarget);
+
+			Node* pTarget1 = Sprite::create("target.png");
+			pTarget1->setPosition(ccp(visibleSize.width * 0.05 - 5.0, visibleSize.height * 0.75));
+			pTarget1->setTag(200);
+			this->addChild(pTarget1);
+			Node* pTarget2 = Sprite::create("target.png");
+			pTarget2->setPosition(ccp(visibleSize.width * 0.05 + 5.0, visibleSize.height * 0.75));
+			pTarget2->setTag(201);
+			this->addChild(pTarget2);
+			Node* pTarget3 = Sprite::create("target.png");
+			pTarget3->setPosition(ccp(visibleSize.width * 0.05 - 30.0, visibleSize.height * 0.70));
+			pTarget3->setTag(202);
+			this->addChild(pTarget3);
+			Node* pTarget4 = Sprite::create("target.png");
+			pTarget4->setPosition(ccp(visibleSize.width * 0.05 + 30.0, visibleSize.height * 0.70));
+			pTarget4->setTag(203);
+			this->addChild(pTarget4);
+
 
 	//敵初期ステータス設定
     setup();
@@ -138,11 +160,6 @@ void HelloWorld::showArrow(float time)
     int randum = rand() % 12;
     targetGesture = arrowArray[randum].getCString();
 
-//	//矢印ラベルを取得
-//	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
-//	//矢印ラベルを更新する
-//	arrowLabel->setString(arrowArray[randum].getCString());
-
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
 	arrowLabel->setString("");
 
@@ -153,13 +170,21 @@ void HelloWorld::showArrow(float time)
     }
 	Size size = Director::sharedDirector()->getWinSize();
 //	Sprite* pArrow = Sprite::create(String::createWithFormat("%d.png",randum)->getCString());
-	pArrow = Sprite::create(String::createWithFormat("%s.png",arrowArray[randum].getCString())->getCString());
-	pArrow->setPosition(ccp(size.width * 0.50, size.height * 0.60));
+	pArrow = Sprite::create("back_blue.png");
+	pArrow->setPosition(ccp(size.width, size.height * 0.80));
 	pArrow->setTag(tagArrowImg);
 	this->addChild(pArrow);
-	pArrow->runAction(KSAnimation::vibrationAnimation((float)defaultEnemySpeed - enemySpeedLv / 10.0));
+	Node* pArrow1 = Sprite::create(String::createWithFormat("%s.png",arrowArray[randum].getCString())->getCString());
+	Size bgSize = pArrow->getContentSize();
+	pArrow1->setPosition(ccp(bgSize.width * 0.5, bgSize.height * 0.5));
+	pArrow->addChild(pArrow1);
 
-	this->scheduleOnce(schedule_selector(HelloWorld::timeOver), (float)defaultEnemySpeed - enemySpeedLv / 10.0);
+	CallFunc* callFunction = CallFunc::create(this, callfunc_selector(HelloWorld::timeOver));
+    Sequence* callAction = Sequence::create(KSAnimation::vibrationAnimation((float)defaultEnemySpeed - enemySpeedLv / 10.0), callFunction, RemoveSelf::create(true), NULL);
+
+	pArrow->runAction(callAction);
+
+//	this->scheduleOnce(schedule_selector(HelloWorld::timeOver), (float)defaultEnemySpeed - enemySpeedLv / 10.0);
 
 }
 
@@ -177,7 +202,7 @@ void HelloWorld::nextStage(float time)
 /*
  * タイムオーバー
  */
-void HelloWorld::timeOver(float time)
+void HelloWorld::timeOver()
 {
 	targetGesture = "99";
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
@@ -263,53 +288,42 @@ void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 			}
 		} else {
 			if (fabs(deltaX) > fabs(deltaY)) {
-				CCLOG("X = %s", nowGesture.substr(wkLen,1).c_str());
+//				CCLOG("X = %s", nowGesture.substr(wkLen,1).c_str());
 				if (nowGesture == "")
 				{
 	//				if ((deltaX + 100 < 0 && subGesture == "0") || (deltaX - 100 > 0 && subGesture == "1"))
 					if (deltaX + 100 < 0)
 					{
-						CCLOG("aaaaaaaaaaaaaaaaaaaa");
 						nowGesture += migi;
 						this->xtGestureStartPoint= point;
 					}
 					if (deltaX - 100 > 0)
 					{
-						CCLOG("aaaaaaaaaaaaaaaaaaaa");
 	//					targetGesture = targetGesture.substr(1);
 						nowGesture += hidari;
 						this->xtGestureStartPoint= point;
 					}
-					CCLOG("--------------");
-					CCLOG("X = %f, y = %f", deltaX, deltaY);
-					CCLOG("targetGesture = %s", targetGesture.c_str());
-					CCLOG("nowGesture = %s", nowGesture.c_str());
 				}
-				CCLOG("cccccc");
 			} else {
-				CCLOG("Y = %s", nowGesture.substr(wkLen,1).c_str());
 				if (nowGesture == "")
 				{
 	//				if ((deltaY + 100 < 0 && subGesture == "2") || (deltaY - 100 > 0 && subGesture == "3"))
 					if (deltaY + 100 < 0)
 					{
-						CCLOG("aaaaaaaaaaaaaaaaaaaa");
 						nowGesture += ue;
 						this->xtGestureStartPoint= point;
 					}
 					if (deltaY - 100 > 0)
 					{
 	//					targetGesture = targetGesture.substr(1);
-						CCLOG("aaaaaaaaaaaaaaaaaaaa");
 						nowGesture += sita;
 						this->xtGestureStartPoint= point;
 					}
-					CCLOG("--------------");
-					CCLOG("X = %f, y = %f", deltaX, deltaY);
-					CCLOG("targetGesture = %s", targetGesture.c_str());
-					CCLOG("nowGesture = %s", nowGesture.c_str());
+//					CCLOG("--------------");
+//					CCLOG("X = %f, y = %f", deltaX, deltaY);
+//					CCLOG("targetGesture = %s", targetGesture.c_str());
+//					CCLOG("nowGesture = %s", nowGesture.c_str());
 				}
-				CCLOG("ddddddddddd");
 			}
 		}
 //		CCLOG("targetGesture = %s", targetGesture.c_str());
@@ -319,8 +333,20 @@ void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 {
 	if (targetGesture < "99"){
-		//タイムアウトチェックタイマーを停止する
-		this->unschedule(schedule_selector(HelloWorld::timeOver));
+
+		//矢印削除
+		Node* pArrow = this->getChildByTag(tagArrowImg);
+		auto arrowPoint = pArrow->getPosition();
+		pArrow->removeFromParentAndCleanup(true);
+
+		Node* pTarget = this->getChildByTag(tagTargetImg);
+		auto targetPoint = pTarget->getPosition();
+
+		Size visibleSize = Director::getInstance()->getVisibleSize();
+
+
+//		//タイムアウトチェックタイマーを停止する
+//		this->unschedule(schedule_selector(HelloWorld::timeOver));
 
 //		Point point = touch->getLocation();
 //		this->xtGestureEndPoint= point;
@@ -334,20 +360,28 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 //		} else {
 //			if ((deltaY + 50 < 0 && targetGesture == "2") || (deltaY - 50 > 0 && targetGesture == "3")) wkGesture = true;
 //		}
-		CCLOG("-------end-------");
-		CCLOG("targetGesture = %s", targetGesture.c_str());
-		CCLOG("nowGesture = %s", nowGesture.c_str());
+//		CCLOG("-------end-------");
+//		CCLOG("targetGesture = %s", targetGesture.c_str());
+//		CCLOG("nowGesture = %s", nowGesture.c_str());
 //		CCLOG("X = %f, y = %f", deltaX, deltaY);
 //		CCLOG("X = %f, y = %f", point.x, point.y);
 
+		int flag = 0;
 		if (nowGesture == targetGesture)
 		{
-			wkGesture = true;
+			if ((targetPoint.x - 30.0 <= arrowPoint.x) && (targetPoint.x + 30.0 >= arrowPoint.x))
+			{
+				wkGesture = true;
+				if ((targetPoint.x - 5.0 <= arrowPoint.x) && (targetPoint.x + 5.0 >= arrowPoint.x))
+				{
+					flag = 1;
+				}
+			}
 		}
 
 		targetGesture = "99";
 		if (wkGesture){
-			attack();
+			attack(flag);
 		} else {
 			miss();
 		}
@@ -361,18 +395,21 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 /*
  *	攻撃成功
  */
-void HelloWorld::attack()
+void HelloWorld::attack(int flag)
 {
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
-	arrowLabel->setString("ぬこぱーんち");
+	CCLOG("flag = %d", flag);
+	if (flag == 0)
+	{
+		arrowLabel->setString("ぬこぱーんち");
+	} else {
+		arrowLabel->setString("すーぱー");
+	}
 
 	//HP更新
 	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagEnemyHp);
 	hpLabel->setString(String::createWithFormat("敵残りHP:%d", --NowEnemyHp)->getCString());
 	if (NowEnemyHp < 1){
-	    Node* pArrow = this->getChildByTag(tagArrowImg);
-    	pArrow->removeFromParentAndCleanup(true);
-
 		arrowLabel->setString(String::createWithFormat("%dステージクリア！！ ",nowStage)->getCString());
 	    int randum = rand() % 3;
 	    switch (randum){

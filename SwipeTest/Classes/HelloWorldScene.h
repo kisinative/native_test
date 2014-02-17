@@ -11,8 +11,8 @@ protected:
 
 	void showArrow(float time);
 	void nextStage(float time);
-	void timeOver(float time);
-	void attack();
+	void timeOver();
+	void attack(int flag);
 	void miss();
 	void setup();
 	void createLabel(std::string labelString, float labelSize, float labelWidth, float labelHeight, int labelTag);
@@ -25,6 +25,7 @@ protected:
 	const int tagEnemyStrong	= 22;		//敵体力タグ
 	const int tagEnemyPower		= 24;		//敵攻撃力タグ
 	const int tagEnemySpeed		= 26;		//敵スピードタグ
+	const int tagTargetImg	 	= 80;		//ターゲットタグ
 	const int tagArrowImg	 	= 90;		//矢印タグ
 	const int tagArrowLabel 	= 100;		//矢印タグ
 	const int tagRetry		 	= 110;		//リトライタグ
@@ -32,7 +33,7 @@ protected:
 	//敵基本能力
 	const int defaultEnemyStrong = 15;		//体力
 	const int defaultEnemyPower  = 10;		//攻撃力
-	const float defaultEnemySpeed  = 2.1;	//スピード
+	const float defaultEnemySpeed  = 4.1;	//スピード
 
 	//敵レベル
 	int enemyStrongLv;

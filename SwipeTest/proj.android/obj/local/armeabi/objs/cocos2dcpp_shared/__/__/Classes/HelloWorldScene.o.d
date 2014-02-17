@@ -212,7 +212,8 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/HelloWorldScene.o: \
  C:\cocos2d-x-3.0beta\projects\native_test\SwipeTest\proj.android\../cocos2d/cocos/2d/CCScheduler.h \
  C:\cocos2d-x-3.0beta\projects\native_test\SwipeTest\proj.android\../cocos2d/cocos/2d/CCComponent.h \
  C:\cocos2d-x-3.0beta\projects\native_test\SwipeTest\proj.android\../cocos2d/cocos/2d/CCComponentContainer.h \
- C:\cocos2d-x-3.0beta\projects\native_test\SwipeTest\proj.android\../cocos2d/cocos/2d/CCDeprecated.h
+ C:\cocos2d-x-3.0beta\projects\native_test\SwipeTest\proj.android\../cocos2d/cocos/2d/CCDeprecated.h \
+ jni/../../Classes/KSAnimation.h
 
 jni/../../Classes/HelloWorldScene.h:
 
@@ -639,3 +640,5 @@ C:\cocos2d-x-3.0beta\projects\native_test\SwipeTest\proj.android\../cocos2d/coco
 C:\cocos2d-x-3.0beta\projects\native_test\SwipeTest\proj.android\../cocos2d/cocos/2d/CCComponentContainer.h:
 
 C:\cocos2d-x-3.0beta\projects\native_test\SwipeTest\proj.android\../cocos2d/cocos/2d/CCDeprecated.h:
+
+jni/../../Classes/KSAnimation.h:
