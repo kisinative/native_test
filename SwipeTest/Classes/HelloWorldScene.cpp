@@ -5,6 +5,9 @@ USING_NS_CC;
 //String arrowArray[] = {"右", "左", "上", "下"};
 String arrowArray[] = {"0", "1", "2", "3","02","03","12","13","20","21","30","31"};
 
+#define WINSIZE CCDirector::sharedDirector()->getWinSize()
+#define TEXT_SCALE WINSIZE.width/1080
+
 Scene* HelloWorld::createScene()
 {
     auto scene = Scene::create();
@@ -24,6 +27,8 @@ bool HelloWorld::init()
         return false;
     }
     
+    EGLView::sharedOpenGLView()->setDesignResolutionSize(1080, 1776, kResolutionNoBorder);
+
     // シングルタッチモードにする
     this->setTouchMode(kCCTouchesOneByOne);
     // タッチを有効にする（内部的にEventDispatcherに登録される）
@@ -58,12 +63,14 @@ bool HelloWorld::init()
     enemySpeedLv = 1;
     nowStage = 1;
     nowGesture = "";
+    Array* moveArrow = Array::create();
+
 
 //	//画面サイズを取得する
 //    Size visibleSize = Director::getInstance()->getVisibleSize();
 //    Point origin = Director::getInstance()->getVisibleOrigin();
 	//矢印ラベルを生成する
-    LabelTTF* arrowLabel = LabelTTF::create("れでぃ", "Arial", 90.0);
+    LabelTTF* arrowLabel = LabelTTF::create("れでぃ", "Arial", 90.0*TEXT_SCALE);
 	arrowLabel->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 	arrowLabel->setTag(tagArrowLabel);
 	this->addChild(arrowLabel,2);
@@ -102,33 +109,36 @@ void HelloWorld::setup()
     Size winSize = Director::sharedDirector()->getWinSize();
     //HP表示
 	createLabel(String::createWithFormat("残りHP:%d", NowHp)->getCString(),
-				50.0,
+				50.0*TEXT_SCALE,
 				winSize.width * 0.15,
 				winSize.height * 0.95,
 				tagHp);
 	//敵HP表示
 	NowEnemyHp = defaultEnemyStrong + (5 * enemyStrongLv);
 	createLabel(String::createWithFormat("敵残りHP:%d", NowEnemyHp)->getCString(),
-				50.0,
+				50.0*TEXT_SCALE,
 				winSize.width * 0.8,
 				winSize.height * 0.95,
 				tagEnemyHp);
 	//敵LV表示
 	createLabel(String::createWithFormat("タフネスLV:%d", enemyStrongLv)->getCString(),
-				50.0,
+				50.0*TEXT_SCALE,
 				winSize.width * 0.8,
 				winSize.height * 0.90,
 				tagEnemyStrong);
 	createLabel(String::createWithFormat("パワーLV:%d", enemypowerLv)->getCString(),
-				50.0,
+				50.0*TEXT_SCALE,
 				winSize.width * 0.8,
 				winSize.height * 0.85,
 				tagEnemyPower);
 	createLabel(String::createWithFormat("スピードLV:%d", enemySpeedLv)->getCString(),
-				50.0,
+				50.0*TEXT_SCALE,
 				winSize.width * 0.8,
 				winSize.height * 0.80,
 				tagEnemySpeed);
+
+	//攻撃数を0に
+	atkCount = 0;
 
     this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 2);
 
@@ -159,6 +169,8 @@ void HelloWorld::showArrow(float time)
 	//ジェスチャー抽選
     int randum = rand() % 12;
     targetGesture = arrowArray[randum].getCString();
+    moveArrow->addObject(arrowArray[randum].getCString());
+    atkCount++;
 
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
 	arrowLabel->setString("");
@@ -204,7 +216,7 @@ void HelloWorld::nextStage(float time)
  */
 void HelloWorld::timeOver()
 {
-	targetGesture = "99";
+//	targetGesture = "99";
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	arrowLabel->setString("timeOut");
 
@@ -332,7 +344,7 @@ void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 
 void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 {
-	if (targetGesture < "99"){
+	if (moveArrow->count() > 0){
 
 		//矢印削除
 		Node* pArrow = this->getChildByTag(tagArrowImg);
@@ -367,7 +379,8 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 //		CCLOG("X = %f, y = %f", point.x, point.y);
 
 		int flag = 0;
-		if (nowGesture == targetGesture)
+//		if (nowGesture == targetGesture)
+		if (nowGesture == moveArrow->objectAtIndex(index))
 		{
 			if ((targetPoint.x - 30.0 <= arrowPoint.x) && (targetPoint.x + 30.0 >= arrowPoint.x))
 			{
@@ -379,7 +392,8 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 			}
 		}
 
-		targetGesture = "99";
+//		targetGesture = "99";
+		moveArrow->removeObjectAtIndex(0);
 		if (wkGesture){
 			attack(flag);
 		} else {

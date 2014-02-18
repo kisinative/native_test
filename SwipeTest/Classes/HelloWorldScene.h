@@ -26,9 +26,9 @@ protected:
 	const int tagEnemyPower		= 24;		//敵攻撃力タグ
 	const int tagEnemySpeed		= 26;		//敵スピードタグ
 	const int tagTargetImg	 	= 80;		//ターゲットタグ
-	const int tagArrowImg	 	= 90;		//矢印タグ
 	const int tagArrowLabel 	= 100;		//矢印タグ
 	const int tagRetry		 	= 110;		//リトライタグ
+	const int tagArrowImg	 	= 1000;		//矢印タグ
 
 	//敵基本能力
 	const int defaultEnemyStrong = 15;		//体力
@@ -54,6 +54,8 @@ protected:
 	std::string nowGesture;				//入力中ジェスチャ
 	bool atkDefFlag;					//攻撃防御フラグ
 	int nowStage;						//現在ステージ
+	std::string moveArrow[];			//移動中矢印
+	int atkCount;						//攻撃数
 
 
 
