@@ -28,6 +28,7 @@ bool HelloWorld::init()
     }
     
     EGLView::sharedOpenGLView()->setDesignResolutionSize(1080, 1776, kResolutionNoBorder);
+//    EGLView::sharedOpenGLView()->setDesignResolutionSize(320, 480, kResolutionNoBorder);
 
     // シングルタッチモードにする
     this->setTouchMode(kCCTouchesOneByOne);
@@ -35,6 +36,7 @@ bool HelloWorld::init()
     this->setTouchEnabled(true);
 
     Size visibleSize = Director::getInstance()->getVisibleSize();
+//    Size visibleSize = Director::sharedDirector()->getWinSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
 
     /////////////////////////////
@@ -61,39 +63,38 @@ bool HelloWorld::init()
     enemyStrongLv = 1;
     enemypowerLv = 1;
     enemySpeedLv = 1;
+    enemyTechniqueLv = 1;
     nowStage = 1;
     nowGesture = "";
-    Array* moveArrow = Array::create();
 
-
-//	//画面サイズを取得する
-//    Size visibleSize = Director::getInstance()->getVisibleSize();
-//    Point origin = Director::getInstance()->getVisibleOrigin();
+//    CCLOG("visible = %f,visible = %f",visibleSize.width,visibleSize.height);
 	//矢印ラベルを生成する
     LabelTTF* arrowLabel = LabelTTF::create("れでぃ", "Arial", 90.0*TEXT_SCALE);
 	arrowLabel->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 	arrowLabel->setTag(tagArrowLabel);
 	this->addChild(arrowLabel,2);
+//    CCLOG("aaaaaaa = %f,bbbbbbb = %f",origin.x,origin.y);
 
 	Node* pTarget = Sprite::create("target.png");
-	pTarget->setPosition(ccp(visibleSize.width * 0.05, visibleSize.height * 0.80));
+//	pTarget->setPosition(ccp(visibleSize.width * 0.05, visibleSize.height * 0.80));
+	pTarget->setPosition(ccp(pTarget->getContentSize().width, visibleSize.height * 0.80));
 	pTarget->setTag(tagTargetImg);
 	this->addChild(pTarget);
 
 			Node* pTarget1 = Sprite::create("target.png");
-			pTarget1->setPosition(ccp(visibleSize.width * 0.05 - 5.0, visibleSize.height * 0.75));
+			pTarget1->setPosition(ccp(pTarget->getContentSize().width - 5.0, visibleSize.height * 0.75));
 			pTarget1->setTag(200);
 			this->addChild(pTarget1);
 			Node* pTarget2 = Sprite::create("target.png");
-			pTarget2->setPosition(ccp(visibleSize.width * 0.05 + 5.0, visibleSize.height * 0.75));
+			pTarget2->setPosition(ccp(pTarget->getContentSize().width + 5.0, visibleSize.height * 0.75));
 			pTarget2->setTag(201);
 			this->addChild(pTarget2);
 			Node* pTarget3 = Sprite::create("target.png");
-			pTarget3->setPosition(ccp(visibleSize.width * 0.05 - 30.0, visibleSize.height * 0.70));
+			pTarget3->setPosition(ccp(pTarget->getContentSize().width - 30.0, visibleSize.height * 0.70));
 			pTarget3->setTag(202);
 			this->addChild(pTarget3);
 			Node* pTarget4 = Sprite::create("target.png");
-			pTarget4->setPosition(ccp(visibleSize.width * 0.05 + 30.0, visibleSize.height * 0.70));
+			pTarget4->setPosition(ccp(pTarget->getContentSize().width + 30.0, visibleSize.height * 0.70));
 			pTarget4->setTag(203);
 			this->addChild(pTarget4);
 
@@ -106,7 +107,8 @@ bool HelloWorld::init()
 
 void HelloWorld::setup()
 {
-    Size winSize = Director::sharedDirector()->getWinSize();
+//    Size winSize = Director::sharedDirector()->getWinSize();
+    Size winSize = Director::getInstance()->getVisibleSize();
     //HP表示
 	createLabel(String::createWithFormat("残りHP:%d", NowHp)->getCString(),
 				50.0*TEXT_SCALE,
@@ -136,11 +138,18 @@ void HelloWorld::setup()
 				winSize.width * 0.8,
 				winSize.height * 0.80,
 				tagEnemySpeed);
+	createLabel(String::createWithFormat("テクニックLV:%d", enemyTechniqueLv)->getCString(),
+				50.0*TEXT_SCALE,
+				winSize.width * 0.8,
+				winSize.height * 0.75,
+				tagEnemyTechnique);
 
-	//攻撃数を0に
-	atkCount = 0;
+	//攻撃数を初期化
+	atkCount = tagArrowImg;
+    frontArrowTag = tagArrowImg;
 
-    this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 2);
+//    this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 2);
+    this->schedule(schedule_selector(HelloWorld::showArrow), 2);
 
 }
 
@@ -167,24 +176,37 @@ void HelloWorld::createLabel(std::string labelString, float labelSize, float lab
 void HelloWorld::showArrow(float time)
 {
 	//ジェスチャー抽選
-    int randum = rand() % 12;
+    int randum = arc4random() % 12;
     targetGesture = arrowArray[randum].getCString();
-    moveArrow->addObject(arrowArray[randum].getCString());
-    atkCount++;
-
+    moveArrow.push_back(arrowArray[randum].getCString());
+    
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
 	arrowLabel->setString("");
 
-    Node* pArrow = this->getChildByTag(tagArrowImg);
+    Node* pArrow = this->getChildByTag(atkCount);
     if (pArrow)
     {
     	pArrow->removeFromParentAndCleanup(true);
     }
-	Size size = Director::sharedDirector()->getWinSize();
+    Size size = Director::getInstance()->getVisibleSize();
+//	Size size = Director::sharedDirector()->getWinSize();
 //	Sprite* pArrow = Sprite::create(String::createWithFormat("%d.png",randum)->getCString());
-	pArrow = Sprite::create("back_blue.png");
+    
+    //攻防判定
+    int atkDefFlag = arc4random() % (50 + defaultEnemyTechnique +enemyTechniqueLv);
+    if (atkDefFlag < (defaultEnemyTechnique +enemyTechniqueLv))
+    {
+        //防御
+        pArrow = Sprite::create("back_red.png");
+        moveAtkDef.push_back(1);
+    } else {
+        //攻撃
+        pArrow = Sprite::create("back_blue.png");
+        moveAtkDef.push_back(0);
+    }
+ 	
 	pArrow->setPosition(ccp(size.width, size.height * 0.80));
-	pArrow->setTag(tagArrowImg);
+	pArrow->setTag(atkCount++);
 	this->addChild(pArrow);
 	Node* pArrow1 = Sprite::create(String::createWithFormat("%s.png",arrowArray[randum].getCString())->getCString());
 	Size bgSize = pArrow->getContentSize();
@@ -216,6 +238,7 @@ void HelloWorld::nextStage(float time)
  */
 void HelloWorld::timeOver()
 {
+    frontArrowTag++;
 //	targetGesture = "99";
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	arrowLabel->setString("timeOut");
@@ -224,11 +247,21 @@ void HelloWorld::timeOver()
 	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagHp);
 	NowHp = NowHp - (defaultEnemyPower + 5 * enemypowerLv);
 	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
+//    for (int i = 1;i < moveArrow.size();i++)
+//    {
+//        moveArrow[i-1] = moveArrow[i];
+//    }
+//    moveArrow.pop_back();
+    moveArrow.erase(moveArrow.begin());
+    moveAtkDef.erase(moveAtkDef.begin());
+
+
 	if (NowHp < 1){
 		hpLabel->setString(String::createWithFormat("残りHP:%d", 0)->getCString());
 		arrowLabel->setString("GameOver");
-	} else {
-		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 1);
+        makeRetryButton();
+//	} else {
+//		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 1);
 	}
 }
 
@@ -344,10 +377,10 @@ void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 
 void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 {
-	if (moveArrow->count() > 0){
+	if (moveArrow.size() > 0){
 
 		//矢印削除
-		Node* pArrow = this->getChildByTag(tagArrowImg);
+		Node* pArrow = this->getChildByTag(frontArrowTag++);
 		auto arrowPoint = pArrow->getPosition();
 		pArrow->removeFromParentAndCleanup(true);
 
@@ -355,6 +388,7 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 		auto targetPoint = pTarget->getPosition();
 
 		Size visibleSize = Director::getInstance()->getVisibleSize();
+//        Size visibleSize = Director::sharedDirector()->getWinSize();
 
 
 //		//タイムアウトチェックタイマーを停止する
@@ -380,7 +414,8 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 
 		int flag = 0;
 //		if (nowGesture == targetGesture)
-		if (nowGesture == moveArrow->objectAtIndex(index))
+        
+		if (nowGesture == moveArrow[0])
 		{
 			if ((targetPoint.x - 30.0 <= arrowPoint.x) && (targetPoint.x + 30.0 >= arrowPoint.x))
 			{
@@ -393,7 +428,16 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 		}
 
 //		targetGesture = "99";
-		moveArrow->removeObjectAtIndex(0);
+//		moveArrow->removeObjectAtIndex(0);
+        
+//        for (int i = 1;i < moveArrow.size();i++)
+//        {
+//            moveArrow[i-1] = moveArrow[i];
+//        }
+//		moveArrow.pop_back();
+        moveArrow.erase(moveArrow.begin());
+        moveAtkDef.erase(moveAtkDef.begin());
+        
 		if (wkGesture){
 			attack(flag);
 		} else {
@@ -424,8 +468,9 @@ void HelloWorld::attack(int flag)
 	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagEnemyHp);
 	hpLabel->setString(String::createWithFormat("敵残りHP:%d", --NowEnemyHp)->getCString());
 	if (NowEnemyHp < 1){
+        arrowRefresh();
 		arrowLabel->setString(String::createWithFormat("%dステージクリア！！ ",nowStage)->getCString());
-	    int randum = rand() % 3;
+	    int randum = rand() % 4;
 	    switch (randum){
 	    	case 0:
 	    	    enemyStrongLv++;
@@ -436,12 +481,15 @@ void HelloWorld::attack(int flag)
 	    	case 2:
 	    	    enemySpeedLv++;
 	    		break;
+	    	case 3:
+	    	    enemyTechniqueLv++;
+	    		break;
 	    }
 	    //HP回復
 	    NowHp += 20;
 		this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 1.3);
-	} else {
-		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 0.2);
+//	} else {
+//		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 0.2);
 	}
 }
 
@@ -458,10 +506,11 @@ void HelloWorld::miss()
 	NowHp = NowHp - (defaultEnemyPower + 5 * enemypowerLv);
 	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
 	if (NowHp < 1){
+        hpLabel->setString(String::createWithFormat("残りHP:%d", 0)->getCString());
 		arrowLabel->setString("GameOver");
 		makeRetryButton();
-	} else {
-		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 1);
+//	} else {
+//		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 1);
 	}
 }
 
@@ -473,15 +522,18 @@ void HelloWorld::miss()
  */
 void HelloWorld::makeRetryButton()
 {
+    arrowRefresh();
+    
 	//画面サイズを取得する
-	Size winSize = Director::sharedDirector()->getWinSize();
+//	Size winSize = Director::sharedDirector()->getWinSize();
+    Size winSize = Director::getInstance()->getVisibleSize();
 
 	//リトライボタンを作成する
 	LabelTTF* retryLabel = LabelTTF::create("Retry?", "Arial", 80.0);
     MenuItemLabel* retryItem = MenuItemLabel::create(retryLabel, [&](Object *sender) {
 			//ゲームのシーンを新しく用意する
 			Scene* gameScene = (Scene*)HelloWorld::create();
-			Director::sharedDirector()->replaceScene(gameScene);
+            Director::getInstance()->replaceScene(gameScene);
     	});
 
 
@@ -498,8 +550,20 @@ void HelloWorld::tapRetryButton(Node *node)
 {
 	//ゲームのシーンを新しく用意する
 	Scene* gameScene = (Scene*)HelloWorld::create();
-	Director::sharedDirector()->replaceScene(gameScene);
+//	Director::sharedDirector()->replaceScene(gameScene);
+	Director::getInstance()->replaceScene(gameScene);
 }
 
-
-
+void HelloWorld::arrowRefresh()
+{
+    this->unschedule(schedule_selector(HelloWorld::showArrow));
+    for (int i = frontArrowTag;i < atkCount; i++)
+    {
+        Node* pArrow = this->getChildByTag(i);
+        pArrow->removeFromParentAndCleanup(true);
+    }
+    moveArrow.clear();
+    moveAtkDef.clear();
+}
+ 
+ 
