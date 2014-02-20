@@ -13,7 +13,8 @@ protected:
 	void nextStage(float time);
 	void timeOver();
 	void attack(int flag);
-	void miss();
+	void defense(int flag);
+	void miss(bool flag);
 	void setup();
 	void createLabel(std::string labelString, float labelSize, float labelWidth, float labelHeight, int labelTag);
 	void makeRetryButton();
@@ -36,7 +37,7 @@ protected:
 	const int defaultEnemyStrong = 15;		//体力
 	const int defaultEnemyPower  = 10;		//攻撃力
 	const float defaultEnemySpeed  = 3.1;	//スピード
-	const int defaultEnemyTechnique  = 50;	//テクニック
+	const int defaultEnemyTechnique  = 20;	//テクニック
 
 	//敵レベル
 	int enemyStrongLv;
@@ -48,6 +49,7 @@ protected:
 	const int MaxHp			= 100;          //最大HP
 	int NowHp;                              //現在HP
 	int NowEnemyHp;                         //敵現在HP
+	int NowEnemyRush;						//現在ラッシュポイント
 
 	//フラグ類
 	std::string migi = "0";                 //入力中ジェスチャ
@@ -62,6 +64,7 @@ protected:
     std::vector<int> moveAtkDef;			//移動中矢印
 	int atkCount;                           //攻撃数
 	int frontArrowTag;                      //先頭矢印タグ
+	int rushCount;							//残りラッシュ数
 
 
 

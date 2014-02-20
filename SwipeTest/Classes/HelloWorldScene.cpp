@@ -147,6 +147,8 @@ void HelloWorld::setup()
 	//攻撃数を初期化
 	atkCount = tagArrowImg;
     frontArrowTag = tagArrowImg;
+    NowEnemyRush = 0;
+    rushCount = 0;
 
 //    this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 2);
     this->schedule(schedule_selector(HelloWorld::showArrow), 2);
@@ -218,6 +220,18 @@ void HelloWorld::showArrow(float time)
 
 	pArrow->runAction(callAction);
 
+	//ラッシュ処理
+	if (rushCount > 0)
+	{
+		if (--rushCount == 0)
+		{
+			NowEnemyRush = 0;
+			this->unschedule(schedule_selector(HelloWorld::showArrow));
+			this->schedule(schedule_selector(HelloWorld::showArrow), 2);
+		}
+	}
+
+
 //	this->scheduleOnce(schedule_selector(HelloWorld::timeOver), (float)defaultEnemySpeed - enemySpeedLv / 10.0);
 
 }
@@ -245,13 +259,29 @@ void HelloWorld::timeOver()
 
 	//HP更新
 	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagHp);
-	NowHp = NowHp - (defaultEnemyPower + 5 * enemypowerLv);
+	NowHp = NowHp - (defaultEnemyPower + 2 * enemypowerLv);
 	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
 //    for (int i = 1;i < moveArrow.size();i++)
 //    {
 //        moveArrow[i-1] = moveArrow[i];
 //    }
 //    moveArrow.pop_back();
+
+	if (moveAtkDef[0] == 1)
+	{
+		//ガード失敗連続攻撃
+		Node* pArrow = this->getChildByTag(frontArrowTag);
+		if (pArrow) {
+			Animation *animation = Animation::create();
+			animation->addSpriteFrameWithFileName("back_red.png");
+			animation->setDelayPerUnit( 0.1f );
+			animation->setRestoreOriginalFrame(false);
+			moveAtkDef[0] = 1;
+			RepeatForever *action = RepeatForever::create( Animate::create(animation) );
+			pArrow->runAction(action);
+		}
+	}
+
     moveArrow.erase(moveArrow.begin());
     moveAtkDef.erase(moveAtkDef.begin());
 
@@ -401,6 +431,7 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 //		float deltaY = this->xtGestureStartPoint.y - this->xtGestureEndPoint.y;
 //
 		bool wkGesture = false;
+		bool wkAtkDef  = false;
 //		if (fabs(deltaX) > fabs(deltaY)) {
 //			if ((deltaX + 50 < 0 && targetGesture == "0") || (deltaX - 50 > 0 && targetGesture == "1")) wkGesture = true;
 //		} else {
@@ -420,6 +451,11 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 			if ((targetPoint.x - 30.0 <= arrowPoint.x) && (targetPoint.x + 30.0 >= arrowPoint.x))
 			{
 				wkGesture = true;
+				//攻防判定
+				if (moveAtkDef[0] == 0)
+				{
+					wkAtkDef = true;
+				}
 				if ((targetPoint.x - 5.0 <= arrowPoint.x) && (targetPoint.x + 5.0 >= arrowPoint.x))
 				{
 					flag = 1;
@@ -439,9 +475,22 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
         moveAtkDef.erase(moveAtkDef.begin());
         
 		if (wkGesture){
-			attack(flag);
+			if (wkAtkDef){
+				attack(flag);
+			} else {
+				defense(flag);
+			}
+			NowEnemyRush += 1;
 		} else {
-			miss();
+			miss(wkAtkDef);
+			NowEnemyRush += 5;
+		}
+
+		if (NowEnemyRush >= 20 && rushCount == 0)
+		{
+			rushCount = 5;
+			this->unschedule(schedule_selector(HelloWorld::showArrow));
+			this->schedule(schedule_selector(HelloWorld::showArrow), 1);
 		}
 	}
 	nowGesture = "";
@@ -456,7 +505,6 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 void HelloWorld::attack(int flag)
 {
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
-	CCLOG("flag = %d", flag);
 	if (flag == 0)
 	{
 		arrowLabel->setString("ぬこぱーんち");
@@ -494,16 +542,42 @@ void HelloWorld::attack(int flag)
 }
 
 /*
+ *	攻撃成功
+ */
+void HelloWorld::defense(int flag)
+{
+
+	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
+	arrowLabel->setString("ガード");
+
+}
+
+/*
  *	攻撃失敗
  */
-void HelloWorld::miss()
+void HelloWorld::miss(bool flag)
 {
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	arrowLabel->setString("ミス！");
 
+	if (!flag)
+	{
+		//ガード失敗連続攻撃
+		Node* pArrow = this->getChildByTag(frontArrowTag);
+		if (pArrow) {
+			Animation *animation = Animation::create();
+			animation->addSpriteFrameWithFileName("back_red.png");
+			animation->setDelayPerUnit( 0.1f );
+			animation->setRestoreOriginalFrame(false);
+			moveAtkDef[0] = 1;
+			RepeatForever *action = RepeatForever::create( Animate::create(animation) );
+			pArrow->runAction(action);
+		}
+	}
+
 	//HP更新
 	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagHp);
-	NowHp = NowHp - (defaultEnemyPower + 5 * enemypowerLv);
+	NowHp = NowHp - (defaultEnemyPower + 2 * enemypowerLv);
 	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
 	if (NowHp < 1){
         hpLabel->setString(String::createWithFormat("残りHP:%d", 0)->getCString());
