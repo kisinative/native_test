@@ -77,24 +77,24 @@ bool HelloWorld::init()
 
 	Node* pTarget = Sprite::create("target.png");
 //	pTarget->setPosition(ccp(visibleSize.width * 0.05, visibleSize.height * 0.80));
-	pTarget->setPosition(ccp(pTarget->getContentSize().width, visibleSize.height * 0.80));
+	pTarget->setPosition(ccp(pTarget->getContentSize().width+50.0, visibleSize.height * 0.80));
 	pTarget->setTag(tagTargetImg);
 	this->addChild(pTarget);
 
 			Node* pTarget1 = Sprite::create("target.png");
-			pTarget1->setPosition(ccp(pTarget->getContentSize().width - 5.0, visibleSize.height * 0.75));
+			pTarget1->setPosition(ccp(pTarget->getContentSize().width+50.0 - 5.0, visibleSize.height * 0.75));
 			pTarget1->setTag(200);
 			this->addChild(pTarget1);
 			Node* pTarget2 = Sprite::create("target.png");
-			pTarget2->setPosition(ccp(pTarget->getContentSize().width + 5.0, visibleSize.height * 0.75));
+			pTarget2->setPosition(ccp(pTarget->getContentSize().width+50.0 + 5.0, visibleSize.height * 0.75));
 			pTarget2->setTag(201);
 			this->addChild(pTarget2);
 			Node* pTarget3 = Sprite::create("target.png");
-			pTarget3->setPosition(ccp(pTarget->getContentSize().width - 30.0, visibleSize.height * 0.70));
+			pTarget3->setPosition(ccp(pTarget->getContentSize().width+50.0 - 50.0, visibleSize.height * 0.70));
 			pTarget3->setTag(202);
 			this->addChild(pTarget3);
 			Node* pTarget4 = Sprite::create("target.png");
-			pTarget4->setPosition(ccp(pTarget->getContentSize().width + 30.0, visibleSize.height * 0.70));
+			pTarget4->setPosition(ccp(pTarget->getContentSize().width+50.0 + 50.0, visibleSize.height * 0.70));
 			pTarget4->setTag(203);
 			this->addChild(pTarget4);
 
@@ -196,7 +196,7 @@ void HelloWorld::showArrow(float time)
     
     //攻防判定
     int atkDefFlag = arc4random() % (50 + defaultEnemyTechnique +enemyTechniqueLv);
-    if (atkDefFlag < (defaultEnemyTechnique +enemyTechniqueLv))
+    if ((atkDefFlag < (defaultEnemyTechnique +enemyTechniqueLv)) || (rushCount > 0))
     {
         //防御
         pArrow = Sprite::create("back_red.png");
@@ -431,7 +431,10 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 //		float deltaY = this->xtGestureStartPoint.y - this->xtGestureEndPoint.y;
 //
 		bool wkGesture = false;
+		//攻防判定
 		bool wkAtkDef  = false;
+		if (moveAtkDef[0] == 0) wkAtkDef = true;
+
 //		if (fabs(deltaX) > fabs(deltaY)) {
 //			if ((deltaX + 50 < 0 && targetGesture == "0") || (deltaX - 50 > 0 && targetGesture == "1")) wkGesture = true;
 //		} else {
@@ -448,14 +451,9 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
         
 		if (nowGesture == moveArrow[0])
 		{
-			if ((targetPoint.x - 30.0 <= arrowPoint.x) && (targetPoint.x + 30.0 >= arrowPoint.x))
+			if ((targetPoint.x - 50.0 <= arrowPoint.x) && (targetPoint.x + 50.0 >= arrowPoint.x))
 			{
 				wkGesture = true;
-				//攻防判定
-				if (moveAtkDef[0] == 0)
-				{
-					wkAtkDef = true;
-				}
 				if ((targetPoint.x - 5.0 <= arrowPoint.x) && (targetPoint.x + 5.0 >= arrowPoint.x))
 				{
 					flag = 1;
@@ -508,13 +506,15 @@ void HelloWorld::attack(int flag)
 	if (flag == 0)
 	{
 		arrowLabel->setString("ぬこぱーんち");
+		--NowEnemyHp;
 	} else {
 		arrowLabel->setString("すーぱー");
+		NowEnemyHp -= 3;
 	}
 
 	//HP更新
 	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagEnemyHp);
-	hpLabel->setString(String::createWithFormat("敵残りHP:%d", --NowEnemyHp)->getCString());
+	hpLabel->setString(String::createWithFormat("敵残りHP:%d", NowEnemyHp)->getCString());
 	if (NowEnemyHp < 1){
         arrowRefresh();
 		arrowLabel->setString(String::createWithFormat("%dステージクリア！！ ",nowStage)->getCString());
