@@ -23,7 +23,9 @@ protected:
 
 	// tag
 	const int tagHp				= 10;		//HPタグ
+	const int tagHpImg			= 11;		//HPタグ
 	const int tagEnemyHp		= 20;		//敵HPタグ
+	const int tagEnemyHpImg		= 21;		//敵HPタグ
 	const int tagEnemyStrong	= 22;		//敵体力タグ
 	const int tagEnemyPower		= 24;		//敵攻撃力タグ
 	const int tagEnemySpeed		= 26;		//敵スピードタグ
@@ -49,6 +51,7 @@ protected:
 	const int MaxHp			= 100;          //最大HP
 	int NowHp;                              //現在HP
 	int NowEnemyHp;                         //敵現在HP
+	int MaxEnemyHp;                         //敵最大HP
 	int NowEnemyRush;						//現在ラッシュポイント
 
 	//フラグ類
