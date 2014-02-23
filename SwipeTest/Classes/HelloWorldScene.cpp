@@ -177,7 +177,8 @@ void HelloWorld::setup()
     rushCount = 0;
 
 	Node* pHpImg = this->getChildByTag(tagEnemyHpImg);
-	pHpImg->runAction(KSAnimation::hpAction(1.0));
+	pHpImg->setScaleX(1.0);
+//	pHpImg->runAction(KSAnimation::hpAction(1.0));
 
 //    this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 2);
     this->schedule(schedule_selector(HelloWorld::showArrow), 2);
@@ -317,6 +318,7 @@ void HelloWorld::timeOver()
 	Node* pHpImg = this->getChildByTag(tagHpImg);
 	float wk_a = (float)NowHp / MaxHp;
 	pHpImg->runAction(KSAnimation::hpAction(wk_a));
+	pHpImg->setScaleX(wk_a);
 
 	if (NowHp < 1){
 		hpLabel->setString(String::createWithFormat("残りHP:%d", 0)->getCString());
@@ -550,6 +552,7 @@ void HelloWorld::attack(int flag)
 	Node* pHpImg = this->getChildByTag(tagEnemyHpImg);
 	float wk_a = (float)NowEnemyHp / MaxEnemyHp;
 	pHpImg->runAction(KSAnimation::hpAction(wk_a));
+	pHpImg->setScaleX(wk_a);
 
 	//HP更新
 	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagEnemyHp);
@@ -581,6 +584,7 @@ void HelloWorld::attack(int flag)
 		Node* pHpImg = this->getChildByTag(tagHpImg);
 		float wk_a = (float)NowHp / MaxHp;
 		pHpImg->runAction(KSAnimation::hpAction(wk_a));
+		pHpImg->setScaleX(wk_a);
 
 
 		this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 1.3);
@@ -630,6 +634,7 @@ void HelloWorld::miss(bool flag)
 	Node* pHpImg = this->getChildByTag(tagHpImg);
 	float wk_a = (float)NowHp / MaxHp;
 	pHpImg->runAction(KSAnimation::hpAction(wk_a));
+	pHpImg->setScaleX(wk_a);
 
 	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
 	if (NowHp < 1){
