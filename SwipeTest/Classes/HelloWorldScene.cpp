@@ -27,9 +27,7 @@ bool HelloWorld::init()
         return false;
     }
     
-    EGLView::sharedOpenGLView()->setDesignResolutionSize(640, 1136, kResolutionNoBorder);
-//    EGLView::sharedOpenGLView()->setDesignResolutionSize(1080, 1776, kResolutionNoBorder);
-//    EGLView::sharedOpenGLView()->setDesignResolutionSize(320, 480, kResolutionNoBorder);
+//    EGLView::sharedOpenGLView()->setDesignResolutionSize(640, 1136, kResolutionNoBorder);
 
     // シングルタッチモードにする
     this->setTouchMode(kCCTouchesOneByOne);
