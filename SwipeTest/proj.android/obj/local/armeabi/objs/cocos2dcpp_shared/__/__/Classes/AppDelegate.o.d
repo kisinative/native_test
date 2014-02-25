@@ -212,7 +212,7 @@ obj/local/armeabi/objs/cocos2dcpp_shared/__/__/Classes/AppDelegate.o: \
  C:\cocos2d-x-3.0beta\projects\native_test\SwipeTest\proj.android\../cocos2d/cocos/2d/CCComponent.h \
  C:\cocos2d-x-3.0beta\projects\native_test\SwipeTest\proj.android\../cocos2d/cocos/2d/CCComponentContainer.h \
  C:\cocos2d-x-3.0beta\projects\native_test\SwipeTest\proj.android\../cocos2d/cocos/2d/CCDeprecated.h \
- jni/../../Classes/HelloWorldScene.h
+ jni/../../Classes/TitleScene.h
 
 jni/../../Classes/AppDelegate.h:
 
@@ -640,4 +640,4 @@ C:\cocos2d-x-3.0beta\projects\native_test\SwipeTest\proj.android\../cocos2d/coco
 
 C:\cocos2d-x-3.0beta\projects\native_test\SwipeTest\proj.android\../cocos2d/cocos/2d/CCDeprecated.h:
 
-jni/../../Classes/HelloWorldScene.h:
+jni/../../Classes/TitleScene.h:
