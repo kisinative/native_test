@@ -1,5 +1,6 @@
 #include "AppDelegate.h"
 #include "TitleScene.h"
+#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 
@@ -7,7 +8,7 @@ AppDelegate::AppDelegate() {
 
 }
 
-AppDelegate::~AppDelegate() 
+AppDelegate::~AppDelegate()
 {
 }
 
@@ -17,7 +18,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto eglView = EGLView::getInstance();
 
     director->setOpenGLView(eglView);
-	
+
     // turn on display FPS
     director->setDisplayStats(true);
 
@@ -38,6 +39,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 void AppDelegate::applicationDidEnterBackground() {
     Director::getInstance()->stopAnimation();
 
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
     // if you use SimpleAudioEngine, it must be pause
     // SimpleAudioEngine::sharedEngine()->pauseBackgroundMusic();
 }
@@ -46,6 +48,7 @@ void AppDelegate::applicationDidEnterBackground() {
 void AppDelegate::applicationWillEnterForeground() {
     Director::getInstance()->startAnimation();
 
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
     // if you use SimpleAudioEngine, it must resume here
     // SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 }

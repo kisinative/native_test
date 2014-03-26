@@ -26,7 +26,7 @@ bool HelloWorld::init()
     {
         return false;
     }
-    
+
 //    EGLView::sharedOpenGLView()->setDesignResolutionSize(640, 1136, kResolutionNoBorder);
 
     // シングルタッチモードにする
@@ -47,7 +47,7 @@ bool HelloWorld::init()
                                            "CloseNormal.png",
                                            "CloseSelected.png",
                                            CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-    
+
 	closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
                                 origin.y + closeItem->getContentSize().height/2));
 
@@ -209,7 +209,7 @@ void HelloWorld::showArrow(float time)
     int randum = arc4random() % 12;
     targetGesture = arrowArray[randum].getCString();
     moveArrow.push_back(arrowArray[randum].getCString());
-    
+
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
 	arrowLabel->setString("");
 
@@ -221,7 +221,7 @@ void HelloWorld::showArrow(float time)
     Size size = Director::getInstance()->getVisibleSize();
 //	Size size = Director::sharedDirector()->getWinSize();
 //	Sprite* pArrow = Sprite::create(String::createWithFormat("%d.png",randum)->getCString());
-    
+
     //攻防判定
     int atkDefFlag = arc4random() % (50 + defaultEnemyTechnique +enemyTechniqueLv);
     if ((atkDefFlag < (defaultEnemyTechnique +enemyTechniqueLv)) || (rushCount > 0))
@@ -234,7 +234,7 @@ void HelloWorld::showArrow(float time)
         pArrow = Sprite::create("back_blue.png");
         moveAtkDef.push_back(0);
     }
- 	
+
 	pArrow->setPosition(Point(size.width, size.height * 0.80));
 	pArrow->setTag(atkCount++);
 	this->addChild(pArrow);
@@ -286,14 +286,7 @@ void HelloWorld::timeOver()
 	arrowLabel->setString("timeOut");
 
 	//HP更新
-	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagHp);
-	NowHp = NowHp - (defaultEnemyPower + 2 * enemypowerLv);
-	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
-//    for (int i = 1;i < moveArrow.size();i++)
-//    {
-//        moveArrow[i-1] = moveArrow[i];
-//    }
-//    moveArrow.pop_back();
+	meDamage();
 
 	if (moveAtkDef[0] == 1)
 	{
@@ -313,13 +306,8 @@ void HelloWorld::timeOver()
     moveArrow.erase(moveArrow.begin());
     moveAtkDef.erase(moveAtkDef.begin());
 
-	Node* pHpImg = this->getChildByTag(tagHpImg);
-	float wk_a = (float)NowHp / MaxHp;
-	pHpImg->runAction(KSAnimation::hpAction(wk_a));
-	pHpImg->setScaleX(wk_a);
-
 	if (NowHp < 1){
-		hpLabel->setString(String::createWithFormat("残りHP:%d", 0)->getCString());
+		this->unschedule(schedule_selector(HelloWorld::showArrow));
 		arrowLabel->setString("GameOver");
         makeRetryButton();
 //	} else {
@@ -480,7 +468,7 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 
 		int flag = 0;
 //		if (nowGesture == targetGesture)
-        
+
 		if (nowGesture == moveArrow[0])
 		{
 			if ((targetPoint.x - 50.0 <= arrowPoint.x) && (targetPoint.x + 50.0 >= arrowPoint.x))
@@ -495,7 +483,7 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 
 //		targetGesture = "99";
 //		moveArrow->removeObjectAtIndex(0);
-        
+
 //        for (int i = 1;i < moveArrow.size();i++)
 //        {
 //            moveArrow[i-1] = moveArrow[i];
@@ -503,7 +491,7 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 //		moveArrow.pop_back();
         moveArrow.erase(moveArrow.begin());
         moveAtkDef.erase(moveAtkDef.begin());
-        
+
 		if (wkGesture){
 			if (wkAtkDef){
 				attack(flag);
@@ -626,17 +614,10 @@ void HelloWorld::miss(bool flag)
 	}
 
 	//HP更新
-	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagHp);
-	NowHp = NowHp - (defaultEnemyPower + 2 * enemypowerLv);
+	meDamage();
 
-	Node* pHpImg = this->getChildByTag(tagHpImg);
-	float wk_a = (float)NowHp / MaxHp;
-	pHpImg->runAction(KSAnimation::hpAction(wk_a));
-	pHpImg->setScaleX(wk_a);
-
-	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
 	if (NowHp < 1){
-        hpLabel->setString(String::createWithFormat("残りHP:%d", 0)->getCString());
+		this->unschedule(schedule_selector(HelloWorld::showArrow));
 		arrowLabel->setString("GameOver");
 		makeRetryButton();
 //	} else {
@@ -653,7 +634,7 @@ void HelloWorld::miss(bool flag)
 void HelloWorld::makeRetryButton()
 {
     arrowRefresh();
-    
+
 	//画面サイズを取得する
 //	Size winSize = Director::sharedDirector()->getWinSize();
     Size winSize = Director::getInstance()->getVisibleSize();
@@ -695,5 +676,22 @@ void HelloWorld::arrowRefresh()
     moveArrow.clear();
     moveAtkDef.clear();
 }
- 
- 
+
+
+//****************************************************************************************
+// 自ダメージ
+//****************************************************************************************
+void HelloWorld::meDamage()
+{
+	LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagHp);
+	NowHp = NowHp - (defaultEnemyPower + 2 * enemypowerLv);
+	if (NowHp < 0){
+		NowHp = 0;
+	}
+	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
+
+	Node* pHpImg = this->getChildByTag(tagHpImg);
+	float wk_a = (float)NowHp / MaxHp;
+	pHpImg->runAction(KSAnimation::hpAction(wk_a));
+	pHpImg->setScaleX(wk_a);
+}

@@ -20,6 +20,7 @@ protected:
 	void makeRetryButton();
 	void tapRetryButton(Node *node);
 	void arrowRefresh();
+	void meDamage();
 
 	// tag
 	const int tagHp				= 10;		//HPタグ

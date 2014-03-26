@@ -6,32 +6,32 @@ obj/local/armeabi/objs/cocos2dx_static/CCDirector.o: \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCPlatformConfig.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCPlatformConfig.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/platform/android/CCPlatformDefine.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/android/log.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/android/log.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCObject.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCDataVisitor.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCPlatformMacros.h \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/string \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/string \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/ccMacros.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/platform/CCCommon.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/platform/android/CCStdC.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/math.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/stdlib.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/alloca.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/strings.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/memory.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/math.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/stdlib.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/alloca.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/strings.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/memory.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/ccConfig.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/ccTypes.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCGeometry.h \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/functional \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/functional \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCObject.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/platform/android/CCGL.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/GLES2/gl2platform.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/KHR/khrplatform.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/GLES2/gl2.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/GLES2/gl2ext.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/GLES2/gl2platform.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/KHR/khrplatform.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/GLES2/gl2.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/GLES2/gl2ext.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCVector.h \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/vector \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/algorithm \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/vector \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/algorithm \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../math/kazmath/include/kazmath/mat4.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../math/kazmath/include/kazmath/utility.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCLabelAtlas.h \
@@ -43,7 +43,7 @@ obj/local/armeabi/objs/cocos2dx_static/CCDirector.o: \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../math/kazmath/include/kazmath/kazmath.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../math/kazmath/include/kazmath/vec2.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../math/kazmath/include/kazmath/vec3.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/assert.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/assert.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../math/kazmath/include/kazmath/mat3.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../math/kazmath/include/kazmath/mat4.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../math/kazmath/include/kazmath/quaternion.h \
@@ -60,15 +60,15 @@ obj/local/armeabi/objs/cocos2dx_static/CCDirector.o: \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCEvent.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCEventKeyboard.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCSet.h \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/set \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/map \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/list \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/set \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/map \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/list \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCProtocols.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCTexture2D.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCEventDispatcher.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCEventListener.h \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/memory \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/unordered_map \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/memory \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/unordered_map \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/renderer/CCQuadCommand.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/renderer/CCRenderCommand.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/ccTypes.h \
@@ -84,13 +84,13 @@ obj/local/armeabi/objs/cocos2dx_static/CCDirector.o: \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../physics/CCPhysicsWorld.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCScheduler.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/uthash.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/inttypes.h \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/mutex \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/inttypes.h \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/mutex \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCTransition.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCTextureCache.h \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/thread \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/condition_variable \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/queue \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/thread \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/condition_variable \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/queue \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/platform/CCImage.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCTexture2D.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCSpriteFrameCache.h \
@@ -107,8 +107,8 @@ obj/local/armeabi/objs/cocos2dx_static/CCDirector.o: \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCLabelBMFont.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCSpriteBatchNode.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCTextureAtlas.h \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/sstream \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/iostream \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/sstream \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/iostream \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCActionManager.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCAction.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCAnimationCache.h \
@@ -177,7 +177,7 @@ obj/local/armeabi/objs/cocos2dx_static/CCDirector.o: \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/renderer/CCRenderCommandPool.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/renderer/CCRenderMaterial.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/renderer/CCRenderer.h \
- C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/stack \
+ C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/stack \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../physics/CCPhysicsContact.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCEventListenerCustom.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCEvent.h \
@@ -195,7 +195,7 @@ obj/local/armeabi/objs/cocos2dx_static/CCDirector.o: \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/ccUTF8.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCNotificationCenter.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCConsole.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/sys/select.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/sys/select.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCVertex.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCIMEDelegate.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCIMEDispatcher.h \
@@ -223,8 +223,8 @@ obj/local/armeabi/objs/cocos2dx_static/CCDirector.o: \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/external/freetype2/prebuilt/android/../../include/android/freetype2/freetype/config/ftconfig.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/external/freetype2/prebuilt/android/../../include/android/freetype2/freetype/config/ftoption.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/external/freetype2/prebuilt/android/../../include/android/freetype2/freetype/config/ftstdlib.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/setjmp.h \
- C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/machine/setjmp.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/setjmp.h \
+ C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/machine/setjmp.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/external/freetype2/prebuilt/android/../../include/android/freetype2/freetype/fttypes.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/external/freetype2/prebuilt/android/../../include/android/freetype2/freetype/ftsystem.h \
  C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/external/freetype2/prebuilt/android/../../include/android/freetype2/freetype/ftimage.h \
@@ -245,7 +245,7 @@ C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/co
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/platform/android/CCPlatformDefine.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/android/log.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/android/log.h:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCObject.h:
 
@@ -253,7 +253,7 @@ C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/co
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCPlatformMacros.h:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/string:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/string:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/ccMacros.h:
 
@@ -261,15 +261,15 @@ C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/co
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/platform/android/CCStdC.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/math.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/math.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/stdlib.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/stdlib.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/alloca.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/alloca.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/strings.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/strings.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/memory.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/memory.h:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/ccConfig.h:
 
@@ -277,25 +277,25 @@ C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/co
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCGeometry.h:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/functional:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/functional:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCObject.h:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/platform/android/CCGL.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/GLES2/gl2platform.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/GLES2/gl2platform.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/KHR/khrplatform.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/KHR/khrplatform.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/GLES2/gl2.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/GLES2/gl2.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/GLES2/gl2ext.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/GLES2/gl2ext.h:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCVector.h:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/vector:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/vector:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/algorithm:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/algorithm:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../math/kazmath/include/kazmath/mat4.h:
 
@@ -319,7 +319,7 @@ C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/co
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../math/kazmath/include/kazmath/vec3.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/assert.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/assert.h:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../math/kazmath/include/kazmath/mat3.h:
 
@@ -353,11 +353,11 @@ C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/co
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCSet.h:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/set:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/set:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/map:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/map:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/list:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/list:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCProtocols.h:
 
@@ -367,9 +367,9 @@ C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/co
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCEventListener.h:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/memory:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/memory:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/unordered_map:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/unordered_map:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/renderer/CCQuadCommand.h:
 
@@ -401,19 +401,19 @@ C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/co
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/uthash.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/inttypes.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/inttypes.h:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/mutex:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/mutex:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCTransition.h:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCTextureCache.h:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/thread:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/thread:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/condition_variable:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/condition_variable:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/queue:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/queue:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/platform/CCImage.h:
 
@@ -447,9 +447,9 @@ C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/co
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCTextureAtlas.h:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/sstream:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/sstream:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/iostream:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/iostream:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCActionManager.h:
 
@@ -587,7 +587,7 @@ C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/co
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/renderer/CCRenderer.h:
 
-C:/android/android-ndk-r9c/sources/cxx-stl/gnu-libstdc++/4.8/include/stack:
+C:/android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.8/include/stack:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../physics/CCPhysicsContact.h:
 
@@ -623,7 +623,7 @@ C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/co
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/../base/CCConsole.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/sys/select.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/sys/select.h:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/cocos/2d/CCVertex.h:
 
@@ -679,9 +679,9 @@ C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/ex
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/external/freetype2/prebuilt/android/../../include/android/freetype2/freetype/config/ftstdlib.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/setjmp.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/setjmp.h:
 
-C:/android/android-ndk-r9c/platforms/android-18/arch-arm/usr/include/machine/setjmp.h:
+C:/android-ndk-r9d/platforms/android-18/arch-arm/usr/include/machine/setjmp.h:
 
 C:\cocos2d-x-3.0beta\projects\native_test\nyanshuffle\proj.android\../cocos2d/external/freetype2/prebuilt/android/../../include/android/freetype2/freetype/fttypes.h:
 

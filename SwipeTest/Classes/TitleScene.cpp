@@ -1,5 +1,6 @@
 #include "TitleScene.h"
 #include "HelloWorldScene.h"
+#include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 
@@ -42,6 +43,10 @@ bool TitleScene::init()
     pMenu->setPosition(Point::ZERO);
     pMenu->setTag(kTag_Menu);
     this->addChild(pMenu);
+
+
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic("harunopayapaya.mp3");
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("harunopayapaya.mp3", true);
 
     CCLOG("aaa = %d, bbb = %d", kTag_StartButton, kTag_Menu);
     return true;
