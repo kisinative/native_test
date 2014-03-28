@@ -107,17 +107,29 @@ bool HelloWorld::init()
 			pTarget4->setTag(203);
 			this->addChild(pTarget4);
 
+	//自他HP画像
 	Node* pHp = Sprite::create("gauge_blue.png");
 	pHp->setPosition(Point(visibleSize.width * 0.1, visibleSize.height * 0.95));
 	pHp->setAnchorPoint(CCPointZero);
 	pHp->setTag(tagHpImg);
 	this->addChild(pHp);
-
 	Node* pHpEnemy = Sprite::create("gauge_red.png");
 	pHpEnemy->setPosition(Point(visibleSize.width * 0.9, visibleSize.height * 0.90));
 	pHpEnemy->setAnchorPoint(Point(1,0));
 	pHpEnemy->setTag(tagEnemyHpImg);
 	this->addChild(pHpEnemy);
+	//自他サムネイル
+	Node* pThumbnail = Sprite::create("mycat.png");
+	pThumbnail->setPosition(Point(origin.x, visibleSize.height));
+	pThumbnail->setAnchorPoint(Point(0,1));
+	pThumbnail->setTag(tagThumbnailImg);
+	this->addChild(pThumbnail);
+	Node* pEnemyThumbnail = Sprite::create("enemy.png");
+	pEnemyThumbnail->setPosition(Point(visibleSize.width, visibleSize.height));
+	pEnemyThumbnail->setAnchorPoint(Point(1,1));
+	pEnemyThumbnail->setTag(tagEnemyThumbnail);
+	this->addChild(pEnemyThumbnail);
+
 
 	//敵初期ステータス設定
     setup();

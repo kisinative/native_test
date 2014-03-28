@@ -31,6 +31,10 @@ protected:
 	const int tagEnemyPower		= 24;		//敵攻撃力タグ
 	const int tagEnemySpeed		= 26;		//敵スピードタグ
 	const int tagEnemyTechnique	= 28;		//敵テクニックタグ
+
+	const int tagThumbnailImg		= 30;	//自キャラサムネイル
+	const int tagEnemyThumbnail	= 31;   //敵キャラサムネイル
+
 	const int tagTargetImg	 	= 80;		//ターゲットタグ
 	const int tagArrowLabel 	= 100;		//矢印タグ
 	const int tagRetry		 	= 110;		//リトライタグ

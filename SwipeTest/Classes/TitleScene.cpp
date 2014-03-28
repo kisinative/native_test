@@ -1,6 +1,10 @@
 #include "TitleScene.h"
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
+#include "platform/android/jni/JniHelper.h"
+#include <jni.h>
+//#define  CLASS_NAME  "org/cocos2dx/cpp/Cocos2dxActivity"
+//#define  METHOD_NAME "adViewOn"
 
 USING_NS_CC;
 
@@ -43,6 +47,14 @@ bool TitleScene::init()
     pMenu->setPosition(Point::ZERO);
     pMenu->setTag(kTag_Menu);
     this->addChild(pMenu);
+
+
+    //広告の表示
+    cocos2d::JniMethodInfo methodInfo;
+    cocos2d::JniHelper::getStaticMethodInfo( methodInfo, "org/cocos2dx/cpp/Cocos2dxActivity",  "adViewOn", "()V" );
+    jstring jpath  = (jstring)methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID);
+    methodInfo.env->DeleteLocalRef(methodInfo.classID);
+
 
 
     CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic("harunopayapaya.mp3");
