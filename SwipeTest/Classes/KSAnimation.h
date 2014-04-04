@@ -12,6 +12,7 @@ class KSAnimation
 public:
     static FiniteTimeAction* vibrationAnimation(float time);
     static FiniteTimeAction* hpAction(float pointScale);
+    static FiniteTimeAction* rushCutin();
 };
 
 #endif // __KSANIMATION_H__

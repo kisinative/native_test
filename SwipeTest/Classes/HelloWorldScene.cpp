@@ -12,7 +12,7 @@ Scene* HelloWorld::createScene()
 {
     auto scene = Scene::create();
     auto layer = HelloWorld::create();
-    scene->addChild(layer);
+    scene->addChild(layer,1);
 
     return scene;
 }
@@ -29,14 +29,17 @@ bool HelloWorld::init()
 
 //    EGLView::sharedOpenGLView()->setDesignResolutionSize(640, 1136, kResolutionNoBorder);
 
+    //サイズ取得を行う
+    origin			= Director::getInstance()->getVisibleOrigin();		//使用端末の(0,0)地点
+	visibleSize		= Director::getInstance()->getVisibleSize();		//使用端末の画面サイズ
+
     // シングルタッチモードにする
     this->setTouchMode(kCCTouchesOneByOne);
     // タッチを有効にする（内部的にEventDispatcherに登録される）
     this->setTouchEnabled(true);
 
-    Size visibleSize = Director::getInstance()->getVisibleSize();
-//    Size visibleSize = Director::sharedDirector()->getWinSize();
-    Point origin = Director::getInstance()->getVisibleOrigin();
+//    Size visibleSize = Director::getInstance()->getVisibleSize();
+//    Point origin = Director::getInstance()->getVisibleOrigin();
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -88,48 +91,54 @@ bool HelloWorld::init()
 //	pTarget->setPosition(ccp(visibleSize.width * 0.05, visibleSize.height * 0.80));
 	pTarget->setPosition(Point(pTarget->getContentSize().width+50.0, visibleSize.height * 0.80));
 	pTarget->setTag(tagTargetImg);
-	this->addChild(pTarget);
+	this->addChild(pTarget,2);
 
 			Node* pTarget1 = Sprite::create("target.png");
 			pTarget1->setPosition(Point(pTarget->getContentSize().width+50.0 - 5.0, visibleSize.height * 0.75));
 			pTarget1->setTag(200);
-			this->addChild(pTarget1);
+			this->addChild(pTarget1,2);
 			Node* pTarget2 = Sprite::create("target.png");
 			pTarget2->setPosition(Point(pTarget->getContentSize().width+50.0 + 5.0, visibleSize.height * 0.75));
 			pTarget2->setTag(201);
-			this->addChild(pTarget2);
+			this->addChild(pTarget2,2);
 			Node* pTarget3 = Sprite::create("target.png");
 			pTarget3->setPosition(Point(pTarget->getContentSize().width+50.0 - 50.0, visibleSize.height * 0.70));
 			pTarget3->setTag(202);
-			this->addChild(pTarget3);
+			this->addChild(pTarget3,2);
 			Node* pTarget4 = Sprite::create("target.png");
 			pTarget4->setPosition(Point(pTarget->getContentSize().width+50.0 + 50.0, visibleSize.height * 0.70));
 			pTarget4->setTag(203);
-			this->addChild(pTarget4);
+			this->addChild(pTarget4,2);
 
 	//自他HP画像
 	Node* pHp = Sprite::create("gauge_blue.png");
 	pHp->setPosition(Point(visibleSize.width * 0.1, visibleSize.height * 0.95));
 	pHp->setAnchorPoint(CCPointZero);
 	pHp->setTag(tagHpImg);
-	this->addChild(pHp);
+	this->addChild(pHp,2);
 	Node* pHpEnemy = Sprite::create("gauge_red.png");
 	pHpEnemy->setPosition(Point(visibleSize.width * 0.9, visibleSize.height * 0.90));
 	pHpEnemy->setAnchorPoint(Point(1,0));
 	pHpEnemy->setTag(tagEnemyHpImg);
-	this->addChild(pHpEnemy);
+	this->addChild(pHpEnemy,2);
 	//自他サムネイル
 	Node* pThumbnail = Sprite::create("mycat.png");
 	pThumbnail->setPosition(Point(origin.x, visibleSize.height));
 	pThumbnail->setAnchorPoint(Point(0,1));
 	pThumbnail->setTag(tagThumbnailImg);
-	this->addChild(pThumbnail);
+	this->addChild(pThumbnail,2);
 	Node* pEnemyThumbnail = Sprite::create("enemy.png");
 	pEnemyThumbnail->setPosition(Point(visibleSize.width, visibleSize.height));
 	pEnemyThumbnail->setAnchorPoint(Point(1,1));
 	pEnemyThumbnail->setTag(tagEnemyThumbnail);
-	this->addChild(pEnemyThumbnail);
+	this->addChild(pEnemyThumbnail,2);
 
+	//自他サムネイル
+	Node* pThumbnail1 = Sprite::create("mycat.png");
+	pThumbnail1->setPosition(Point(visibleSize.width * 0.5, origin.y + 150));
+	pThumbnail1->setAnchorPoint(Point(0,0));
+	pThumbnail1->setTag(500);
+	this->addChild(pThumbnail1,2);
 
 	//敵初期ステータス設定
     setup();
@@ -139,52 +148,57 @@ bool HelloWorld::init()
 
 void HelloWorld::setup()
 {
-//    Size winSize = Director::sharedDirector()->getWinSize();
-    Size winSize = Director::getInstance()->getVisibleSize();
     //HP表示
 	createLabel(String::createWithFormat("残りHP:%d", NowHp)->getCString(),
 				50.0*TEXT_SCALE,
-				winSize.width * 0.15,
-				winSize.height * 0.95,
+				visibleSize.width * 0.15,
+				visibleSize.height * 0.95,
 				tagHp);
 
 
 	//敵HP表示
-	NowEnemyHp = defaultEnemyStrong + (5 * enemyStrongLv);
+	NowEnemyHp = defaultEnemyStrong + (6 * enemyStrongLv);
 	MaxEnemyHp = NowEnemyHp;
 	createLabel(String::createWithFormat("敵残りHP:%d", NowEnemyHp)->getCString(),
 				50.0*TEXT_SCALE,
-				winSize.width * 0.8,
-				winSize.height * 0.95,
+				visibleSize.width * 0.8,
+				visibleSize.height * 0.95,
 				tagEnemyHp);
 
 	//敵LV表示
 	createLabel(String::createWithFormat("タフネスLV:%d", enemyStrongLv)->getCString(),
 				50.0*TEXT_SCALE,
-				winSize.width * 0.8,
-				winSize.height * 0.90,
+				visibleSize.width * 0.8,
+				visibleSize.height * 0.90,
 				tagEnemyStrong);
 	createLabel(String::createWithFormat("パワーLV:%d", enemypowerLv)->getCString(),
 				50.0*TEXT_SCALE,
-				winSize.width * 0.8,
-				winSize.height * 0.85,
+				visibleSize.width * 0.8,
+				visibleSize.height * 0.85,
 				tagEnemyPower);
 	createLabel(String::createWithFormat("スピードLV:%d", enemySpeedLv)->getCString(),
 				50.0*TEXT_SCALE,
-				winSize.width * 0.8,
-				winSize.height * 0.80,
+				visibleSize.width * 0.8,
+				visibleSize.height * 0.80,
 				tagEnemySpeed);
 	createLabel(String::createWithFormat("テクニックLV:%d", enemyTechniqueLv)->getCString(),
 				50.0*TEXT_SCALE,
-				winSize.width * 0.8,
-				winSize.height * 0.75,
+				visibleSize.width * 0.8,
+				visibleSize.height * 0.75,
 				tagEnemyTechnique);
 
 	//攻撃数を初期化
 	atkCount = tagArrowImg;
     frontArrowTag = tagArrowImg;
+    NowRush = 0;
     NowEnemyRush = 0;
     rushCount = 0;
+
+    //ラッシュ系初期化
+    NowRush		= 0;
+	rushStack	= false;
+	rush_flag	= false;
+	startRush	= startRushConst;
 
 	Node* pHpImg = this->getChildByTag(tagEnemyHpImg);
 	pHpImg->setScaleX(1.0);
@@ -230,9 +244,6 @@ void HelloWorld::showArrow(float time)
     {
     	pArrow->removeFromParentAndCleanup(true);
     }
-    Size size = Director::getInstance()->getVisibleSize();
-//	Size size = Director::sharedDirector()->getWinSize();
-//	Sprite* pArrow = Sprite::create(String::createWithFormat("%d.png",randum)->getCString());
 
     //攻防判定
     int atkDefFlag = arc4random() % (50 + defaultEnemyTechnique +enemyTechniqueLv);
@@ -247,13 +258,13 @@ void HelloWorld::showArrow(float time)
         moveAtkDef.push_back(0);
     }
 
-	pArrow->setPosition(Point(size.width, size.height * 0.80));
+	pArrow->setPosition(Point(visibleSize.width, visibleSize.height * 0.80));
 	pArrow->setTag(atkCount++);
-	this->addChild(pArrow);
+	this->addChild(pArrow,2);
 	Node* pArrow1 = Sprite::create(String::createWithFormat("%s.png",arrowArray[randum].getCString())->getCString());
 	Size bgSize = pArrow->getContentSize();
 	pArrow1->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.5));
-	pArrow->addChild(pArrow1);
+	pArrow->addChild(pArrow1,3);
 
 	CallFunc* callFunction = CallFunc::create(this, callfunc_selector(HelloWorld::timeOver));
     Sequence* callAction = Sequence::create(KSAnimation::vibrationAnimation((float)defaultEnemySpeed - enemySpeedLv / 10.0), callFunction, RemoveSelf::create(true), NULL);
@@ -296,6 +307,7 @@ void HelloWorld::timeOver()
 //	targetGesture = "99";
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	arrowLabel->setString("timeOut");
+	rushPoint(false);		//ラッシュポイント低下
 
 	//HP更新
 	meDamage();
@@ -342,16 +354,22 @@ void HelloWorld::menuCloseCallback(Object* pSender)
 //****************************************************************************************
 bool HelloWorld::onTouchBegan(Touch* touch, Event* event)
 {
-    Point point = touch->getLocation();
+	//ラッシュ中か？
+	if (!rush_flag){
+		Point point = touch->getLocation();
 //    CCLOG("X = %f, y = %f", point.x, point.y);
-    this->xtGestureStartPoint= point;
-    return true;
+		this->xtGestureStartPoint= point;
+	}
+	return true;
 }
 
 void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 {
 //    Point point = touch->getLocation();
 //    CCLOG("X = %f, y = %f", point.x, point.y);
+
+	//ラッシュ中か？
+	if (!rush_flag){
 
 //	if (targetGesture.size() > 1) {
 		Point point = touch->getLocation();
@@ -434,96 +452,79 @@ void HelloWorld::onTouchMoved(Touch* touch, Event* event)
 			}
 		}
 //		CCLOG("targetGesture = %s", targetGesture.c_str());
-//	}
+	}
 }
 
 void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 {
-	if (moveArrow.size() > 0){
+	//ラッシュ中か？
+	if (!rush_flag){
+		if (moveArrow.size() > 0){
 
-		//矢印削除
-		Node* pArrow = this->getChildByTag(frontArrowTag++);
-		auto arrowPoint = pArrow->getPosition();
-		pArrow->removeFromParentAndCleanup(true);
+			//矢印削除
+			Node* pArrow = this->getChildByTag(frontArrowTag++);
+			auto arrowPoint = pArrow->getPosition();
+			pArrow->removeFromParentAndCleanup(true);
 
-		Node* pTarget = this->getChildByTag(tagTargetImg);
-		auto targetPoint = pTarget->getPosition();
+			Node* pTarget = this->getChildByTag(tagTargetImg);
+			auto targetPoint = pTarget->getPosition();
 
-		Size visibleSize = Director::getInstance()->getVisibleSize();
-//        Size visibleSize = Director::sharedDirector()->getWinSize();
+			bool wkGesture = false;
+			//攻防判定
+			bool wkAtkDef  = false;
+			if (moveAtkDef[0] == 0) wkAtkDef = true;
 
+			int flag = 0;
 
-//		//タイムアウトチェックタイマーを停止する
-//		this->unschedule(schedule_selector(HelloWorld::timeOver));
-
-//		Point point = touch->getLocation();
-//		this->xtGestureEndPoint= point;
-//
-//		float deltaX = this->xtGestureStartPoint.x - this->xtGestureEndPoint.x;
-//		float deltaY = this->xtGestureStartPoint.y - this->xtGestureEndPoint.y;
-//
-		bool wkGesture = false;
-		//攻防判定
-		bool wkAtkDef  = false;
-		if (moveAtkDef[0] == 0) wkAtkDef = true;
-
-//		if (fabs(deltaX) > fabs(deltaY)) {
-//			if ((deltaX + 50 < 0 && targetGesture == "0") || (deltaX - 50 > 0 && targetGesture == "1")) wkGesture = true;
-//		} else {
-//			if ((deltaY + 50 < 0 && targetGesture == "2") || (deltaY - 50 > 0 && targetGesture == "3")) wkGesture = true;
-//		}
-//		CCLOG("-------end-------");
-//		CCLOG("targetGesture = %s", targetGesture.c_str());
-//		CCLOG("nowGesture = %s", nowGesture.c_str());
-//		CCLOG("X = %f, y = %f", deltaX, deltaY);
-//		CCLOG("X = %f, y = %f", point.x, point.y);
-
-		int flag = 0;
-//		if (nowGesture == targetGesture)
-
-		if (nowGesture == moveArrow[0])
-		{
-			if ((targetPoint.x - 50.0 <= arrowPoint.x) && (targetPoint.x + 50.0 >= arrowPoint.x))
+			if (nowGesture == moveArrow[0])
 			{
-				wkGesture = true;
-				if ((targetPoint.x - 5.0 <= arrowPoint.x) && (targetPoint.x + 5.0 >= arrowPoint.x))
+				if ((targetPoint.x - 50.0 <= arrowPoint.x) && (targetPoint.x + 50.0 >= arrowPoint.x))
 				{
-					flag = 1;
+					wkGesture = true;
+					if ((targetPoint.x - 5.0 <= arrowPoint.x) && (targetPoint.x + 5.0 >= arrowPoint.x))
+					{
+						flag = 1;
+					}
 				}
 			}
-		}
 
-//		targetGesture = "99";
-//		moveArrow->removeObjectAtIndex(0);
+			moveArrow.erase(moveArrow.begin());
+			moveAtkDef.erase(moveAtkDef.begin());
 
-//        for (int i = 1;i < moveArrow.size();i++)
-//        {
-//            moveArrow[i-1] = moveArrow[i];
-//        }
-//		moveArrow.pop_back();
-        moveArrow.erase(moveArrow.begin());
-        moveAtkDef.erase(moveAtkDef.begin());
-
-		if (wkGesture){
-			if (wkAtkDef){
-				attack(flag);
+			if (wkGesture){
+				if (wkAtkDef){
+					attack(flag);
+				} else {
+					defense(flag);
+				}
+				NowEnemyRush += 1;
 			} else {
-				defense(flag);
+				miss(wkAtkDef);
+				NowEnemyRush += 5;
 			}
-			NowEnemyRush += 1;
-		} else {
-			miss(wkAtkDef);
-			NowEnemyRush += 5;
-		}
 
-		if (NowEnemyRush >= 20 && rushCount == 0)
-		{
-			rushCount = 5;
-			this->unschedule(schedule_selector(HelloWorld::showArrow));
-			this->schedule(schedule_selector(HelloWorld::showArrow), 1);
+			if (NowEnemyRush >= startEnemyRush && rushCount == 0)
+			{
+				rushCount = 5;
+				this->unschedule(schedule_selector(HelloWorld::showArrow));
+				this->schedule(schedule_selector(HelloWorld::showArrow), 1);
+			}
+		}
+		nowGesture = "";
+	} else {
+		Point point			= touch->getLocation();
+		Node* pRushTarget	= getChildByTag(tagRushTarget);
+		if (!pRushTarget){
+			return;
+		}
+		Rect rushTarget		= pRushTarget->boundingBox();
+		if (rushTarget.containsPoint(point)) {
+			//現在のターゲットを消す
+			pRushTarget->removeFromParentAndCleanup(true);
+
+			randomTarget();			// ラッシュターゲット抽選
 		}
 	}
-	nowGesture = "";
 }
 
 //****************************************************************************************
@@ -534,17 +535,20 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
  */
 void HelloWorld::attack(int flag)
 {
+
+	rushPoint(true);	//ラッシュポイント増加
+
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	if (flag == 0)
 	{
 		arrowLabel->setString("ぬこぱーんち");
-		--NowEnemyHp;
+		NowEnemyHp -= normalAtk;
 	} else {
 		arrowLabel->setString("すーぱー");
-		NowEnemyHp -= 3;
-		if (NowEnemyHp < 0) {
-			NowEnemyHp = 0;
-		}
+		NowEnemyHp -= justAtk;
+	}
+	if (NowEnemyHp < 0) {
+		NowEnemyHp = 0;
 	}
 
 	Node* pHpImg = this->getChildByTag(tagEnemyHpImg);
@@ -597,6 +601,8 @@ void HelloWorld::attack(int flag)
 void HelloWorld::defense(int flag)
 {
 
+	rushPoint(true);	//ラッシュポイント増加
+
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	arrowLabel->setString("ガード");
 
@@ -607,6 +613,9 @@ void HelloWorld::defense(int flag)
  */
 void HelloWorld::miss(bool flag)
 {
+
+	rushPoint(false);	//ラッシュポイント初期化
+
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	arrowLabel->setString("ミス！");
 
@@ -648,8 +657,6 @@ void HelloWorld::makeRetryButton()
     arrowRefresh();
 
 	//画面サイズを取得する
-//	Size winSize = Director::sharedDirector()->getWinSize();
-    Size winSize = Director::getInstance()->getVisibleSize();
 
 	//リトライボタンを作成する
 	LabelTTF* retryLabel = LabelTTF::create("Retry?", "Arial", 80.0);
@@ -660,12 +667,12 @@ void HelloWorld::makeRetryButton()
     	});
 
 
-	retryItem->setPosition(Point(winSize.width * 0.5,winSize.height *0.4));
+	retryItem->setPosition(Point(visibleSize.width * 0.5,visibleSize.height *0.4));
 
 	//メニューを作成する
 	Menu* menu = Menu::create(retryItem, NULL);
 	menu->setPosition(Point::ZERO);
-	this->addChild(menu,3);
+	this->addChild(menu,2);
 }
 
 //リトライボタンタップ時の処理
@@ -677,6 +684,9 @@ void HelloWorld::tapRetryButton(Node *node)
 	Director::getInstance()->replaceScene(gameScene);
 }
 
+/*
+ * 攻防処理リフレッシュ
+ */
 void HelloWorld::arrowRefresh()
 {
     this->unschedule(schedule_selector(HelloWorld::showArrow));
@@ -685,6 +695,10 @@ void HelloWorld::arrowRefresh()
         Node* pArrow = this->getChildByTag(i);
         pArrow->removeFromParentAndCleanup(true);
     }
+
+	atkCount = tagArrowImg;
+    frontArrowTag = tagArrowImg;
+
     moveArrow.clear();
     moveAtkDef.clear();
 }
@@ -707,3 +721,160 @@ void HelloWorld::meDamage()
 	pHpImg->runAction(KSAnimation::hpAction(wk_a));
 	pHpImg->setScaleX(wk_a);
 }
+
+/*****************************************************************************************
+ *  ラッシュ関連
+ *****************************************************************************************/
+/*
+ * 　ラッシュ開始処理
+ */
+void HelloWorld::menuStartRush(Object* sender)
+{
+	arrowRefresh();			// 攻防の矢印をリフレッシュ
+	rush_flag = true;		// ラッシュフラグをtrueにする
+	NowRush = 0;			// ラッシュポイントを初期化
+
+	//ラッシュ開始ボタン削除
+	Node* pRushMenu   = this->getChildByTag(tagRushMenu);
+	pRushMenu->removeFromParentAndCleanup(true);
+//	Node* pRushButton = this->getChildByTag(tagRushButton);
+//	pRushButton->removeFromParentAndCleanup(true);
+
+	//カットイン作成
+	Node* pCutin = Sprite::create("rush_cutin.png");
+	pCutin->setPosition(Point(visibleSize.width, visibleSize.height * 0.45));
+	pCutin->setTag(tagRushCutin);
+	pCutin->setAnchorPoint(Point(0,0));
+	this->addChild(pCutin,4);
+	//カットインアニメーション
+	Node* pHpImg = this->getChildByTag(tagRushCutin);
+	pHpImg->runAction(KSAnimation::rushCutin());
+	//カットイン削除
+	pCutin->removeFromParentAndCleanup(true);
+
+	randomTarget();			// ラッシュターゲット抽選
+
+	this->scheduleOnce(schedule_selector(HelloWorld::rushEnd), rushTime);
+
+}
+
+/*
+ * ラッシュターゲット表示位置抽選
+ */
+void HelloWorld::randomTarget(){
+	//visibleSize.width * 0.5, visibleSize.height
+	int x_point  = (int)origin.x + 50;
+	int y_point  = (int)origin.y + 200;
+	float randum_x = arc4random() % ((int)visibleSize.width  -  50 - x_point) + x_point;
+	float randum_y = arc4random() % ((int)visibleSize.height - 300 - y_point) + y_point;
+
+	Node* pRushTarget = Sprite::create("rush_target.png");
+	pRushTarget->setPosition(Point(randum_x, randum_y));
+	pRushTarget->setTag(tagRushTarget);
+	this->addChild(pRushTarget,2);
+}
+
+/*
+ * 自ラッシュ増減処理
+ * flag: true = 攻撃 | false = 防御
+ */
+void HelloWorld::rushPoint(bool flag)
+{
+	if (!rushStack){
+		NowRush = flag ? NowRush + 1: 0;
+
+		CCLOG("startRush = %d,NowRush = %d", startRush, NowRush);
+		if (startRush <= NowRush) {
+		    // ラッシュボタン設置
+		    MenuItemImage* pStartRush;
+		    pStartRush = MenuItemImage::create("rush_1.png",
+		                                         "rush_2.png",
+		                                         CC_CALLBACK_1(HelloWorld::menuStartRush, this));
+		    pStartRush->setPosition(Point(origin.x, visibleSize.height + rushButton_y));
+		    pStartRush->setAnchorPoint(Point(0,1));
+
+//		    pStartRush->setTag(tagRushButton);
+
+		    Menu* pMenu = Menu::create(pStartRush, NULL);
+		    pMenu->setPosition(Point::ZERO);
+		    pMenu->setTag(tagRushMenu);
+		    this->addChild(pMenu,10);
+		    rushStack = true;
+
+		    //ダメージ処理
+			NowEnemyHp -= rushAtk;
+			if (NowEnemyHp < 0) {
+				NowEnemyHp = 0;
+			}
+
+			Node* pHpImg = this->getChildByTag(tagEnemyHpImg);
+			float wk_a = (float)NowEnemyHp / MaxEnemyHp;
+			pHpImg->runAction(KSAnimation::hpAction(wk_a));
+			pHpImg->setScaleX(wk_a);
+
+			//HP更新
+			LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagEnemyHp);
+			hpLabel->setString(String::createWithFormat("敵残りHP:%d", NowEnemyHp)->getCString());
+			if (NowEnemyHp < 1){
+				this->unschedule(schedule_selector(HelloWorld::rushEnd));
+				this->scheduleOnce(schedule_selector(HelloWorld::rushEnd), 0.1f);
+
+		        arrowRefresh();
+		        LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
+				arrowLabel->setString(String::createWithFormat("%dステージクリア！！ ",nowStage)->getCString());
+			    int randum = rand() % 4;
+			    switch (randum){
+			    	case 0:
+			    	    enemyStrongLv++;
+			    		break;
+			    	case 1:
+			    	    enemypowerLv++;
+			    		break;
+			    	case 2:
+			    	    enemySpeedLv++;
+			    		break;
+			    	case 3:
+			    	    enemyTechniqueLv++;
+			    		break;
+			    }
+			    //HP回復
+			    NowHp += 20;
+			    if (MaxHp < NowHp)
+			    {
+			    	NowHp = MaxHp;
+			    }
+				Node* pHpImg = this->getChildByTag(tagHpImg);
+				float wk_a = (float)NowHp / MaxHp;
+				pHpImg->runAction(KSAnimation::hpAction(wk_a));
+				pHpImg->setScaleX(wk_a);
+
+
+				this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 1.3);
+			}
+		}
+	}
+}
+
+
+/*
+ * ラッシュ終了
+ */
+void HelloWorld::rushEnd(float time){
+	//現在のターゲットを消す
+	Node* pRushTarget	= getChildByTag(tagRushTarget);
+	pRushTarget->removeFromParentAndCleanup(true);
+
+	//ラッシュフラグオフ
+	rushStack = false;
+	rush_flag = false;
+
+	startRush++;			//ラッシュ発生必要コンボ数増加
+
+	//通常ゲーム再開
+	this->schedule(schedule_selector(HelloWorld::showArrow), 2);
+
+}
+
+
+
+

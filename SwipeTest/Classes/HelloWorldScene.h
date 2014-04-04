@@ -21,6 +21,10 @@ protected:
 	void tapRetryButton(Node *node);
 	void arrowRefresh();
 	void meDamage();
+	void rushPoint(bool flag);
+	void menuStartRush(Object* sender);
+	void randomTarget();
+	void rushEnd(float time);
 
 	// tag
 	const int tagHp				= 10;		//HPタグ
@@ -38,13 +42,22 @@ protected:
 	const int tagTargetImg	 	= 80;		//ターゲットタグ
 	const int tagArrowLabel 	= 100;		//矢印タグ
 	const int tagRetry		 	= 110;		//リトライタグ
+	const int tagRushButton 	= 120;		//ラッシュボタンタグ
+	const int tagRushMenu	 	= 125;		//ラッシュボタンタグ
+	const int tagRushTarget	= 130;		//ラッシュターゲットタグ
+	const int tagRushCutin		= 140;		//ラッシュカットインタグ
 	const int tagArrowImg	 	= 1000;		//矢印タグ
 
 	//敵基本能力
-	const int defaultEnemyStrong = 15;		//体力
+	const int defaultEnemyStrong = 40;		//体力
 	const int defaultEnemyPower  = 10;		//攻撃力
 	const float defaultEnemySpeed  = 3.1;	//スピード
 	const int defaultEnemyTechnique  = 20;	//テクニック
+
+	//攻撃力
+	const int normalAtk 			= 5;	//通常攻撃
+	const int justAtk				= 8;	//ジャストヒット
+	const int rushAtk				= 53;	//ラッシュ攻撃
 
 	//敵レベル
 	int enemyStrongLv;
@@ -55,6 +68,7 @@ protected:
 	//HP関連
 	const int MaxHp			= 100;          //最大HP
 	int NowHp;                              //現在HP
+	int NowRush;							//現在ラッシュポイント
 	int NowEnemyHp;                         //敵現在HP
 	int MaxEnemyHp;                         //敵最大HP
 	int NowEnemyRush;						//現在ラッシュポイント
@@ -64,16 +78,27 @@ protected:
 	std::string hidari = "1";				//入力中ジェスチャ
 	std::string ue = "2";                   //入力中ジェスチャ
 	std::string sita = "3";                 //入力中ジェスチャ
+	const int startRushConst = 5;			//自ラッシュ開始ポイント
+	int		startRush;						//自ラッシュ開始ポイント
+	int		startEnemyRush = 20;			//敵ラッシュ開始ポイント
+	bool	rushStack = false;				//ラッシュ開始可能状況判定フラグ
+	bool	rush_flag = false;				//ラッシュ判定フラグ
+	float	rushTime  = 4.0;				//ラッシュ時間
+
 	std::string targetGesture;              //現在ジェスチャ
 	std::string nowGesture;                 //入力中ジェスチャ
 	bool atkDefFlag;                        //攻撃防御フラグ
 	int nowStage;                           //現在ステージ
     std::vector<std::string> moveArrow;		//移動中矢印
     std::vector<int> moveAtkDef;			//移動中矢印
-	int atkCount;                           //攻撃数
-	int frontArrowTag;                      //先頭矢印タグ
+	int atkCount;                          //攻撃数
+	int frontArrowTag;                     //先頭矢印タグ
 	int rushCount;							//残りラッシュ数
 
+	//配置
+	cocos2d::Point	origin;							//使用端末の(0,0)地点
+	cocos2d::Size	visibleSize;					//使用端末の画面サイズ
+	float			rushButton_y		= -100.0;	//ラッシュボタン
 
 
 public:

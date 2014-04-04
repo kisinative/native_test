@@ -54,13 +54,16 @@ bool TitleScene::init()
     cocos2d::JniHelper::getStaticMethodInfo( methodInfo, "org/cocos2dx/cpp/Cocos2dxActivity",  "adViewOn", "()V" );
     jstring jpath  = (jstring)methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID);
     methodInfo.env->DeleteLocalRef(methodInfo.classID);
+//    cocos2d::JniMethodInfo methodInfo;
+//    cocos2d::JniHelper::getMethodInfo( methodInfo, "org/cocos2dx/cpp/Cocos2dxActivity",  "adViewOn", "()V" );
+//    jstring jpath  = (jstring)methodInfo.env->NewObject(methodInfo.classID, methodInfo.methodID);
+//    methodInfo.env->DeleteLocalRef(methodInfo.classID);
 
 
 
     CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic("harunopayapaya.mp3");
     CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("harunopayapaya.mp3", true);
 
-    CCLOG("aaa = %d, bbb = %d", kTag_StartButton, kTag_Menu);
     return true;
 }
 
