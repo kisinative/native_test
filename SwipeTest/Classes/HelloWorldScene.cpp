@@ -1,5 +1,6 @@
 #include "HelloWorldScene.h"
 #include "KSAnimation.h"
+#include <unistd.h>
 
 USING_NS_CC;
 //String arrowArray[] = {"右", "左", "上", "下"};
@@ -459,6 +460,15 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 {
 	//ラッシュ中か？
 	if (!rush_flag){
+
+		//誤タッチ免除
+		Point point = touch->getLocation();
+		float deltaX = this->xtGestureStartPoint.x - point.x;
+		float deltaY = this->xtGestureStartPoint.y - point.y;
+		if (fabs(deltaX) <= 10.0 && fabs(deltaY) <= 10.0 ) {
+			return;
+		}
+
 		if (moveArrow.size() > 0){
 
 			//矢印削除
@@ -524,6 +534,59 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 
 			randomTarget();			// ラッシュターゲット抽選
 		}
+
+
+		//ダメージ処理
+		NowEnemyHp -= rushAtk;
+		if (NowEnemyHp < 0) {
+			NowEnemyHp = 0;
+		}
+
+		Node* pHpImg = this->getChildByTag(tagEnemyHpImg);
+		float wk_a = (float)NowEnemyHp / MaxEnemyHp;
+		pHpImg->runAction(KSAnimation::hpAction(wk_a));
+		pHpImg->setScaleX(wk_a);
+
+		//HP更新
+		LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagEnemyHp);
+		hpLabel->setString(String::createWithFormat("敵残りHP:%d", NowEnemyHp)->getCString());
+		if (NowEnemyHp < 1){
+			this->unschedule(schedule_selector(HelloWorld::rushEnd));
+			this->scheduleOnce(schedule_selector(HelloWorld::rushEnd), 0.1f);
+
+			arrowRefresh();
+			LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
+			arrowLabel->setString(String::createWithFormat("%dステージクリア！！ ",nowStage)->getCString());
+			int randum = arc4random() % 4;
+			switch (randum){
+				case 0:
+					enemyStrongLv++;
+					break;
+				case 1:
+					enemypowerLv++;
+					break;
+				case 2:
+					enemySpeedLv++;
+					break;
+				case 3:
+					enemyTechniqueLv++;
+					break;
+			}
+			//HP回復
+			NowHp += 20;
+			if (MaxHp < NowHp)
+			{
+				NowHp = MaxHp;
+			}
+			Node* pHpImg = this->getChildByTag(tagHpImg);
+			float wk_a = (float)NowHp / MaxHp;
+			pHpImg->runAction(KSAnimation::hpAction(wk_a));
+			pHpImg->setScaleX(wk_a);
+
+
+			this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 1.3);
+		}
+
 	}
 }
 
@@ -562,7 +625,7 @@ void HelloWorld::attack(int flag)
 	if (NowEnemyHp < 1){
         arrowRefresh();
 		arrowLabel->setString(String::createWithFormat("%dステージクリア！！ ",nowStage)->getCString());
-	    int randum = rand() % 4;
+	    int randum = arc4random() % 4;
 	    switch (randum){
 	    	case 0:
 	    	    enemyStrongLv++;
@@ -587,7 +650,6 @@ void HelloWorld::attack(int flag)
 		float wk_a = (float)NowHp / MaxHp;
 		pHpImg->runAction(KSAnimation::hpAction(wk_a));
 		pHpImg->setScaleX(wk_a);
-
 
 		this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 1.3);
 //	} else {
@@ -737,9 +799,9 @@ void HelloWorld::menuStartRush(Object* sender)
 	//ラッシュ開始ボタン削除
 	Node* pRushMenu   = this->getChildByTag(tagRushMenu);
 	pRushMenu->removeFromParentAndCleanup(true);
+
 //	Node* pRushButton = this->getChildByTag(tagRushButton);
 //	pRushButton->removeFromParentAndCleanup(true);
-
 	//カットイン作成
 	Node* pCutin = Sprite::create("rush_cutin.png");
 	pCutin->setPosition(Point(visibleSize.width, visibleSize.height * 0.45));
@@ -747,17 +809,25 @@ void HelloWorld::menuStartRush(Object* sender)
 	pCutin->setAnchorPoint(Point(0,0));
 	this->addChild(pCutin,4);
 	//カットインアニメーション
-	Node* pHpImg = this->getChildByTag(tagRushCutin);
-	pHpImg->runAction(KSAnimation::rushCutin());
+//	Node* pHpImg = this->getChildByTag(tagRushCutin);
+//	pHpImg->runAction(KSAnimation::rushCutin());
+	pCutin->runAction(KSAnimation::rushCutin());
 	//カットイン削除
-	pCutin->removeFromParentAndCleanup(true);
+//	pCutin->removeFromParentAndCleanup(true);
 
-	randomTarget();			// ラッシュターゲット抽選
+//	randomTarget();			// ラッシュターゲット抽選
+	this->scheduleOnce(schedule_selector(HelloWorld::firstRandomTarget), 2);
 
 	this->scheduleOnce(schedule_selector(HelloWorld::rushEnd), rushTime);
 
 }
 
+/*
+ * ラッシュターゲット表示位置抽選
+ */
+void HelloWorld::firstRandomTarget(float time){
+	randomTarget();
+}
 /*
  * ラッシュターゲット表示位置抽選
  */
@@ -801,56 +871,6 @@ void HelloWorld::rushPoint(bool flag)
 		    this->addChild(pMenu,10);
 		    rushStack = true;
 
-		    //ダメージ処理
-			NowEnemyHp -= rushAtk;
-			if (NowEnemyHp < 0) {
-				NowEnemyHp = 0;
-			}
-
-			Node* pHpImg = this->getChildByTag(tagEnemyHpImg);
-			float wk_a = (float)NowEnemyHp / MaxEnemyHp;
-			pHpImg->runAction(KSAnimation::hpAction(wk_a));
-			pHpImg->setScaleX(wk_a);
-
-			//HP更新
-			LabelTTF* hpLabel = (LabelTTF*)this->getChildByTag(tagEnemyHp);
-			hpLabel->setString(String::createWithFormat("敵残りHP:%d", NowEnemyHp)->getCString());
-			if (NowEnemyHp < 1){
-				this->unschedule(schedule_selector(HelloWorld::rushEnd));
-				this->scheduleOnce(schedule_selector(HelloWorld::rushEnd), 0.1f);
-
-		        arrowRefresh();
-		        LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
-				arrowLabel->setString(String::createWithFormat("%dステージクリア！！ ",nowStage)->getCString());
-			    int randum = rand() % 4;
-			    switch (randum){
-			    	case 0:
-			    	    enemyStrongLv++;
-			    		break;
-			    	case 1:
-			    	    enemypowerLv++;
-			    		break;
-			    	case 2:
-			    	    enemySpeedLv++;
-			    		break;
-			    	case 3:
-			    	    enemyTechniqueLv++;
-			    		break;
-			    }
-			    //HP回復
-			    NowHp += 20;
-			    if (MaxHp < NowHp)
-			    {
-			    	NowHp = MaxHp;
-			    }
-				Node* pHpImg = this->getChildByTag(tagHpImg);
-				float wk_a = (float)NowHp / MaxHp;
-				pHpImg->runAction(KSAnimation::hpAction(wk_a));
-				pHpImg->setScaleX(wk_a);
-
-
-				this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 1.3);
-			}
 		}
 	}
 }
@@ -869,6 +889,11 @@ void HelloWorld::rushEnd(float time){
 	rush_flag = false;
 
 	startRush++;			//ラッシュ発生必要コンボ数増加
+
+	//カットイン削除
+	Node* pHpImg = this->getChildByTag(tagRushCutin);
+	pHpImg->removeFromParentAndCleanup(true);
+
 
 	//通常ゲーム再開
 	this->schedule(schedule_selector(HelloWorld::showArrow), 2);

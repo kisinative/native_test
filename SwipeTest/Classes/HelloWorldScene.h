@@ -23,6 +23,7 @@ protected:
 	void meDamage();
 	void rushPoint(bool flag);
 	void menuStartRush(Object* sender);
+	void firstRandomTarget(float time);
 	void randomTarget();
 	void rushEnd(float time);
 
@@ -55,9 +56,9 @@ protected:
 	const int defaultEnemyTechnique  = 20;	//テクニック
 
 	//攻撃力
-	const int normalAtk 			= 5;	//通常攻撃
-	const int justAtk				= 8;	//ジャストヒット
-	const int rushAtk				= 53;	//ラッシュ攻撃
+	const int normalAtk 			= 3;	//通常攻撃
+	const int justAtk				= 5;	//ジャストヒット
+	const int rushAtk				= 1;	//ラッシュ攻撃
 
 	//敵レベル
 	int enemyStrongLv;
@@ -83,7 +84,7 @@ protected:
 	int		startEnemyRush = 20;			//敵ラッシュ開始ポイント
 	bool	rushStack = false;				//ラッシュ開始可能状況判定フラグ
 	bool	rush_flag = false;				//ラッシュ判定フラグ
-	float	rushTime  = 4.0;				//ラッシュ時間
+	float	rushTime  = 6.0;				//ラッシュ時間
 
 	std::string targetGesture;              //現在ジェスチャ
 	std::string nowGesture;                 //入力中ジェスチャ

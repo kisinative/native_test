@@ -33,8 +33,9 @@ FiniteTimeAction* KSAnimation::rushCutin()
 	Point origin			= Director::getInstance()->getVisibleOrigin();
 	Size  visibleSize		= Director::getInstance()->getVisibleSize();
 
-	EaseInOut* move1 = EaseInOut::create(MoveTo::create(0.2, ccp( origin.x, visibleSize.height * 0.45)), 2);
-    DelayTime* move2 = DelayTime::create(0.7f);
+//	EaseInOut* move1 = EaseInOut::create(MoveTo::create(0.2, ccp( origin.x, visibleSize.height * 0.45)), 2);
+	MoveTo* move1 = MoveTo::create(0.2, ccp( origin.x, visibleSize.height * 0.45));
+    DelayTime* move2 = DelayTime::create(0.6f);
     MoveTo* move3 = MoveTo::create(0.2, ccp( -800, visibleSize.height * 0.45));
 
     Sequence* moves = Sequence::create(move1, move2, move3, NULL);
