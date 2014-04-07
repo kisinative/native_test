@@ -18,14 +18,16 @@ protected:
 	void setup();
 	void createLabel(std::string labelString, float labelSize, float labelWidth, float labelHeight, int labelTag);
 	void makeRetryButton();
-	void tapRetryButton(Node *node);
+	void tapRetryButton(Object* pSender);
 	void arrowRefresh();
 	void meDamage();
 	void rushPoint(bool flag);
-	void menuStartRush(Object* sender);
+	void menuStartRush();
 	void firstRandomTarget(float time);
 	void randomTarget();
 	void rushEnd(float time);
+	void tapReturnMenu(Object* pSender);
+	void tapNextLv(Object* pSender);
 
 	// tag
 	const int tagHp				= 10;		//HPタグ
@@ -47,6 +49,8 @@ protected:
 	const int tagRushMenu	 	= 125;		//ラッシュボタンタグ
 	const int tagRushTarget	= 130;		//ラッシュターゲットタグ
 	const int tagRushCutin		= 140;		//ラッシュカットインタグ
+	const int tagNextButton	= 150;		//NEXTステージボタン
+	const int tagMenutButton	= 160;		//メニューボタン
 	const int tagArrowImg	 	= 1000;		//矢印タグ
 
 	//敵基本能力
@@ -61,6 +65,7 @@ protected:
 	const int rushAtk				= 1;	//ラッシュ攻撃
 
 	//敵レベル
+	int enemyLv;
 	int enemyStrongLv;
 	int enemypowerLv;
 	int enemySpeedLv;
@@ -100,7 +105,12 @@ protected:
 	cocos2d::Point	origin;							//使用端末の(0,0)地点
 	cocos2d::Size	visibleSize;					//使用端末の画面サイズ
 	float			rushButton_y		= -100.0;	//ラッシュボタン
+	float			nextLvButton_y		= 250.0;	//ネクストレベルボタン
+	float			returnMenuButton_y	= 250.0;	//メニューボタン
 
+
+	//プリファレンス
+	const char* key_enemyLv = "EnemyLv";
 
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer

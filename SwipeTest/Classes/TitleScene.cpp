@@ -27,6 +27,7 @@ bool TitleScene::init()
 
     Size size = Director::sharedDirector()->getWinSize();
 
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic("harunopayapaya.mp3");
 
     // 背景
     Sprite* pBG = Sprite::create("title_bg.png");
@@ -61,7 +62,6 @@ bool TitleScene::init()
 
 
 
-    CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic("harunopayapaya.mp3");
     CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("harunopayapaya.mp3", true);
 
     return true;
@@ -71,6 +71,6 @@ void TitleScene::menuStartCallback(Object* sender)
 {
     // ゲーム画面の表示
     Scene* scene = HelloWorld::createScene();
-    TransitionJumpZoom* tran = TransitionJumpZoom::create(1, scene);
+    TransitionFlipX* tran = TransitionFlipX::create(1, scene);
     Director::sharedDirector()->replaceScene(tran);
 }

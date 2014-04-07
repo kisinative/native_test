@@ -1,5 +1,6 @@
 #include "HelloWorldScene.h"
 #include "KSAnimation.h"
+#include "TitleScene.h"
 #include <unistd.h>
 
 USING_NS_CC;
@@ -149,6 +150,32 @@ bool HelloWorld::init()
 
 void HelloWorld::setup()
 {
+
+	//敵レベル取得
+	UserDefault* userDefault = UserDefault::sharedUserDefault();
+	enemyLv = userDefault->getIntegerForKey(key_enemyLv, 1);
+	enemyStrongLv		= enemyLv;
+	enemypowerLv		= enemyLv;
+	enemySpeedLv		= enemyLv;
+	enemyTechniqueLv	= enemyLv;
+	int randum = arc4random() % 4;
+	switch (randum){
+		case 0:
+			enemyStrongLv = enemyStrongLv + 3;
+			break;
+		case 1:
+			enemypowerLv = enemypowerLv + 3;
+			break;
+		case 2:
+			enemySpeedLv = enemySpeedLv + 3;
+			break;
+		case 3:
+			enemyTechniqueLv = enemyTechniqueLv + 3 ;
+			break;
+	}
+
+
+
     //HP表示
 	createLabel(String::createWithFormat("残りHP:%d", NowHp)->getCString(),
 				50.0*TEXT_SCALE,
@@ -294,8 +321,36 @@ void HelloWorld::showArrow(float time)
 void HelloWorld::nextStage(float time)
 {
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
-	arrowLabel->setString(String::createWithFormat("%dステージれでぃ！",++nowStage)->getCString());
-	setup();
+//	arrowLabel->setString(String::createWithFormat("%dステージクリア！！ ",nowStage)->getCString());
+	arrowLabel->setString("ステージクリア！！ ");
+
+	// NEXTステージボタン設置
+	MenuItemImage* pNext;
+	pNext = MenuItemImage::create("next_1.png",
+										 "next_2.png",
+										 CC_CALLBACK_1(HelloWorld::tapNextLv, this));
+	pNext->setPosition(Point(origin.x, origin.y + nextLvButton_y));
+	pNext->setAnchorPoint(Point(0,1));
+
+	Menu* pMenuNext = Menu::create(pNext, NULL);
+	pMenuNext->setPosition(Point::ZERO);
+	pMenuNext->setTag(tagNextButton);
+	this->addChild(pMenuNext,10);
+
+	// メニュー画面へ戻るボタン
+	MenuItemImage* pRetrunMenu;
+	pRetrunMenu = MenuItemImage::create("return_1.png",
+										 "return_2.png",
+										 CC_CALLBACK_1(HelloWorld::tapReturnMenu, this));
+	pRetrunMenu->setPosition(Point(visibleSize.width, origin.y + returnMenuButton_y));
+	pRetrunMenu->setAnchorPoint(Point(1,1));
+
+	Menu* pMenuReturn = Menu::create(pRetrunMenu, NULL);
+	pMenuReturn->setPosition(Point::ZERO);
+	pMenuReturn->setTag(tagMenutButton);
+	this->addChild(pMenuReturn,10);
+
+
 }
 
 
@@ -513,11 +568,13 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 				NowEnemyRush += 5;
 			}
 
-			if (NowEnemyRush >= startEnemyRush && rushCount == 0)
+			if (NowEnemyRush >= startEnemyRush && rushCount == 0 && NowEnemyHp > 0)
 			{
 				rushCount = 5;
 				this->unschedule(schedule_selector(HelloWorld::showArrow));
 				this->schedule(schedule_selector(HelloWorld::showArrow), 1);
+			} else {
+				rushPoint(wkGesture);
 			}
 		}
 		nowGesture = "";
@@ -528,12 +585,13 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 			return;
 		}
 		Rect rushTarget		= pRushTarget->boundingBox();
-		if (rushTarget.containsPoint(point)) {
-			//現在のターゲットを消す
-			pRushTarget->removeFromParentAndCleanup(true);
-
-			randomTarget();			// ラッシュターゲット抽選
+		if (!rushTarget.containsPoint(point)) {
+			return;
 		}
+		//現在のターゲットを消す
+		pRushTarget->removeFromParentAndCleanup(true);
+
+		randomTarget();			// ラッシュターゲット抽選
 
 
 		//ダメージ処理
@@ -552,26 +610,30 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 		hpLabel->setString(String::createWithFormat("敵残りHP:%d", NowEnemyHp)->getCString());
 		if (NowEnemyHp < 1){
 			this->unschedule(schedule_selector(HelloWorld::rushEnd));
-			this->scheduleOnce(schedule_selector(HelloWorld::rushEnd), 0.1f);
+			this->scheduleOnce(schedule_selector(HelloWorld::rushEnd), 0.0f);
 
-			arrowRefresh();
-			LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
-			arrowLabel->setString(String::createWithFormat("%dステージクリア！！ ",nowStage)->getCString());
-			int randum = arc4random() % 4;
-			switch (randum){
-				case 0:
-					enemyStrongLv++;
-					break;
-				case 1:
-					enemypowerLv++;
-					break;
-				case 2:
-					enemySpeedLv++;
-					break;
-				case 3:
-					enemyTechniqueLv++;
-					break;
-			}
+//			LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
+//			int randum = arc4random() % 4;
+//			switch (randum){
+//				case 0:
+//					enemyStrongLv++;
+//					break;
+//				case 1:
+//					enemypowerLv++;
+//					break;
+//				case 2:
+//					enemySpeedLv++;
+//					break;
+//				case 3:
+//					enemyTechniqueLv++;
+//					break;
+//			}
+
+			//相手レベルUP
+			UserDefault* userDefault = UserDefault::sharedUserDefault();
+			enemyLv = userDefault->getIntegerForKey(key_enemyLv, 1) + 1;
+			userDefault->setIntegerForKey(key_enemyLv, enemyLv);
+
 			//HP回復
 			NowHp += 20;
 			if (MaxHp < NowHp)
@@ -583,8 +645,7 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 			pHpImg->runAction(KSAnimation::hpAction(wk_a));
 			pHpImg->setScaleX(wk_a);
 
-
-			this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 1.3);
+			this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 0.1);
 		}
 
 	}
@@ -599,7 +660,7 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 void HelloWorld::attack(int flag)
 {
 
-	rushPoint(true);	//ラッシュポイント増加
+//	rushPoint(true);	//ラッシュポイント増加
 
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	if (flag == 0)
@@ -624,22 +685,27 @@ void HelloWorld::attack(int flag)
 	hpLabel->setString(String::createWithFormat("敵残りHP:%d", NowEnemyHp)->getCString());
 	if (NowEnemyHp < 1){
         arrowRefresh();
-		arrowLabel->setString(String::createWithFormat("%dステージクリア！！ ",nowStage)->getCString());
-	    int randum = arc4random() % 4;
-	    switch (randum){
-	    	case 0:
-	    	    enemyStrongLv++;
-	    		break;
-	    	case 1:
-	    	    enemypowerLv++;
-	    		break;
-	    	case 2:
-	    	    enemySpeedLv++;
-	    		break;
-	    	case 3:
-	    	    enemyTechniqueLv++;
-	    		break;
-	    }
+//	    int randum = arc4random() % 4;
+//	    switch (randum){
+//	    	case 0:
+//	    	    enemyStrongLv++;
+//	    		break;
+//	    	case 1:
+//	    	    enemypowerLv++;
+//	    		break;
+//	    	case 2:
+//	    	    enemySpeedLv++;
+//	    		break;
+//	    	case 3:
+//	    	    enemyTechniqueLv++;
+//	    		break;
+//	    }
+
+		//相手レベルUP
+		UserDefault* userDefault = UserDefault::sharedUserDefault();
+		enemyLv = userDefault->getIntegerForKey(key_enemyLv, 1) + 1;
+		userDefault->setIntegerForKey(key_enemyLv, enemyLv);
+
 	    //HP回復
 	    NowHp += 20;
 	    if (MaxHp < NowHp)
@@ -651,7 +717,7 @@ void HelloWorld::attack(int flag)
 		pHpImg->runAction(KSAnimation::hpAction(wk_a));
 		pHpImg->setScaleX(wk_a);
 
-		this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 1.3);
+		this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 0.1);
 //	} else {
 //		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 0.2);
 	}
@@ -663,7 +729,7 @@ void HelloWorld::attack(int flag)
 void HelloWorld::defense(int flag)
 {
 
-	rushPoint(true);	//ラッシュポイント増加
+//	rushPoint(true);	//ラッシュポイント増加
 
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	arrowLabel->setString("ガード");
@@ -676,7 +742,7 @@ void HelloWorld::defense(int flag)
 void HelloWorld::miss(bool flag)
 {
 
-	rushPoint(false);	//ラッシュポイント初期化
+//	rushPoint(false);	//ラッシュポイント初期化
 
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	arrowLabel->setString("ミス！");
@@ -737,14 +803,6 @@ void HelloWorld::makeRetryButton()
 	this->addChild(menu,2);
 }
 
-//リトライボタンタップ時の処理
-void HelloWorld::tapRetryButton(Node *node)
-{
-	//ゲームのシーンを新しく用意する
-	Scene* gameScene = (Scene*)HelloWorld::create();
-//	Director::sharedDirector()->replaceScene(gameScene);
-	Director::getInstance()->replaceScene(gameScene);
-}
 
 /*
  * 攻防処理リフレッシュ
@@ -790,18 +848,17 @@ void HelloWorld::meDamage()
 /*
  * 　ラッシュ開始処理
  */
-void HelloWorld::menuStartRush(Object* sender)
+//void HelloWorld::menuStartRush(Object* sender)
+void HelloWorld::menuStartRush()
 {
 	arrowRefresh();			// 攻防の矢印をリフレッシュ
 	rush_flag = true;		// ラッシュフラグをtrueにする
 	NowRush = 0;			// ラッシュポイントを初期化
 
-	//ラッシュ開始ボタン削除
-	Node* pRushMenu   = this->getChildByTag(tagRushMenu);
-	pRushMenu->removeFromParentAndCleanup(true);
+//	//ラッシュ開始ボタン削除
+//	Node* pRushMenu   = this->getChildByTag(tagRushMenu);
+//	pRushMenu->removeFromParentAndCleanup(true);
 
-//	Node* pRushButton = this->getChildByTag(tagRushButton);
-//	pRushButton->removeFromParentAndCleanup(true);
 	//カットイン作成
 	Node* pCutin = Sprite::create("rush_cutin.png");
 	pCutin->setPosition(Point(visibleSize.width, visibleSize.height * 0.45));
@@ -809,14 +866,11 @@ void HelloWorld::menuStartRush(Object* sender)
 	pCutin->setAnchorPoint(Point(0,0));
 	this->addChild(pCutin,4);
 	//カットインアニメーション
-//	Node* pHpImg = this->getChildByTag(tagRushCutin);
-//	pHpImg->runAction(KSAnimation::rushCutin());
 	pCutin->runAction(KSAnimation::rushCutin());
 	//カットイン削除
 //	pCutin->removeFromParentAndCleanup(true);
 
-//	randomTarget();			// ラッシュターゲット抽選
-	this->scheduleOnce(schedule_selector(HelloWorld::firstRandomTarget), 2);
+	this->scheduleOnce(schedule_selector(HelloWorld::firstRandomTarget), 1);
 
 	this->scheduleOnce(schedule_selector(HelloWorld::rushEnd), rushTime);
 
@@ -855,20 +909,22 @@ void HelloWorld::rushPoint(bool flag)
 
 		CCLOG("startRush = %d,NowRush = %d", startRush, NowRush);
 		if (startRush <= NowRush) {
-		    // ラッシュボタン設置
-		    MenuItemImage* pStartRush;
-		    pStartRush = MenuItemImage::create("rush_1.png",
-		                                         "rush_2.png",
-		                                         CC_CALLBACK_1(HelloWorld::menuStartRush, this));
-		    pStartRush->setPosition(Point(origin.x, visibleSize.height + rushButton_y));
-		    pStartRush->setAnchorPoint(Point(0,1));
+//		    // ラッシュボタン設置
+//		    MenuItemImage* pStartRush;
+//		    pStartRush = MenuItemImage::create("rush_1.png",
+//		                                         "rush_2.png",
+//		                                         CC_CALLBACK_1(HelloWorld::menuStartRush, this));
+//		    pStartRush->setPosition(Point(origin.x, visibleSize.height + rushButton_y));
+//		    pStartRush->setAnchorPoint(Point(0,1));
+//
+//		    Menu* pMenu = Menu::create(pStartRush, NULL);
+//		    pMenu->setPosition(Point::ZERO);
+//		    pMenu->setTag(tagRushMenu);
+//		    this->addChild(pMenu,10);
 
-//		    pStartRush->setTag(tagRushButton);
+			//ボタン表示せずポイントが溜まった瞬間ラッシュを開始する
+			menuStartRush();
 
-		    Menu* pMenu = Menu::create(pStartRush, NULL);
-		    pMenu->setPosition(Point::ZERO);
-		    pMenu->setTag(tagRushMenu);
-		    this->addChild(pMenu,10);
 		    rushStack = true;
 
 		}
@@ -896,10 +952,51 @@ void HelloWorld::rushEnd(float time){
 
 
 	//通常ゲーム再開
+//	this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 0.1);
 	this->schedule(schedule_selector(HelloWorld::showArrow), 2);
 
+	if (NowEnemyHp < 1){
+		arrowRefresh();
+	} else {
+		showArrow(0.0);
+	}
 }
 
 
+/********************************************************************************************
+ * シーン変更
+ ********************************************************************************************/
+//リトライボタンタップ時の処理
+void HelloWorld::tapRetryButton(Object* pSender)
+{
+	//ゲームのシーンを新しく用意する
+	Scene* gameScene = (Scene*)HelloWorld::create();
+	Director::getInstance()->replaceScene(gameScene);
+}
+
+//メニューへの処理
+void HelloWorld::tapReturnMenu(Object* pSender)
+{
+	// ボタン削除
+	Node* pNext = this->getChildByTag(tagNextButton);
+	pNext->removeFromParentAndCleanup(true);
+	Node* pMenu = this->getChildByTag(tagMenutButton);
+	pMenu->removeFromParentAndCleanup(true);
+
+	Scene* gameScene = (Scene*)TitleScene::create();
+	Director::getInstance()->replaceScene(gameScene);
+}
+//次のレベルへの処理
+void HelloWorld::tapNextLv(Object* pSender)
+{
+
+	// ボタン削除
+	Node* pNext = this->getChildByTag(tagNextButton);
+	pNext->removeFromParentAndCleanup(true);
+	Node* pMenu = this->getChildByTag(tagMenutButton);
+	pMenu->removeFromParentAndCleanup(true);
 
 
+	setup();
+
+}
