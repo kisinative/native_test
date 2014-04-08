@@ -14,6 +14,29 @@ FiniteTimeAction* KSAnimation::vibrationAnimation(float time)
     return move;
 }
 
+FiniteTimeAction* KSAnimation::move1(float time)
+{
+
+	int randum = arc4random() % 3;
+	Sequence* moves;
+	switch (randum){
+		case 0:
+			moves = Sequence::create(EaseIn::create(ScaleTo::create(1.0f, 2.0f), time / 4), EaseIn::create(ScaleTo::create(2.0f, 1.0f), time / 4), EaseIn::create(ScaleTo::create(1.0f, 1.0f), time / 2), NULL);
+			break;
+		case 1:
+			moves = Sequence::create(EaseInOut::create(ScaleTo::create(1.0f, 0.1f), time / 4), EaseInOut::create(ScaleTo::create(0.1f, 1.0f), time / 4), EaseInOut::create(ScaleTo::create(1.0f, 1.0f), time / 2), NULL);
+			break;
+		case 2:
+			Size size = Director::getInstance()->getVisibleSize();
+			moves = Sequence::create(MoveTo::create(time, ccp(0.0, size.height * 0.80)), NULL);
+			break;
+	}
+
+
+    return Repeat::create(moves, 3);
+}
+
+
 FiniteTimeAction* KSAnimation::hpAction(float pointScale)
 {
     MoveBy* move1 = MoveBy::create(0.03, ccp( 0, -5));

@@ -14,6 +14,11 @@ protected:
         kTag_Help,
     };
 
+	//プリファレンス
+	const char* key_enemyLv = "EnemyLv";
+
+	bool debug_flag = true;
+
 public:
 
     virtual bool init();

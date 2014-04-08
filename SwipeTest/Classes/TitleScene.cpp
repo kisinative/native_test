@@ -27,7 +27,6 @@ bool TitleScene::init()
 
     Size size = Director::sharedDirector()->getWinSize();
 
-    CocosDenshion::SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic("harunopayapaya.mp3");
 
     // 背景
     Sprite* pBG = Sprite::create("title_bg.png");
@@ -49,6 +48,22 @@ bool TitleScene::init()
     pMenu->setTag(kTag_Menu);
     this->addChild(pMenu);
 
+    if (debug_flag){
+		//リトライボタンを作成する
+		LabelTTF* retryLabel = LabelTTF::create("初期化", "Arial", 80.0);
+		MenuItemLabel* retryItem = MenuItemLabel::create(retryLabel, [&](Object *sender) {
+				UserDefault* userDefault = UserDefault::sharedUserDefault();
+				userDefault->setIntegerForKey(key_enemyLv, 1);
+			});
+
+
+		retryItem->setPosition(Point(size.width * 0.5,size.height *0.4));
+
+		//メニューを作成する
+		Menu* menu = Menu::create(retryItem, NULL);
+		menu->setPosition(Point::ZERO);
+		this->addChild(menu,2);
+    }
 
     //広告の表示
     cocos2d::JniMethodInfo methodInfo;
@@ -61,8 +76,8 @@ bool TitleScene::init()
 //    methodInfo.env->DeleteLocalRef(methodInfo.classID);
 
 
-
-    CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic("harunopayapaya.mp3", true);
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("harunopayapaya.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("harunopayapaya.mp3", true);
 
     return true;
 }

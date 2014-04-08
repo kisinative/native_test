@@ -295,9 +295,17 @@ void HelloWorld::showArrow(float time)
 	pArrow->addChild(pArrow1,3);
 
 	CallFunc* callFunction = CallFunc::create(this, callfunc_selector(HelloWorld::timeOver));
-    Sequence* callAction = Sequence::create(KSAnimation::vibrationAnimation((float)defaultEnemySpeed - enemySpeedLv / 10.0), callFunction, RemoveSelf::create(true), NULL);
+//    Sequence* callAction = Sequence::create(KSAnimation::vibrationAnimation((float)defaultEnemySpeed - enemySpeedLv / 10.0), callFunction, RemoveSelf::create(true), NULL);
+//
+//	pArrow->runAction(callAction);
 
-	pArrow->runAction(callAction);
+	Spawn* spawn = Spawn::createWithTwoActions(
+			Sequence::create(KSAnimation::vibrationAnimation((float)defaultEnemySpeed - enemySpeedLv / 10.0), callFunction, RemoveSelf::create(true), NULL),
+			KSAnimation::move1((float)defaultEnemySpeed - enemySpeedLv / 10.0)
+	);
+	pArrow->runAction(spawn);
+//	pArrow->runAction(Spawn::createWithTwoActions(MoveTo::create(time, ccp(0.0, visibleSize.height * 0.80)),Sequence::create(EaseInOut::create(ScaleTo::create(1.0f, 3.0f), time / 2), EaseInOut::create(ScaleTo::create(3.0f, 1.0f), time / 2), NULL)));
+//	pArrow->runAction(Spawn::createWithTwoActions(MoveTo::create(time, ccp(0.0, visibleSize.height * 0.80)),Sequence::create(MoveBy::create(0.5, ccp( -10, 0 )), MoveBy::create(0.5, ccp( 10, 0 )), NULL)));
 
 	//ラッシュ処理
 	if (rushCount > 0)
@@ -330,7 +338,7 @@ void HelloWorld::nextStage(float time)
 										 "next_2.png",
 										 CC_CALLBACK_1(HelloWorld::tapNextLv, this));
 	pNext->setPosition(Point(origin.x, origin.y + nextLvButton_y));
-	pNext->setAnchorPoint(Point(0,1));
+	pNext->setAnchorPoint(Point(0,0));
 
 	Menu* pMenuNext = Menu::create(pNext, NULL);
 	pMenuNext->setPosition(Point::ZERO);
@@ -343,7 +351,7 @@ void HelloWorld::nextStage(float time)
 										 "return_2.png",
 										 CC_CALLBACK_1(HelloWorld::tapReturnMenu, this));
 	pRetrunMenu->setPosition(Point(visibleSize.width, origin.y + returnMenuButton_y));
-	pRetrunMenu->setAnchorPoint(Point(1,1));
+	pRetrunMenu->setAnchorPoint(Point(1,0));
 
 	Menu* pMenuReturn = Menu::create(pRetrunMenu, NULL);
 	pMenuReturn->setPosition(Point::ZERO);
