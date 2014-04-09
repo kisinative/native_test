@@ -304,8 +304,22 @@ void HelloWorld::showArrow(float time)
 			KSAnimation::move1((float)defaultEnemySpeed - enemySpeedLv / 10.0)
 	);
 	pArrow->runAction(spawn);
-//	pArrow->runAction(Spawn::createWithTwoActions(MoveTo::create(time, ccp(0.0, visibleSize.height * 0.80)),Sequence::create(EaseInOut::create(ScaleTo::create(1.0f, 3.0f), time / 2), EaseInOut::create(ScaleTo::create(3.0f, 1.0f), time / 2), NULL)));
-//	pArrow->runAction(Spawn::createWithTwoActions(MoveTo::create(time, ccp(0.0, visibleSize.height * 0.80)),Sequence::create(MoveBy::create(0.5, ccp( -10, 0 )), MoveBy::create(0.5, ccp( 10, 0 )), NULL)));
+
+//	pArrow->runAction(MoveTo::create(time, ccp(0.0, visibleSize.height * 0.80)));
+//	pArrow->runAction(Sequence::create(MoveBy::create(0.8, ccp( -10, 0 )), MoveBy::create(0.8, ccp( 10, 0 )), NULL));
+
+//	pArrow->runAction( MoveTo::create(1.0, ccp(0.0, visibleSize.height * 0.80)) );
+//
+//	//上下に50px移動を繰り返す
+//	pArrow->runAction( RepeatForever::create(
+//	Sequence::create( MoveBy::create(0.5, ccp( 0, -50 )),MoveBy::create(0.5, ccp( 0, 50 )),	NULL )));
+
+//	pArrow->runAction(Spawn::createWithTwoActions(MoveTo::create(time, ccp(0.0, visibleSize.height * 0.80)),Sequence::create(MoveBy::create(0.5, ccp( 0, -50 )), MoveBy::create(0.5, ccp( 0, 50 )), NULL)));
+
+//	pArrow->runAction(Spawn::createWithTwoActions(MoveTo::create(time, ccp(0.0, visibleSize.height * 0.80)),Sequence::create(MoveBy::create(0.5, ccp( -100, 0 )), MoveBy::create(0.5, ccp( 200, 0 )), NULL)));
+
+
+//	pArrow->runAction(Spawn::createWithTwoActions(MoveTo::create(time, ccp(0.0, visibleSize.height * 0.80)),MoveTo::create(time, ccp(0.0, visibleSize.height * 0.80))));
 
 	//ラッシュ処理
 	if (rushCount > 0)

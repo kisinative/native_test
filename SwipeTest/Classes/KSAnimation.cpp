@@ -17,18 +17,21 @@ FiniteTimeAction* KSAnimation::vibrationAnimation(float time)
 FiniteTimeAction* KSAnimation::move1(float time)
 {
 
-	int randum = arc4random() % 3;
+	int randum = arc4random() % 4;
 	Sequence* moves;
 	switch (randum){
 		case 0:
-			moves = Sequence::create(EaseIn::create(ScaleTo::create(1.0f, 2.0f), time / 4), EaseIn::create(ScaleTo::create(2.0f, 1.0f), time / 4), EaseIn::create(ScaleTo::create(1.0f, 1.0f), time / 2), NULL);
+			moves = Sequence::create(EaseIn::create(ScaleTo::create(1.0f, 2.0f), time / 4), EaseIn::create(ScaleTo::create(2.0f, 1.0f), time / 4), DelayTime::create(time / 2), NULL);
 			break;
 		case 1:
-			moves = Sequence::create(EaseInOut::create(ScaleTo::create(1.0f, 0.1f), time / 4), EaseInOut::create(ScaleTo::create(0.1f, 1.0f), time / 4), EaseInOut::create(ScaleTo::create(1.0f, 1.0f), time / 2), NULL);
+			moves = Sequence::create(EaseInOut::create(ScaleTo::create(1.0f, 0.1f), time / 4), EaseInOut::create(ScaleTo::create(0.1f, 1.0f), time / 4), DelayTime::create(time / 2), NULL);
 			break;
 		case 2:
-			Size size = Director::getInstance()->getVisibleSize();
-			moves = Sequence::create(MoveTo::create(time, ccp(0.0, size.height * 0.80)), NULL);
+			moves = Sequence::create(MoveBy::create(time / 4, ccp( -100, 0 )), MoveBy::create(time / 4, ccp( 100, 0 )), NULL);
+			break;
+		case 3:
+//			moves = RepeatForever::create(Sequence::create(MoveBy::create(time / 8, ccp( 0, -50 )), MoveBy::create(time / 8, ccp( 0, 50 )), NULL));
+			moves = Sequence::create(MoveBy::create(time / 8, ccp( 0, -50 )), MoveBy::create(time / 8, ccp( 0, 50 )), NULL);
 			break;
 	}
 
