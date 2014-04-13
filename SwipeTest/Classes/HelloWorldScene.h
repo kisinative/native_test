@@ -64,6 +64,12 @@ protected:
 	const int justAtk				= 5;	//ジャストヒット
 	const int rushAtk				= 1;	//ラッシュ攻撃
 
+	//プレイヤーレベル
+	int playerStrongLv;
+	int playerPowerLv;
+	int playerSpeedLv;
+	int playerTechniqueLv;
+
 	//敵レベル
 	int enemyLv;
 	int enemyStrongLv;
@@ -84,7 +90,7 @@ protected:
 	std::string hidari = "1";				//入力中ジェスチャ
 	std::string ue = "2";                   //入力中ジェスチャ
 	std::string sita = "3";                 //入力中ジェスチャ
-	const int startRushConst = 5;			//自ラッシュ開始ポイント
+	const int startRushConst = 7;			//自ラッシュ開始ポイント
 	int		startRush;						//自ラッシュ開始ポイント
 	int		startEnemyRush = 20;			//敵ラッシュ開始ポイント
 	bool	rushStack = false;				//ラッシュ開始可能状況判定フラグ
@@ -102,15 +108,26 @@ protected:
 	int rushCount;							//残りラッシュ数
 
 	//配置
-	cocos2d::Point	origin;							//使用端末の(0,0)地点
-	cocos2d::Size	visibleSize;					//使用端末の画面サイズ
-	float			rushButton_y		= -100.0;	//ラッシュボタン
-	float			nextLvButton_y		= 250.0;	//ネクストレベルボタン
-	float			returnMenuButton_y	= 250.0;	//メニューボタン
+	cocos2d::Point	origin;										//使用端末の(0,0)地点
+	cocos2d::Size	visibleSize;								//使用端末の画面サイズ
+	float			rushButton_y		= -100.0;				//ラッシュボタン
+	float			nextLvButton_y		= 250.0;				//ネクストレベルボタン
+	float			returnMenuButton_y	= 250.0;				//メニューボタン
 
 
 	//プリファレンス
-	const char* key_enemyLv = "EnemyLv";
+	const char* key_enemyLv				= "EnemyLv";			//敵レベル
+	const char* key_playerExp			= "PlayerExp";			//プレイヤー経験値
+	const char* key_playerStrongLv		= "PlayerStrong";		//プレイヤー体力
+	const char* key_playerPowerLv		= "PlayerPower";		//プレイヤー攻撃力
+	const char* key_playerSpeedLv		= "PlayerSpeed";		//プレイヤースピード
+	const char* key_playerTechniqueLv	= "PlayerTechnique";	//プレイヤーテクニック
+
+
+//	int enemyStrongLv;
+//	int enemypowerLv;
+//	int enemySpeedLv;
+//	int enemyTechniqueLv;
 
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer

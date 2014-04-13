@@ -49,8 +49,9 @@ bool TitleScene::init()
     this->addChild(pMenu);
 
     if (debug_flag){
-		//リトライボタンを作成する
+		//初期化ボタンを作成する
 		LabelTTF* retryLabel = LabelTTF::create("初期化", "Arial", 80.0);
+		retryLabel->setColor(ccc3(255, 255, 255));
 		MenuItemLabel* retryItem = MenuItemLabel::create(retryLabel, [&](Object *sender) {
 				UserDefault* userDefault = UserDefault::sharedUserDefault();
 				userDefault->setIntegerForKey(key_enemyLv, 1);

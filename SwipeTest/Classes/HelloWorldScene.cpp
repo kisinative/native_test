@@ -64,10 +64,16 @@ bool HelloWorld::init()
     //初期化
     NowHp = MaxHp;
     targetGesture = "99";
-    enemyStrongLv = 1;
-    enemypowerLv = 1;
-    enemySpeedLv = 1;
-    enemyTechniqueLv = 1;
+    //プレイヤーの各種レベル取得
+	UserDefault* userDefault = UserDefault::sharedUserDefault();
+	playerStrongLv 		= userDefault->getIntegerForKey(key_playerStrongLv, 1);
+	playerPowerLv		= userDefault->getIntegerForKey(key_playerPowerLv, 1);
+	playerSpeedLv		= userDefault->getIntegerForKey(key_playerSpeedLv, 1);
+	playerTechniqueLv	= userDefault->getIntegerForKey(key_playerTechniqueLv, 1);
+//    enemyStrongLv = 1;
+//    enemypowerLv = 1;
+//    enemySpeedLv = 1;
+//    enemyTechniqueLv = 1;
     nowStage = 1;
     nowGesture = "";
 
@@ -227,6 +233,14 @@ void HelloWorld::setup()
 	rushStack	= false;
 	rush_flag	= false;
 	startRush	= startRushConst;
+
+	//LV相殺
+	enemySpeedLv	   -= playerSpeedLv / 2;
+	enemyTechniqueLv   -= playerTechniqueLv / 2;
+	enemySpeedLv		= enemySpeedLv		> 1 ? enemySpeedLv : 1;
+	enemyTechniqueLv	= enemyTechniqueLv	> 1 ? enemyTechniqueLv : 1;
+	CCLOG("enemySpeedLv = %d, enemyTechniqueLv = %d", enemySpeedLv, enemyTechniqueLv);
+	CCLOG("test = %d", 5 / 2);
 
 	Node* pHpImg = this->getChildByTag(tagEnemyHpImg);
 	pHpImg->setScaleX(1.0);
