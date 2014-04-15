@@ -164,22 +164,28 @@ void HelloWorld::setup()
 	enemypowerLv		= enemyLv;
 	enemySpeedLv		= enemyLv;
 	enemyTechniqueLv	= enemyLv;
-	int randum = arc4random() % 4;
-	switch (randum){
+	enemyType = arc4random() % 5;
+	switch (enemyType){
 		case 0:
-			enemyStrongLv = enemyStrongLv + 3;
+			enemyStrongLv = enemyStrongLv + 1;
+			enemypowerLv = enemypowerLv + 1;
+			enemySpeedLv = enemySpeedLv + 1;
+			enemyTechniqueLv = enemyTechniqueLv + 1;
 			break;
 		case 1:
-			enemypowerLv = enemypowerLv + 3;
+			enemyStrongLv = enemyStrongLv + 3;
 			break;
 		case 2:
-			enemySpeedLv = enemySpeedLv + 3;
+			enemypowerLv = enemypowerLv + 3;
 			break;
 		case 3:
+			enemySpeedLv = enemySpeedLv + 3;
+			break;
+		case 4:
 			enemyTechniqueLv = enemyTechniqueLv + 3 ;
 			break;
 	}
-
+	catChenge(enemyType,0);
 
 
     //HP表示
@@ -239,8 +245,6 @@ void HelloWorld::setup()
 	enemyTechniqueLv   -= playerTechniqueLv / 2;
 	enemySpeedLv		= enemySpeedLv		> 1 ? enemySpeedLv : 1;
 	enemyTechniqueLv	= enemyTechniqueLv	> 1 ? enemyTechniqueLv : 1;
-	CCLOG("enemySpeedLv = %d, enemyTechniqueLv = %d", enemySpeedLv, enemyTechniqueLv);
-	CCLOG("test = %d", 5 / 2);
 
 	Node* pHpImg = this->getChildByTag(tagEnemyHpImg);
 	pHpImg->setScaleX(1.0);
@@ -556,7 +560,7 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 		Point point = touch->getLocation();
 		float deltaX = this->xtGestureStartPoint.x - point.x;
 		float deltaY = this->xtGestureStartPoint.y - point.y;
-		if (fabs(deltaX) <= 10.0 && fabs(deltaY) <= 10.0 ) {
+		if (fabs(deltaX) <= 20.0 && fabs(deltaY) <= 20.0 ) {
 			return;
 		}
 
@@ -610,7 +614,9 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 				this->unschedule(schedule_selector(HelloWorld::showArrow));
 				this->schedule(schedule_selector(HelloWorld::showArrow), 1);
 			} else {
-				rushPoint(wkGesture);
+				if (!(rushCount >  5 && wkGesture)){
+					rushPoint(wkGesture);
+				}
 			}
 		}
 		nowGesture = "";
@@ -1034,5 +1040,45 @@ void HelloWorld::tapNextLv(Object* pSender)
 
 
 	setup();
+
+}
+
+/*
+ * 猫戦闘画像変更
+ */
+void HelloWorld::catChenge(int catType, int flag)
+{
+
+	String img_name = "";
+	switch (flag){
+		case 0:
+//			String* img_name = "cat_";String::createWithFormat(
+			img_name = String::createWithFormat("cat_%d.png",catType)->getCString();
+			break;
+		case 1:
+//			String* img_name = "catAtk_";
+			img_name = String::createWithFormat("catAtk_%d.png",catType)->getCString();
+			break;
+		case 2:
+//			String* img_name = "catDown_";
+			img_name = String::createWithFormat("catDown_%d.png",catType)->getCString();
+			break;
+	}
+
+	Node* pEnemyImg = this->getChildByTag(tagEnemyImg);
+	if (pEnemyImg)
+	{
+		Animation *animation = Animation::create();
+		animation->addSpriteFrameWithFileName(img_name.getCString());
+		animation->setDelayPerUnit( 0.1f );
+		animation->setRestoreOriginalFrame(false);
+		RepeatForever *action = RepeatForever::create( Animate::create(animation) );
+		pEnemyImg->runAction(action);
+	} else {
+		Node* pTarget = Sprite::create(img_name.getCString());
+		pTarget->setPosition(Point(pTarget->getContentSize().width * 0.5, origin.y + pTarget->getContentSize().height/2));
+		pTarget->setTag(tagEnemyImg);
+		this->addChild(pTarget,1);
+	}
 
 }

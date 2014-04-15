@@ -28,6 +28,7 @@ protected:
 	void rushEnd(float time);
 	void tapReturnMenu(Object* pSender);
 	void tapNextLv(Object* pSender);
+	void catChenge(int catType, int flag);
 
 	// tag
 	const int tagHp				= 10;		//HPタグ
@@ -41,6 +42,7 @@ protected:
 
 	const int tagThumbnailImg		= 30;	//自キャラサムネイル
 	const int tagEnemyThumbnail	= 31;   //敵キャラサムネイル
+	const int tagEnemyImg		= 50;		//敵戦闘画像
 
 	const int tagTargetImg	 	= 80;		//ターゲットタグ
 	const int tagArrowLabel 	= 100;		//矢印タグ
@@ -72,6 +74,7 @@ protected:
 
 	//敵レベル
 	int enemyLv;
+	int enemyType;
 	int enemyStrongLv;
 	int enemypowerLv;
 	int enemySpeedLv;
