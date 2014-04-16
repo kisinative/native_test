@@ -28,7 +28,12 @@ protected:
 	void rushEnd(float time);
 	void tapReturnMenu(Object* pSender);
 	void tapNextLv(Object* pSender);
-	void catChenge(int catType, int flag);
+	void catChenge(int flag);
+	void catChenge0();
+	void catChenge1();
+	void catChenge2();
+	void enemyAtk();
+	void enemyDef(bool flag);
 
 	// tag
 	const int tagHp				= 10;		//HPタグ

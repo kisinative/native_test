@@ -17,14 +17,14 @@ FiniteTimeAction* KSAnimation::vibrationAnimation(float time)
 FiniteTimeAction* KSAnimation::move1(float time)
 {
 
-	int randum = arc4random() % 4;
+	int randum = arc4random() % 5;
 	Sequence* moves;
 	switch (randum){
 		case 0:
 			moves = Sequence::create(EaseIn::create(ScaleTo::create(1.0f, 2.0f), time / 4), EaseIn::create(ScaleTo::create(2.0f, 1.0f), time / 4), DelayTime::create(time / 2), NULL);
 			break;
 		case 1:
-			moves = Sequence::create(EaseInOut::create(ScaleTo::create(1.0f, 0.1f), time / 4), EaseInOut::create(ScaleTo::create(0.1f, 1.0f), time / 4), DelayTime::create(time / 2), NULL);
+			moves = Sequence::create(EaseInOut::create(ScaleTo::create(1.0f, 0.1f), time / 4), EaseInOut::create(ScaleTo::create(0.1f, 1.0f), time / 2), DelayTime::create(time / 4), NULL);
 			break;
 		case 2:
 			moves = Sequence::create(MoveBy::create(time / 4, ccp( -100, 0 )), MoveBy::create(time / 4, ccp( 100, 0 )), NULL);
@@ -32,6 +32,9 @@ FiniteTimeAction* KSAnimation::move1(float time)
 		case 3:
 //			moves = RepeatForever::create(Sequence::create(MoveBy::create(time / 8, ccp( 0, -50 )), MoveBy::create(time / 8, ccp( 0, 50 )), NULL));
 			moves = Sequence::create(MoveBy::create(time / 8, ccp( 0, -50 )), MoveBy::create(time / 8, ccp( 0, 50 )), NULL);
+			break;
+		case 4:
+			moves = Sequence::create(Blink::create(time,6), NULL);
 			break;
 	}
 

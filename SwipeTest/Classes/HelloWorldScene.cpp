@@ -185,7 +185,7 @@ void HelloWorld::setup()
 			enemyTechniqueLv = enemyTechniqueLv + 3 ;
 			break;
 	}
-	catChenge(enemyType,0);
+	catChenge(0);
 
 
     //HP表示
@@ -403,6 +403,11 @@ void HelloWorld::timeOver()
 //	targetGesture = "99";
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	arrowLabel->setString("timeOut");
+
+	//敵攻撃エフェクト
+	enemyAtk();
+
+
 	rushPoint(false);		//ラッシュポイント低下
 
 	//HP更新
@@ -604,6 +609,8 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 				}
 				NowEnemyRush += 1;
 			} else {
+				//敵攻撃エフェクト
+				enemyAtk();
 				miss(wkAtkDef);
 				NowEnemyRush += 5;
 			}
@@ -727,6 +734,7 @@ void HelloWorld::attack(int flag)
 	hpLabel->setString(String::createWithFormat("敵残りHP:%d", NowEnemyHp)->getCString());
 	if (NowEnemyHp < 1){
         arrowRefresh();
+		enemyDef(false);
 //	    int randum = arc4random() % 4;
 //	    switch (randum){
 //	    	case 0:
@@ -760,7 +768,9 @@ void HelloWorld::attack(int flag)
 		pHpImg->setScaleX(wk_a);
 
 		this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 0.1);
-//	} else {
+	} else {
+		enemyDef(true);
+
 //		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 0.2);
 	}
 }
@@ -1046,22 +1056,22 @@ void HelloWorld::tapNextLv(Object* pSender)
 /*
  * 猫戦闘画像変更
  */
-void HelloWorld::catChenge(int catType, int flag)
+void HelloWorld::catChenge(int flag)
 {
 
 	String img_name = "";
 	switch (flag){
 		case 0:
 //			String* img_name = "cat_";String::createWithFormat(
-			img_name = String::createWithFormat("cat_%d.png",catType)->getCString();
+			img_name = String::createWithFormat("cat_%d.png",enemyType)->getCString();
 			break;
 		case 1:
 //			String* img_name = "catAtk_";
-			img_name = String::createWithFormat("catAtk_%d.png",catType)->getCString();
+			img_name = String::createWithFormat("catAtk_%d.png",enemyType)->getCString();
 			break;
 		case 2:
 //			String* img_name = "catDown_";
-			img_name = String::createWithFormat("catDown_%d.png",catType)->getCString();
+			img_name = String::createWithFormat("catDown_%d.png",enemyType)->getCString();
 			break;
 	}
 
@@ -1072,13 +1082,129 @@ void HelloWorld::catChenge(int catType, int flag)
 		animation->addSpriteFrameWithFileName(img_name.getCString());
 		animation->setDelayPerUnit( 0.1f );
 		animation->setRestoreOriginalFrame(false);
-		RepeatForever *action = RepeatForever::create( Animate::create(animation) );
-		pEnemyImg->runAction(action);
+//		RepeatForever *action = RepeatForever::create( Animate::create(animation) );
+		pEnemyImg->runAction(Animate::create(animation));
 	} else {
 		Node* pTarget = Sprite::create(img_name.getCString());
 		pTarget->setPosition(Point(pTarget->getContentSize().width * 0.5, origin.y + pTarget->getContentSize().height/2));
 		pTarget->setTag(tagEnemyImg);
 		this->addChild(pTarget,1);
+	}
+
+}
+//アニメーション中に引数のある処理の動かし方がわからなかったので書いた処理
+//解決方法がわかったら直すべ
+void HelloWorld::catChenge0()
+{
+	catChenge(0);
+//	img_name = String::createWithFormat("cat_%d.png",enemyType)->getCString();
+//	Animation *animation = Animation::create();
+//	animation->addSpriteFrameWithFileName(img_name.getCString());
+//	animation->setDelayPerUnit( 0.1f );
+//	animation->setRestoreOriginalFrame(false);
+//	RepeatForever *action = RepeatForever::create( Animate::create(animation) );
+}
+void HelloWorld::catChenge1()
+{
+	catChenge(1);
+//	img_name = String::createWithFormat("catAtk_%d.png",enemyType)->getCString();
+//	Animation *animation = Animation::create();
+//	animation->addSpriteFrameWithFileName(img_name.getCString());
+//	animation->setDelayPerUnit( 0.1f );
+//	animation->setRestoreOriginalFrame(false);
+//	return *action = RepeatForever::create( Animate::create(animation) );
+}
+void HelloWorld::catChenge2()
+{
+	catChenge(2);
+//	img_name = String::createWithFormat("catDown_%d.png",enemyType)->getCString();
+//	Animation *animation = Animation::create();
+//	animation->addSpriteFrameWithFileName(img_name.getCString());
+//	animation->setDelayPerUnit( 0.1f );
+//	animation->setRestoreOriginalFrame(false);
+//	return *action = RepeatForever::create( Animate::create(animation) );
+}
+void HelloWorld::enemyAtk()
+{
+	//敵攻撃エフェクト
+	Node* pEnemyImg = this->getChildByTag(tagEnemyImg);
+	String img_name = String::createWithFormat("cat_%d.png",enemyType)->getCString();
+	Animation *animation = Animation::create();
+	animation->addSpriteFrameWithFileName(img_name.getCString());
+	animation->setDelayPerUnit( 0.01f );
+	animation->setRestoreOriginalFrame(false);
+//	RepeatForever *action = RepeatForever::create( Animate::create(animation) );
+
+
+	img_name = String::createWithFormat("catAtk_%d.png",enemyType)->getCString();
+	Animation *animation1 = Animation::create();
+	animation1->addSpriteFrameWithFileName(img_name.getCString());
+	animation1->setDelayPerUnit( 0.01f );
+	animation1->setRestoreOriginalFrame(false);
+//	RepeatForever *action1 = RepeatForever::create( Animate::create(animation1) );
+
+
+//	Spawn::createWithTwoActions(EaseInOut::create(ScaleTo::create(1.0f, 0.8f),0.3),EaseInOut::create(MoveBy::create(0.3, ccp( -30, 50)),0.3)),
+//	Animate::create(animation1),
+//	Spawn::createWithTwoActions(EaseInOut::create(ScaleTo::create(0.8f, 1.2f),0.3),EaseInOut::create(MoveTo::create(0.3, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2 - 50)),0.3)),
+//	Animate::create(animation),
+//	Spawn::createWithTwoActions(EaseInOut::create(ScaleTo::create(1.2f, 1.0f),0.3),EaseInOut::create(MoveTo::create(0.3, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2)),0.3)),
+//	NULL
+
+//	MoveBy::create(0.03, ccp( -30, 50)),
+//	Animate::create(animation1),
+//	MoveTo::create(0.03, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2 - 50)),
+//	Animate::create(animation),
+//	MoveTo::create(0.03, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2)),
+//	NULL
+
+	pEnemyImg->runAction(
+			Sequence::create(
+				MoveBy::create(0.1, ccp( -30, 50)),
+				Animate::create(animation1),
+				MoveTo::create(0.2, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2 - 100)),
+				Animate::create(animation),
+				MoveTo::create(0.02, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2)),
+				NULL
+			)
+	);
+
+}
+void HelloWorld::enemyDef(bool flag)
+{
+	//敵攻撃エフェクト
+	Node* pEnemyImg = this->getChildByTag(tagEnemyImg);
+	String img_name = String::createWithFormat("cat_%d.png",enemyType)->getCString();
+	Animation *animation = Animation::create();
+	animation->addSpriteFrameWithFileName(img_name.getCString());
+	animation->setDelayPerUnit( 0.01f );
+	animation->setRestoreOriginalFrame(false);
+
+	img_name = String::createWithFormat("catDown_%d.png",enemyType)->getCString();
+	Animation *animation1 = Animation::create();
+	animation1->addSpriteFrameWithFileName(img_name.getCString());
+	animation1->setDelayPerUnit( 0.01f );
+	animation1->setRestoreOriginalFrame(false);
+
+	if (flag) {
+		pEnemyImg->runAction(
+				Sequence::create(
+					MoveBy::create(0.15, ccp( 30, 50)),
+					Animate::create(animation1),
+					DelayTime::create(0.3f),
+					Animate::create(animation),
+					MoveTo::create(0.02, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2)),
+					NULL
+				)
+		);
+	} else {
+		pEnemyImg->runAction(
+				Sequence::create(
+					MoveBy::create(0.15, ccp( 30, 50)),
+					Animate::create(animation1),
+					NULL
+				)
+		);
 	}
 
 }
