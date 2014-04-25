@@ -6,12 +6,16 @@
 class TitleScene : public cocos2d::Layer
 {
 protected:
+
+	void menuPowerUpCallback(Object* sender);
+
     enum kTag
     {
         kTag_Menu = 1,
         kTag_StartButton,
         kTag_HelpButton,
         kTag_Help,
+        kTag_PowerUpButton,
     };
 
 	//プリファレンス
@@ -25,6 +29,7 @@ public:
     static cocos2d::Scene* scene();
     CREATE_FUNC(TitleScene);
     virtual void menuStartCallback(Object* sender);
+
 
 };
 

@@ -124,7 +124,7 @@ protected:
 
 
 	//プリファレンス
-	const char* key_enemyLv				= "EnemyLv";			//敵レベル
+	const char* key_enemyLv			= "EnemyLv";			//敵レベル
 	const char* key_playerExp			= "PlayerExp";			//プレイヤー経験値
 	const char* key_playerStrongLv		= "PlayerStrong";		//プレイヤー体力
 	const char* key_playerPowerLv		= "PlayerPower";		//プレイヤー攻撃力

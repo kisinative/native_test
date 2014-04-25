@@ -360,9 +360,16 @@ void HelloWorld::showArrow(float time)
  */
 void HelloWorld::nextStage(float time)
 {
+
+
+	// 経験値追加
+	UserDefault* userDefault = UserDefault::sharedUserDefault();
+	int playerExp = userDefault->getIntegerForKey(key_playerExp, 0);
+	int wk_enemyLv = nowStage+playerExp--;
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
-//	arrowLabel->setString(String::createWithFormat("%dステージクリア！！ ",nowStage)->getCString());
-	arrowLabel->setString("ステージクリア！！ ");
+	arrowLabel->setString(String::createWithFormat("ステージクリア！！\n%dポイント獲得 %d　→　%d",wk_enemyLv, playerExp, wk_enemyLv+playerExp)->getCString());
+//	arrowLabel->setString("ステージクリア！！ ");
+	userDefault->setIntegerForKey(key_playerExp, wk_enemyLv+playerExp);
 
 	// NEXTステージボタン設置
 	MenuItemImage* pNext;

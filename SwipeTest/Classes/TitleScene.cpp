@@ -1,5 +1,6 @@
 #include "TitleScene.h"
 #include "HelloWorldScene.h"
+#include "PowerUpScene.h"
 #include "SimpleAudioEngine.h"
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
@@ -48,6 +49,18 @@ bool TitleScene::init()
     pMenu->setTag(kTag_Menu);
     this->addChild(pMenu);
 
+    // パワーアップボタン
+    MenuItemImage* pPowerUp;
+    pPowerUp = MenuItemImage::create("powerup_1.png",
+                                         "powerup_2.png",
+                                         CC_CALLBACK_1(TitleScene::menuPowerUpCallback, this));
+    pPowerUp->setPosition(Point(size.width * 0.5, size.height * 0.50));
+    pMenu = Menu::create(pPowerUp, NULL);
+    pMenu->setPosition(Point::ZERO);
+    pMenu->setTag(kTag_PowerUpButton);
+    this->addChild(pMenu);
+
+
     if (debug_flag){
 		//初期化ボタンを作成する
 		LabelTTF* retryLabel = LabelTTF::create("初期化", "Arial", 80.0);
@@ -87,6 +100,13 @@ void TitleScene::menuStartCallback(Object* sender)
 {
     // ゲーム画面の表示
     Scene* scene = HelloWorld::createScene();
+    TransitionFlipX* tran = TransitionFlipX::create(1, scene);
+    Director::sharedDirector()->replaceScene(tran);
+}
+void TitleScene::menuPowerUpCallback(Object* sender)
+{
+    // パワーアップ画面の表示
+    Scene* scene = PowerUp::createScene();
     TransitionFlipX* tran = TransitionFlipX::create(1, scene);
     Director::sharedDirector()->replaceScene(tran);
 }
