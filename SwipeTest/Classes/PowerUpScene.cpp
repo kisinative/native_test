@@ -3,6 +3,11 @@
 #include <unistd.h>
 
 USING_NS_CC;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#define MISAKI_FONT "fonts/mini-wakuwaku-maru.ttf"
+#else
+#define MISAKI_FONT "mini-wakuwaku-maru"
+#endif
 
 Scene* PowerUp::createScene()
 {
@@ -50,7 +55,7 @@ bool PowerUp::init()
 		pTarget->setTag(kTag_StrongButton);
 		this->addChild(pTarget,1);
 	}
-    wkLabel = LabelTTF::create(String::createWithFormat("タフネス LV%d\n必要ポイント：%d", playerStr, Calculation(playerStr))->getCString(), "Arial", 40.0);
+    wkLabel = LabelTTF::create(String::createWithFormat("タフネス LV%d\n必要ポイント：%d", playerStr, Calculation(playerStr))->getCString(), MISAKI_FONT, 40.0);
 	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 950));
 	wkLabel->setTag(kTag_StrongLabel);
 	this->addChild(wkLabel,2);
@@ -74,7 +79,7 @@ bool PowerUp::init()
 		pTarget->setTag(kTag_PowerButton);
 		this->addChild(pTarget,1);
 	}
-    wkLabel = LabelTTF::create(String::createWithFormat("パワー LV%d\n必要ポイント：%d", playerPow, Calculation(playerPow))->getCString(), "Arial", 40.0);
+    wkLabel = LabelTTF::create(String::createWithFormat("パワー LV%d\n必要ポイント：%d", playerPow, Calculation(playerPow))->getCString(), MISAKI_FONT, 40.0);
 	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 750));
 	wkLabel->setTag(kTag_PowerLabel);
 	this->addChild(wkLabel,2);
@@ -98,7 +103,7 @@ bool PowerUp::init()
 		pTarget->setTag(kTag_SpeedButton);
 		this->addChild(pTarget,1);
 	}
-    wkLabel = LabelTTF::create(String::createWithFormat("スピード LV%d\n必要ポイント：%d", playerSpd, Calculation(playerSpd))->getCString(), "Arial", 40.0);
+    wkLabel = LabelTTF::create(String::createWithFormat("スピード LV%d\n必要ポイント：%d", playerSpd, Calculation(playerSpd))->getCString(), MISAKI_FONT, 40.0);
 	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 550));
 	wkLabel->setTag(kTag_SpeedLabel);
 	this->addChild(wkLabel,2);
@@ -122,7 +127,7 @@ bool PowerUp::init()
 		pTarget->setTag(kTag_TechniqueButton);
 		this->addChild(pTarget,1);
 	}
-    wkLabel = LabelTTF::create(String::createWithFormat("テクニック LV%d\n必要ポイント：%d", playerTec, Calculation(playerTec))->getCString(), "Arial", 40.0);
+    wkLabel = LabelTTF::create(String::createWithFormat("テクニック LV%d\n必要ポイント：%d", playerTec, Calculation(playerTec))->getCString(), MISAKI_FONT, 40.0);
 	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 350));
 	wkLabel->setTag(kTag_TechniqueLabel);
 	this->addChild(wkLabel,2);
@@ -140,7 +145,7 @@ bool PowerUp::init()
     this->addChild(pMenu,1);
 
     //現在経験値
-    wkLabel = LabelTTF::create(String::createWithFormat("ポイント：%d",playerExp)->getCString(), "Arial", 40.0);
+    wkLabel = LabelTTF::create(String::createWithFormat("ポイント：%d",playerExp)->getCString(), MISAKI_FONT, 40.0);
 	wkLabel->setPosition(Point(visibleSize.width * 0.3, origin.y + 200));
 	wkLabel->setColor(ccc3(255, 0, 50));
 	wkLabel->setTag(kTag_ExpLabel);
