@@ -22,7 +22,13 @@ bool TitleScene::init()
 {
     if (!Layer::init())
         return false;
-    EGLView::sharedOpenGLView()->setDesignResolutionSize(640, 1136, kResolutionNoBorder);
+
+//    EGLView::sharedOpenGLView()->setDesignResolutionSize(640, 1136, kResolutionNoBorder);
+    Director* pDirector = Director::sharedDirector();
+    EGLView* pEGLView = EGLView::sharedOpenGLView();
+    pDirector->setOpenGLView(pEGLView);
+//    pEGLView->setDesignResolutionSize(320, 480, kResolutionShowAll);
+    pEGLView->setDesignResolutionSize(640, 1136, kResolutionShowAll);
 
     srand((unsigned int)time(NULL));
 
@@ -100,7 +106,7 @@ void TitleScene::menuStartCallback(Object* sender)
 {
     // ゲーム画面の表示
     Scene* scene = HelloWorld::createScene();
-    TransitionFlipX* tran = TransitionFlipX::create(1, scene);
+    TransitionFlipX* tran = TransitionFlipX::create(0.2, scene);
     Director::sharedDirector()->replaceScene(tran);
 }
 void TitleScene::menuPowerUpCallback(Object* sender)

@@ -7,6 +7,8 @@ class GameOver : public cocos2d::Layer
 {
 protected:
 
+	void tapReturnMenu(Object* pSender);
+	void tapRetry(Object* pSender);
 
     enum kTag
     {
@@ -27,8 +29,8 @@ protected:
 public:
 
 	static cocos2d::Scene* createScene();
-    virtual bool init();
     static cocos2d::Scene* scene();
+    virtual bool init();
     CREATE_FUNC(GameOver);
 
 };

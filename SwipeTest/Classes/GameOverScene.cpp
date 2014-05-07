@@ -1,5 +1,6 @@
 #include "GameOverScene.h"
 #include "TitleScene.h"
+#include "HelloWorldScene.h"
 #include <unistd.h>
 
 USING_NS_CC;
@@ -46,7 +47,7 @@ bool GameOver::init()
 										 "button_2.png",
 										 CC_CALLBACK_1(GameOver::tapRetry, this));
 	pGameOver->setPosition(Point(visibleSize.width * 0.5, origin.y + 350));
-	Menu* pMenu = Menu::create(pGameOver, NULL);
+	pMenu = Menu::create(pGameOver, NULL);
 	pMenu->setPosition(Point::ZERO);
 	pMenu->setTag(kTag_Retry);
 	this->addChild(pMenu,1);
@@ -59,13 +60,13 @@ bool GameOver::init()
 	pGameOver = MenuItemImage::create("button_1.png",
 										 "button_2.png",
 										 CC_CALLBACK_1(GameOver::tapReturnMenu, this));
-	pGameOver->setPosition(Point(visibleSize.width * 0.5, origin.y + 350));
-	Menu* pMenu = Menu::create(pGameOver, NULL);
+	pGameOver->setPosition(Point(visibleSize.width * 0.5, origin.y + 200));
+	pMenu = Menu::create(pGameOver, NULL);
 	pMenu->setPosition(Point::ZERO);
 	pMenu->setTag(kTag_Menu);
 	this->addChild(pMenu,1);
     wkLabel = LabelTTF::create("タイトルにもどる", MISAKI_FONT, 40.0);
-	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 350));
+	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 200));
 	wkLabel->setTag(kTag_Menu_Label);
 	this->addChild(wkLabel,2);
 

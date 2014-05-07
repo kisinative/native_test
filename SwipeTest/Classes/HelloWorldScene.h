@@ -34,6 +34,7 @@ protected:
 	void catChenge2();
 	void enemyAtk();
 	void enemyDef(bool flag);
+	void moveGameOver();
 
 	// tag
 	const int tagHp				= 10;		//HPタグ

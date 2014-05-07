@@ -1,6 +1,7 @@
 #include "HelloWorldScene.h"
 #include "KSAnimation.h"
 #include "TitleScene.h"
+#include "GameOverScene.h"
 #include <unistd.h>
 
 USING_NS_CC;
@@ -439,9 +440,13 @@ void HelloWorld::timeOver()
     moveAtkDef.erase(moveAtkDef.begin());
 
 	if (NowHp < 1){
-		this->unschedule(schedule_selector(HelloWorld::showArrow));
-		arrowLabel->setString("GameOver");
-        makeRetryButton();
+//		this->unschedule(schedule_selector(HelloWorld::showArrow));
+//		arrowLabel->setString("GameOver");
+//        makeRetryButton();
+
+		moveGameOver();
+
+
 //	} else {
 //		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 1);
 	}
@@ -825,9 +830,15 @@ void HelloWorld::miss(bool flag)
 	meDamage();
 
 	if (NowHp < 1){
-		this->unschedule(schedule_selector(HelloWorld::showArrow));
-		arrowLabel->setString("GameOver");
-		makeRetryButton();
+//		this->unschedule(schedule_selector(HelloWorld::showArrow));
+//		arrowLabel->setString("GameOver");
+//		makeRetryButton();
+
+		moveGameOver();
+
+
+
+
 //	} else {
 //		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 1);
 	}
@@ -1059,6 +1070,23 @@ void HelloWorld::tapNextLv(Object* pSender)
 	setup();
 
 }
+
+/*
+ * ゲームオーバーへ遷移
+ */
+void HelloWorld::moveGameOver()
+{
+
+	//ゲームのシーンを新しく用意する
+	Scene* gameScene = (Scene*)GameOver::create();
+//	TransitionSlideInL* tran = TransitionSlideInL::create(1, gameScene);
+    TransitionSplitCols* tran = TransitionSplitCols::create(0.5, gameScene);
+	Director::getInstance()->replaceScene(tran);
+
+}
+
+
+
 
 /*
  * 猫戦闘画像変更

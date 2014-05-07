@@ -10,6 +10,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/AppDelegate.cpp \
                    ../../Classes/TitleScene.cpp \
                    ../../Classes/PowerUpScene.cpp \
+                   ../../Classes/GameOverScene.cpp \
                    ../../Classes/KSAnimation.cpp \
                    ../../Classes/BFSprite.cpp \
                    ../../Classes/HelloWorldScene.cpp
