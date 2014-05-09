@@ -2,6 +2,7 @@
 #include "KSAnimation.h"
 #include "TitleScene.h"
 #include "GameOverScene.h"
+#include "WinnerScene.h"
 #include <unistd.h>
 
 USING_NS_CC;
@@ -10,6 +11,12 @@ String arrowArray[] = {"0", "1", "2", "3","02","03","12","13","20","21","30","31
 
 #define WINSIZE CCDirector::sharedDirector()->getWinSize()
 #define TEXT_SCALE WINSIZE.width/1080
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#define MISAKI_FONT "fonts/mini-wakuwaku-maru.ttf"
+#else
+#define MISAKI_FONT "mini-wakuwaku-maru"
+#endif
 
 Scene* HelloWorld::createScene()
 {
@@ -49,18 +56,18 @@ bool HelloWorld::init()
     //    you may modify it.
 
     // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+//    auto closeItem = MenuItemImage::create(
+//                                           "CloseNormal.png",
+//                                           "CloseSelected.png",
+//                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+//
+//	closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
+//                                origin.y + closeItem->getContentSize().height/2));
 
-	closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
-
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Point::ZERO);
-    this->addChild(menu, 1);
+//    // create menu, it's an autorelease object
+//    auto menu = Menu::create(closeItem, NULL);
+//    menu->setPosition(Point::ZERO);
+//    this->addChild(menu, 1);
 
     //初期化
     NowHp = MaxHp;
@@ -86,6 +93,7 @@ bool HelloWorld::init()
 //    pBG->setPosition(Point(origin.x, origin.y));
 //    this->addChild(pBG);
     CCLOG("visible = %f,visible = %f",origin.x,origin.y);
+    CCLOG("visibleSize.width = %f, visibleSize.height = %f",visibleSize.width, visibleSize.height);
 
 
 //    CCLOG("visible = %f,visible = %f",visibleSize.width,visibleSize.height);
@@ -144,7 +152,7 @@ bool HelloWorld::init()
 
 	//自他サムネイル
 	Node* pThumbnail1 = Sprite::create("mycat.png");
-	pThumbnail1->setPosition(Point(visibleSize.width * 0.5, origin.y + 150));
+	pThumbnail1->setPosition(Point(visibleSize.width * 0.5, origin.y + 100));
 	pThumbnail1->setAnchorPoint(Point(0,0));
 	pThumbnail1->setTag(500);
 	this->addChild(pThumbnail1,2);
@@ -450,6 +458,16 @@ void HelloWorld::timeOver()
 //	} else {
 //		this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 1);
 	}
+
+	//コンボ表記削除
+	noMissFlag = false;
+	conboCount = 0;
+	Node* pConboTarget	= getChildByTag(tagComboCount);
+	if (pConboTarget){
+		pConboTarget->removeFromParentAndCleanup(true);
+	}
+
+
 }
 
 
@@ -614,6 +632,23 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 			moveAtkDef.erase(moveAtkDef.begin());
 
 			if (wkGesture){
+				//コンボ数
+				if (++conboCount > 1) {
+					createLabel(String::createWithFormat("%dこんぼ", conboCount)->getCString(),
+								40,
+								visibleSize.width * 0.85,
+								origin.y + 750,
+								tagComboCount);
+
+					Node* pHpImg = this->getChildByTag(tagComboCount);
+					pHpImg->runAction(KSAnimation::hpAction());
+
+				}
+				if (conboCount > maxConboCount) {
+					maxConboCount = conboCount;
+				}
+
+
 				if (wkAtkDef){
 					attack(flag);
 				} else {
@@ -625,6 +660,14 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 				enemyAtk();
 				miss(wkAtkDef);
 				NowEnemyRush += 5;
+
+				//コンボ表記削除
+				noMissFlag = false;
+				conboCount = 0;
+				Node* pConboTarget	= getChildByTag(tagComboCount);
+				if (pConboTarget){
+					pConboTarget->removeFromParentAndCleanup(true);
+				}
 			}
 
 			if (NowEnemyRush >= startEnemyRush && rushCount == 0 && NowEnemyHp > 0)
@@ -663,7 +706,7 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 
 		Node* pHpImg = this->getChildByTag(tagEnemyHpImg);
 		float wk_a = (float)NowEnemyHp / MaxEnemyHp;
-		pHpImg->runAction(KSAnimation::hpAction(wk_a));
+		pHpImg->runAction(KSAnimation::hpAction());
 		pHpImg->setScaleX(wk_a);
 
 		//HP更新
@@ -690,10 +733,10 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 //					break;
 //			}
 
-			//相手レベルUP
-			UserDefault* userDefault = UserDefault::sharedUserDefault();
-			enemyLv = userDefault->getIntegerForKey(key_enemyLv, 1) + 1;
-			userDefault->setIntegerForKey(key_enemyLv, enemyLv);
+//			//相手レベルUP
+//			UserDefault* userDefault = UserDefault::sharedUserDefault();
+//			enemyLv = userDefault->getIntegerForKey(key_enemyLv, 1) + 1;
+//			userDefault->setIntegerForKey(key_enemyLv, enemyLv);
 
 			//HP回復
 			NowHp += 20;
@@ -703,10 +746,11 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 			}
 			Node* pHpImg = this->getChildByTag(tagHpImg);
 			float wk_a = (float)NowHp / MaxHp;
-			pHpImg->runAction(KSAnimation::hpAction(wk_a));
+			pHpImg->runAction(KSAnimation::hpAction());
 			pHpImg->setScaleX(wk_a);
 
-			this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 0.1);
+//			this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 0.1);
+			moveWinner();
 		}
 
 	}
@@ -738,7 +782,7 @@ void HelloWorld::attack(int flag)
 
 	Node* pHpImg = this->getChildByTag(tagEnemyHpImg);
 	float wk_a = (float)NowEnemyHp / MaxEnemyHp;
-	pHpImg->runAction(KSAnimation::hpAction(wk_a));
+	pHpImg->runAction(KSAnimation::hpAction());
 	pHpImg->setScaleX(wk_a);
 
 	//HP更新
@@ -763,10 +807,10 @@ void HelloWorld::attack(int flag)
 //	    		break;
 //	    }
 
-		//相手レベルUP
-		UserDefault* userDefault = UserDefault::sharedUserDefault();
-		enemyLv = userDefault->getIntegerForKey(key_enemyLv, 1) + 1;
-		userDefault->setIntegerForKey(key_enemyLv, enemyLv);
+//		//相手レベルUP
+//		UserDefault* userDefault = UserDefault::sharedUserDefault();
+//		enemyLv = userDefault->getIntegerForKey(key_enemyLv, 1) + 1;
+//		userDefault->setIntegerForKey(key_enemyLv, enemyLv);
 
 	    //HP回復
 	    NowHp += 20;
@@ -776,10 +820,11 @@ void HelloWorld::attack(int flag)
 	    }
 		Node* pHpImg = this->getChildByTag(tagHpImg);
 		float wk_a = (float)NowHp / MaxHp;
-		pHpImg->runAction(KSAnimation::hpAction(wk_a));
+		pHpImg->runAction(KSAnimation::hpAction());
 		pHpImg->setScaleX(wk_a);
 
-		this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 0.1);
+//		this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 0.1);
+		moveWinner();
 	} else {
 		enemyDef(true);
 
@@ -908,7 +953,7 @@ void HelloWorld::meDamage()
 
 	Node* pHpImg = this->getChildByTag(tagHpImg);
 	float wk_a = (float)NowHp / MaxHp;
-	pHpImg->runAction(KSAnimation::hpAction(wk_a));
+	pHpImg->runAction(KSAnimation::hpAction());
 	pHpImg->setScaleX(wk_a);
 }
 
@@ -1080,11 +1125,30 @@ void HelloWorld::moveGameOver()
 	//ゲームのシーンを新しく用意する
 	Scene* gameScene = (Scene*)GameOver::create();
 //	TransitionSlideInL* tran = TransitionSlideInL::create(1, gameScene);
-    TransitionSplitCols* tran = TransitionSplitCols::create(0.5, gameScene);
+//    TransitionSplitCols* tran = TransitionSplitCols::create(0.5, gameScene);
+	TransitionMoveInT* tran = TransitionMoveInT::create(0.5, gameScene);
 	Director::getInstance()->replaceScene(tran);
 
 }
 
+/*
+ * 勝利画面へ遷移
+ */
+void HelloWorld::moveWinner()
+{
+
+
+	UserDefault* userDefault = UserDefault::sharedUserDefault();
+	userDefault->setIntegerForKey(key_maxComboCount, maxConboCount);
+	userDefault->setBoolForKey(key_noMissFlag, noMissFlag);
+
+
+	//ゲームのシーンを新しく用意する
+	Scene* gameScene = (Scene*)Winner::create();
+	TransitionMoveInT* tran = TransitionMoveInT::create(0.5, gameScene);
+	Director::getInstance()->replaceScene(tran);
+
+}
 
 
 

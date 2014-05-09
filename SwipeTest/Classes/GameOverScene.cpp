@@ -33,7 +33,7 @@ bool GameOver::init()
 	LabelTTF* wkLabel;
 
 	pTarget = Sprite::create("gameover.png");
-	pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 950));
+	pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 850));
 	pTarget->setTag(kTag_GameOver);
 	this->addChild(pTarget,1);
 

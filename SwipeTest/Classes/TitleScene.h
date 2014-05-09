@@ -20,6 +20,12 @@ protected:
 
 	//プリファレンス
 	const char* key_enemyLv = "EnemyLv";
+	const char* key_playEnemyLv		= "PlayEnemyLv";		//対戦中敵レベル
+	const char* key_playerExp			= "PlayerExp";			//プレイヤー経験値
+	const char* key_playerStrongLv		= "PlayerStrong";		//プレイヤー体力
+	const char* key_playerPowerLv		= "PlayerPower";		//プレイヤー攻撃力
+	const char* key_playerSpeedLv		= "PlayerSpeed";		//プレイヤースピード
+	const char* key_playerTechniqueLv	= "PlayerTechnique";	//プレイヤーテクニック
 
 	bool debug_flag = true;
 

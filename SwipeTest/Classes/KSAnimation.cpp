@@ -43,7 +43,7 @@ FiniteTimeAction* KSAnimation::move1(float time)
 }
 
 
-FiniteTimeAction* KSAnimation::hpAction(float pointScale)
+FiniteTimeAction* KSAnimation::hpAction()
 {
     MoveBy* move1 = MoveBy::create(0.03, ccp( 0, -5));
     MoveBy* move2 = MoveBy::create(0.06, ccp( 0, 10));

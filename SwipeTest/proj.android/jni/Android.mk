@@ -11,8 +11,11 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/TitleScene.cpp \
                    ../../Classes/PowerUpScene.cpp \
                    ../../Classes/GameOverScene.cpp \
+                   ../../Classes/WinnerScene.cpp \
                    ../../Classes/KSAnimation.cpp \
                    ../../Classes/BFSprite.cpp \
+                   ../../Classes/NendIconModule.cpp \
+                   ../../Classes/NendModule.cpp \
                    ../../Classes/HelloWorldScene.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes

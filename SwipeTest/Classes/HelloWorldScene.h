@@ -35,6 +35,7 @@ protected:
 	void enemyAtk();
 	void enemyDef(bool flag);
 	void moveGameOver();
+	void moveWinner();
 
 	// tag
 	const int tagHp				= 10;		//HPタグ
@@ -60,6 +61,7 @@ protected:
 	const int tagNextButton	= 150;		//NEXTステージボタン
 	const int tagMenutButton	= 160;		//メニューボタン
 	const int tagArrowImg	 	= 1000;		//矢印タグ
+	const int tagComboCount	= 170;		//コンボ数タグ
 
 	//敵基本能力
 	const int defaultEnemyStrong = 40;		//体力
@@ -105,6 +107,9 @@ protected:
 	bool	rushStack = false;				//ラッシュ開始可能状況判定フラグ
 	bool	rush_flag = false;				//ラッシュ判定フラグ
 	float	rushTime  = 6.0;				//ラッシュ時間
+	bool	noMissFlag  = true;				//ノーミスフラグ
+	int		conboCount = 0;					//コンボカウント
+	int		maxConboCount = 0;				//MAXコンボカウント
 
 	std::string targetGesture;              //現在ジェスチャ
 	std::string nowGesture;                 //入力中ジェスチャ
@@ -126,11 +131,14 @@ protected:
 
 	//プリファレンス
 	const char* key_enemyLv			= "EnemyLv";			//敵レベル
+	const char* key_playEnemyLv		= "PlayEnemyLv";		//対戦中敵レベル
 	const char* key_playerExp			= "PlayerExp";			//プレイヤー経験値
 	const char* key_playerStrongLv		= "PlayerStrong";		//プレイヤー体力
 	const char* key_playerPowerLv		= "PlayerPower";		//プレイヤー攻撃力
 	const char* key_playerSpeedLv		= "PlayerSpeed";		//プレイヤースピード
 	const char* key_playerTechniqueLv	= "PlayerTechnique";	//プレイヤーテクニック
+	const char* key_maxComboCount		= "MaxConboCount";		//MAXコンボ数
+	const char* key_noMissFlag			= "NoMissFlag";			//ノーミスフラグ
 
 
 //	int enemyStrongLv;
