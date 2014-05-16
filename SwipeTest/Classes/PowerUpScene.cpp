@@ -1,7 +1,9 @@
 #include "PowerUpScene.h"
 #include "TitleScene.h"
 #include <unistd.h>
+#include "SimpleAudioEngine.h"
 
+using namespace CocosDenshion;
 USING_NS_CC;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #define MISAKI_FONT "fonts/mini-wakuwaku-maru.ttf"
@@ -21,6 +23,12 @@ Scene* PowerUp::createScene()
 // on "init" you need to initialize your instance
 bool PowerUp::init()
 {
+
+	//効果音読み込み
+	SimpleAudioEngine::sharedEngine()->setEffectsVolume(0.5);
+	SimpleAudioEngine::sharedEngine()->preloadEffect("lvup.mp3");
+
+
     //サイズ取得を行う
     origin			= Director::getInstance()->getVisibleOrigin();		//使用端末の(0,0)地点
 	visibleSize		= Director::getInstance()->getVisibleSize();		//使用端末の画面サイズ
@@ -169,33 +177,136 @@ int PowerUp::Calculation(int lv)
 
 void PowerUp::tapStrongButton(Object* pSender)
 {
+	//効果音を鳴らす
+	SimpleAudioEngine::sharedEngine()->playEffect("lvup.mp3");
+
+
 	UserDefault* userDefault = UserDefault::sharedUserDefault();
 	int wk_lv = userDefault->getIntegerForKey(key_playerStrongLv, 0) + 1;
 	int wk_exp = userDefault->getIntegerForKey(key_playerExp, 0) - Calculation(wk_lv-1);
 	userDefault->setIntegerForKey(key_playerStrongLv, wk_lv);
 	userDefault->setIntegerForKey(key_playerExp, wk_exp);
+
+	redisplay();
 }
 void PowerUp::tapPowerButton(Object* pSender)
 {
+	//効果音を鳴らす
+	SimpleAudioEngine::sharedEngine()->playEffect("lvup.mp3");
+
 	UserDefault* userDefault = UserDefault::sharedUserDefault();
 	int wk_lv = userDefault->getIntegerForKey(key_playerPowerLv, 0) + 1;
 	int wk_exp = userDefault->getIntegerForKey(key_playerExp, 0) - Calculation(wk_lv-1);
 	userDefault->setIntegerForKey(key_playerPowerLv, wk_lv);
 	userDefault->setIntegerForKey(key_playerExp, wk_exp);
+
+	redisplay();
 }
 void PowerUp::tapSpeedButton(Object* pSender)
 {
+	//効果音を鳴らす
+	SimpleAudioEngine::sharedEngine()->playEffect("lvup.mp3");
+
 	UserDefault* userDefault = UserDefault::sharedUserDefault();
 	int wk_lv = userDefault->getIntegerForKey(key_playerSpeedLv, 0) + 1;
 	int wk_exp = userDefault->getIntegerForKey(key_playerExp, 0) - Calculation(wk_lv-1);
 	userDefault->setIntegerForKey(key_playerSpeedLv, wk_lv);
 	userDefault->setIntegerForKey(key_playerExp, wk_exp);
+
+	redisplay();
 }
 void PowerUp::tapTechniqueButton(Object* pSender)
 {
+	//効果音を鳴らす
+	SimpleAudioEngine::sharedEngine()->playEffect("lvup.mp3");
+
 	UserDefault* userDefault = UserDefault::sharedUserDefault();
 	int wk_lv = userDefault->getIntegerForKey(key_playerTechniqueLv, 0) + 1;
 	int wk_exp = userDefault->getIntegerForKey(key_playerExp, 0) - Calculation(wk_lv-1);
 	userDefault->setIntegerForKey(key_playerTechniqueLv, wk_lv);
 	userDefault->setIntegerForKey(key_playerExp, wk_exp);
+
+	redisplay();
 }
+/*
+ * 再表示
+ */
+void PowerUp::redisplay()
+{
+    //サイズ取得を行う
+    origin			= Director::getInstance()->getVisibleOrigin();		//使用端末の(0,0)地点
+	visibleSize		= Director::getInstance()->getVisibleSize();		//使用端末の画面サイズ
+
+	// 現在の経験値やレベル取得
+	UserDefault* userDefault = UserDefault::sharedUserDefault();
+	int playerExp = userDefault->getIntegerForKey(key_playerExp, 0);
+	int playerStr = userDefault->getIntegerForKey(key_playerStrongLv, 1);
+	int playerPow = userDefault->getIntegerForKey(key_playerPowerLv, 1);
+	int playerSpd = userDefault->getIntegerForKey(key_playerSpeedLv, 1);
+	int playerTec = userDefault->getIntegerForKey(key_playerTechniqueLv, 1);
+
+	MenuItemImage* pPowerUp;
+	Menu* pMenu;
+	Node* pTarget;
+	LabelTTF* wkLabel;
+    // 体力
+	if (playerExp < Calculation(playerStr)) {
+		pTarget	= getChildByTag(kTag_StrongButton);
+		pTarget->removeFromParentAndCleanup(true);
+
+		pTarget = Sprite::create("levelup_2.png");
+		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 720));
+		pTarget->setTag(kTag_StrongButton);
+		this->addChild(pTarget,1);
+	}
+	wkLabel = (LabelTTF*)this->getChildByTag(kTag_StrongLabel);
+	wkLabel->setString(String::createWithFormat("タフネス LV%d\n必要ポイント：%d", playerStr, Calculation(playerStr))->getCString());
+
+
+    // 攻撃力
+	if (playerExp < Calculation(playerPow)) {
+		pTarget	= getChildByTag(kTag_PowerButton);
+		pTarget->removeFromParentAndCleanup(true);
+
+		pTarget = Sprite::create("levelup_2.png");
+		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 570));
+		pTarget->setTag(kTag_PowerButton);
+		this->addChild(pTarget,1);
+	}
+	wkLabel = (LabelTTF*)this->getChildByTag(kTag_PowerLabel);
+	wkLabel->setString(String::createWithFormat("パワー LV%d\n必要ポイント：%d", playerPow, Calculation(playerPow))->getCString());
+
+    // スピード
+	if (playerExp < Calculation(playerSpd)) {
+		pTarget	= getChildByTag(kTag_SpeedButton);
+		pTarget->removeFromParentAndCleanup(true);
+
+		pTarget = Sprite::create("levelup_2.png");
+		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 420));
+		pTarget->setTag(kTag_SpeedButton);
+		this->addChild(pTarget,1);
+	}
+	wkLabel = (LabelTTF*)this->getChildByTag(kTag_SpeedLabel);
+	wkLabel->setString(String::createWithFormat("スピード LV%d\n必要ポイント：%d", playerSpd, Calculation(playerSpd))->getCString());
+
+
+    // テクニック
+	if (playerExp < Calculation(playerTec)) {
+		pTarget	= getChildByTag(kTag_TechniqueButton);
+		pTarget->removeFromParentAndCleanup(true);
+
+		pTarget = Sprite::create("levelup_2.png");
+		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 270));
+		pTarget->setTag(kTag_TechniqueButton);
+		this->addChild(pTarget,1);
+	}
+	wkLabel = (LabelTTF*)this->getChildByTag(kTag_TechniqueLabel);
+	wkLabel->setString(String::createWithFormat("テクニック LV%d\n必要ポイント：%d", playerTec, Calculation(playerTec))->getCString());
+
+
+    //現在経験値
+	wkLabel = (LabelTTF*)this->getChildByTag(kTag_ExpLabel);
+	wkLabel->setString(String::createWithFormat("ポイント：%d",playerExp)->getCString());
+
+}
+

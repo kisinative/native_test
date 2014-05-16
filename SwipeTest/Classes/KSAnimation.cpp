@@ -21,19 +21,24 @@ FiniteTimeAction* KSAnimation::move1(float time)
 	Sequence* moves;
 	switch (randum){
 		case 0:
+			//拡大
 			moves = Sequence::create(EaseIn::create(ScaleTo::create(1.0f, 2.0f), time / 4), EaseIn::create(ScaleTo::create(2.0f, 1.0f), time / 4), DelayTime::create(time / 2), NULL);
 			break;
 		case 1:
+			//縮小
 			moves = Sequence::create(EaseInOut::create(ScaleTo::create(1.0f, 0.1f), time / 4), EaseInOut::create(ScaleTo::create(0.1f, 1.0f), time / 2), DelayTime::create(time / 4), NULL);
 			break;
 		case 2:
+			//一旦ゆっくりになり再進行
 			moves = Sequence::create(MoveBy::create(time / 4, ccp( -100, 0 )), MoveBy::create(time / 4, ccp( 100, 0 )), NULL);
 			break;
 		case 3:
+			//上下に移動
 //			moves = RepeatForever::create(Sequence::create(MoveBy::create(time / 8, ccp( 0, -50 )), MoveBy::create(time / 8, ccp( 0, 50 )), NULL));
 			moves = Sequence::create(MoveBy::create(time / 8, ccp( 0, -50 )), MoveBy::create(time / 8, ccp( 0, 50 )), NULL);
 			break;
 		case 4:
+			//点滅
 			moves = Sequence::create(Blink::create(time,6), NULL);
 			break;
 	}

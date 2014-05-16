@@ -52,6 +52,8 @@ protected:
 	const int tagEnemyImg		= 50;		//敵戦闘画像
 
 	const int tagTargetImg	 	= 80;		//ターゲットタグ
+	const int tagTargetImgSub1	= 85;		//ターゲットタグ
+	const int tagTargetImgSub2	= 86;		//ターゲットタグ
 	const int tagArrowLabel 	= 100;		//矢印タグ
 	const int tagRetry		 	= 110;		//リトライタグ
 	const int tagRushButton 	= 120;		//ラッシュボタンタグ

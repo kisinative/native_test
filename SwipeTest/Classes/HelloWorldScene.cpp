@@ -86,6 +86,11 @@ bool HelloWorld::init()
     nowGesture = "";
 
     // 背景を生成
+    Sprite* pBG = Sprite::create("background_0.jpg");
+    pBG->setPosition(Point(visibleSize.width * 0.5, visibleSize.height * 0.5));
+    this->addChild(pBG);
+
+
 //    Sprite* pBG = Sprite::create("testbackimg.png");
 //    pBG->setPosition(ccp(visibleSize.width * 0.5, visibleSize.height * 0.5));
 //    this->addChild(pBG);
@@ -104,28 +109,34 @@ bool HelloWorld::init()
 	this->addChild(arrowLabel,2);
 //    CCLOG("aaaaaaa = %f,bbbbbbb = %f",origin.x,origin.y);
 
-	Node* pTarget = Sprite::create("target.png");
+	Node* pTarget = Sprite::create("target_0.png");
 //	pTarget->setPosition(ccp(visibleSize.width * 0.05, visibleSize.height * 0.80));
 	pTarget->setPosition(Point(pTarget->getContentSize().width+50.0, visibleSize.height * 0.80));
 	pTarget->setTag(tagTargetImg);
 	this->addChild(pTarget,2);
 
-			Node* pTarget1 = Sprite::create("target.png");
-			pTarget1->setPosition(Point(pTarget->getContentSize().width+50.0 - 5.0, visibleSize.height * 0.75));
-			pTarget1->setTag(200);
-			this->addChild(pTarget1,2);
-			Node* pTarget2 = Sprite::create("target.png");
-			pTarget2->setPosition(Point(pTarget->getContentSize().width+50.0 + 5.0, visibleSize.height * 0.75));
-			pTarget2->setTag(201);
-			this->addChild(pTarget2,2);
-			Node* pTarget3 = Sprite::create("target.png");
-			pTarget3->setPosition(Point(pTarget->getContentSize().width+50.0 - 50.0, visibleSize.height * 0.70));
-			pTarget3->setTag(202);
-			this->addChild(pTarget3,2);
-			Node* pTarget4 = Sprite::create("target.png");
-			pTarget4->setPosition(Point(pTarget->getContentSize().width+50.0 + 50.0, visibleSize.height * 0.70));
-			pTarget4->setTag(203);
-			this->addChild(pTarget4,2);
+	Node* pTarget1 = Sprite::create("target_1.png");
+	pTarget1->setPosition(Point(pTarget->getContentSize().width+50.0 - 50.0, visibleSize.height * 0.80));
+	pTarget1->setTag(tagTargetImgSub1);
+	this->addChild(pTarget1,1);
+	pTarget1 = Sprite::create("target_1.png");
+	pTarget1->setPosition(Point(pTarget->getContentSize().width+50.0 + 50.0, visibleSize.height * 0.80));
+//	pTarget1->setFlipX(true);
+	pTarget1->setRotation(180);
+	pTarget1->setTag(tagTargetImgSub1);
+	this->addChild(pTarget1,1);
+//			Node* pTarget2 = Sprite::create("target.png");
+//			pTarget2->setPosition(Point(pTarget->getContentSize().width+50.0 + 5.0, visibleSize.height * 0.75));
+//			pTarget2->setTag(201);
+//			this->addChild(pTarget2,2);
+//			Node* pTarget3 = Sprite::create("target.png");
+//			pTarget3->setPosition(Point(pTarget->getContentSize().width+50.0 - 50.0, visibleSize.height * 0.70));
+//			pTarget3->setTag(202);
+//			this->addChild(pTarget3,2);
+//			Node* pTarget4 = Sprite::create("target.png");
+//			pTarget4->setPosition(Point(pTarget->getContentSize().width+50.0 + 50.0, visibleSize.height * 0.70));
+//			pTarget4->setTag(203);
+//			this->addChild(pTarget4,2);
 
 	//自他HP画像
 	Node* pHp = Sprite::create("gauge_blue.png");
@@ -326,11 +337,85 @@ void HelloWorld::showArrow(float time)
 //
 //	pArrow->runAction(callAction);
 
-	Spawn* spawn = Spawn::createWithTwoActions(
-			Sequence::create(KSAnimation::vibrationAnimation((float)defaultEnemySpeed - enemySpeedLv / 10.0), callFunction, RemoveSelf::create(true), NULL),
-			KSAnimation::move1((float)defaultEnemySpeed - enemySpeedLv / 10.0)
-	);
-	pArrow->runAction(spawn);
+
+
+
+
+	randum = arc4random() % 6;
+	Spawn* spawn;
+	float base_time = (float)defaultEnemySpeed - enemySpeedLv / 10.0;
+	auto base_move = Sequence::create(KSAnimation::vibrationAnimation(base_time), callFunction, RemoveSelf::create(true), NULL);
+	switch (randum){
+		case 0:
+			//拡大
+			pArrow->runAction(base_move);
+			break;
+		case 1:
+			//拡大
+			spawn = Spawn::createWithTwoActions(
+					base_move,
+					Sequence::create(EaseInOut::create(ScaleTo::create(1.0f, 1.5f), base_time / 4), EaseInOut::create(ScaleTo::create(1.5f, 1.0f), base_time / 4), NULL)
+			);
+			pArrow->runAction(spawn);
+			break;
+		case 2:
+			//縮小
+			spawn = Spawn::createWithTwoActions(
+					base_move,
+					Sequence::create(EaseInOut::create(ScaleTo::create(1.0f, 0.1f), base_time / 4), EaseInOut::create(ScaleTo::create(0.1f, 1.0f), base_time / 2), DelayTime::create(base_time / 4), NULL)
+			);
+			pArrow->runAction(spawn);
+			break;
+		case 3:
+			//一旦ゆっくりになり再進行
+			spawn = Spawn::createWithTwoActions(
+					base_move,
+					Sequence::create(MoveBy::create(base_time / 3, ccp( -100, 0 )), MoveBy::create(base_time / 4, ccp( 100, 0 )), NULL)
+			);
+			pArrow->runAction(spawn);
+			break;
+		case 4:
+			//上下に移動
+			spawn = Spawn::createWithTwoActions(
+					base_move,
+					Repeat::create(Sequence::create(MoveBy::create(base_time / 8, ccp( 0, -50 )), MoveBy::create(base_time / 8, ccp( 0, 50 )), NULL), 3)
+			);
+			pArrow->runAction(spawn);
+			break;
+		case 5:
+			//点滅
+			spawn = Spawn::createWithTwoActions(
+					base_move,
+					Sequence::create(Blink::create(base_time,6), NULL)
+			);
+			pArrow->runAction(spawn);
+			break;
+	}
+
+//	Spawn* spawn = Spawn::createWithTwoActions(
+//			Sequence::create(KSAnimation::vibrationAnimation((float)defaultEnemySpeed - enemySpeedLv / 10.0), callFunction, RemoveSelf::create(true), NULL),
+//			KSAnimation::move1((float)defaultEnemySpeed - enemySpeedLv / 10.0)
+//	);
+//	pArrow->runAction(spawn);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //	pArrow->runAction(MoveTo::create(time, ccp(0.0, visibleSize.height * 0.80)));
 //	pArrow->runAction(Sequence::create(MoveBy::create(0.8, ccp( -10, 0 )), MoveBy::create(0.8, ccp( 10, 0 )), NULL));

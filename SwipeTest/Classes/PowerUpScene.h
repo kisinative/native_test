@@ -13,6 +13,7 @@ protected:
 	void tapSpeedButton(Object* pSender);
 	void tapTechniqueButton(Object* pSender);
 	int Calculation(int lv);
+	void redisplay();
 
     enum kTag
     {

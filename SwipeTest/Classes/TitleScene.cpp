@@ -81,7 +81,7 @@ bool TitleScene::init()
     	Node* pTarget;
     	LabelTTF* wkLabel;
 
-    	// リトライボタン
+    	// 初期化
     	pGameOver = MenuItemImage::create("button_1.png",
     										 "button_2.png",
     										 [&](Object *sender) {

@@ -8,7 +8,7 @@ USING_NS_CC;
 class Define
 {
 public:
-	static const char* key_enemyLv = "EnemyLv";
+	const std::string key_enemyLv = "EnemyLv";
 
 
 
