@@ -3,6 +3,7 @@
 #include "TitleScene.h"
 #include "GameOverScene.h"
 #include "WinnerScene.h"
+//#include "Define.h"
 #include <unistd.h>
 
 USING_NS_CC;
@@ -23,7 +24,7 @@ Scene* HelloWorld::createScene()
     auto scene = Scene::create();
     auto layer = HelloWorld::create();
     scene->addChild(layer,1);
-
+//    CCLOG("X = %s", Define::key_enemyLv);
     return scene;
 }
 
@@ -69,15 +70,25 @@ bool HelloWorld::init()
 //    menu->setPosition(Point::ZERO);
 //    this->addChild(menu, 1);
 
-    //初期化
-    NowHp = MaxHp;
-    targetGesture = "99";
     //プレイヤーの各種レベル取得
 	UserDefault* userDefault = UserDefault::sharedUserDefault();
 	playerStrongLv 		= userDefault->getIntegerForKey(key_playerStrongLv, 1);
 	playerPowerLv		= userDefault->getIntegerForKey(key_playerPowerLv, 1);
 	playerSpeedLv		= userDefault->getIntegerForKey(key_playerSpeedLv, 1);
 	playerTechniqueLv	= userDefault->getIntegerForKey(key_playerTechniqueLv, 1);
+
+    //初期化
+    NowHp = MaxHp + playerStrongLv * lvStrong;
+    targetGesture = "99";
+
+
+
+
+
+
+
+
+
 //    enemyStrongLv = 1;
 //    enemypowerLv = 1;
 //    enemySpeedLv = 1;
@@ -86,7 +97,7 @@ bool HelloWorld::init()
     nowGesture = "";
 
     // 背景を生成
-    Sprite* pBG = Sprite::create("background_0.jpg");
+    Sprite* pBG = Sprite::create("background_0.png");
     pBG->setPosition(Point(visibleSize.width * 0.5, visibleSize.height * 0.5));
     this->addChild(pBG);
 
@@ -116,14 +127,14 @@ bool HelloWorld::init()
 	this->addChild(pTarget,2);
 
 	Node* pTarget1 = Sprite::create("target_1.png");
-	pTarget1->setPosition(Point(pTarget->getContentSize().width+50.0 - 50.0, visibleSize.height * 0.80));
+	pTarget1->setPosition(Point(pTarget->getContentSize().width+50.0, visibleSize.height * 0.80));
 	pTarget1->setTag(tagTargetImgSub1);
 	this->addChild(pTarget1,1);
 	pTarget1 = Sprite::create("target_1.png");
-	pTarget1->setPosition(Point(pTarget->getContentSize().width+50.0 + 50.0, visibleSize.height * 0.80));
+	pTarget1->setPosition(Point(pTarget->getContentSize().width+50.0, visibleSize.height * 0.80));
 //	pTarget1->setFlipX(true);
 	pTarget1->setRotation(180);
-	pTarget1->setTag(tagTargetImgSub1);
+	pTarget1->setTag(tagTargetImgSub2);
 	this->addChild(pTarget1,1);
 //			Node* pTarget2 = Sprite::create("target.png");
 //			pTarget2->setPosition(Point(pTarget->getContentSize().width+50.0 + 5.0, visibleSize.height * 0.75));
@@ -139,34 +150,50 @@ bool HelloWorld::init()
 //			this->addChild(pTarget4,2);
 
 	//自他HP画像
-	Node* pHp = Sprite::create("gauge_blue.png");
-	pHp->setPosition(Point(visibleSize.width * 0.1, visibleSize.height * 0.95));
-	pHp->setAnchorPoint(CCPointZero);
-	pHp->setTag(tagHpImg);
-	this->addChild(pHp,2);
-	Node* pHpEnemy = Sprite::create("gauge_red.png");
-	pHpEnemy->setPosition(Point(visibleSize.width * 0.9, visibleSize.height * 0.90));
-	pHpEnemy->setAnchorPoint(Point(1,0));
-	pHpEnemy->setTag(tagEnemyHpImg);
-	this->addChild(pHpEnemy,2);
-	//自他サムネイル
+	Node* pHp = Sprite::create("gauge_cover.png");
+	pHp->setPosition(Point(origin.x + 80, origin.y + 950));
+	pHp->setAnchorPoint(Point(0,1));
+	this->addChild(pHp,3);
+	Node* pHpEnemy = Sprite::create("gauge_cover.png");
+	pHpEnemy->setPosition(Point(origin.x + 115, origin.y + 890));
+	pHpEnemy->setAnchorPoint(Point(0,1));
+	this->addChild(pHpEnemy,3);
+
+    // 描画用ノードの作成
+    CCDrawNode* draw = CCDrawNode::create();
+    draw->setPosition(ccp(origin.x + 80, origin.y + 950));
+    draw->setAnchorPoint(Point(0,1));
+    draw->setTag(tagHpImg);
+    this->addChild(draw,2);
+    static Point points[] = {ccp(0, 0),ccp(0, -50),ccp(350, -50),ccp(350, 0)};
+    draw->drawPolygon(points,                  // 頂点の座標のデータ
+                      4,                       // 角数
+                      ccc4FFromccc3B(ccc3(0, 0, 255)), // 図形の色
+                      1,                       // 枠線の太さ
+                      ccc4FFromccc3B(ccBLACK)  // 枠線の色
+                      );
+    draw = CCDrawNode::create();
+    draw->setPosition(ccp(origin.x + 115, origin.y + 890));
+    draw->setAnchorPoint(Point(0,1));
+    draw->setTag(tagEnemyHpImg);
+    this->addChild(draw,2);
+    draw->drawPolygon(points,                  // 頂点の座標のデータ
+                      4,                       // 角数
+                      ccc4FFromccc3B(ccc3(255, 0, 0)), // 図形の色
+                      1,                       // 枠線の太さ
+                      ccc4FFromccc3B(ccBLACK)  // 枠線の色
+                      );
+
+
+
+
+
+	//自サムネイル
 	Node* pThumbnail = Sprite::create("mycat.png");
-	pThumbnail->setPosition(Point(origin.x, visibleSize.height));
+	pThumbnail->setPosition(Point(origin.x, visibleSize.height-10));
 	pThumbnail->setAnchorPoint(Point(0,1));
 	pThumbnail->setTag(tagThumbnailImg);
 	this->addChild(pThumbnail,2);
-	Node* pEnemyThumbnail = Sprite::create("enemy.png");
-	pEnemyThumbnail->setPosition(Point(visibleSize.width, visibleSize.height));
-	pEnemyThumbnail->setAnchorPoint(Point(1,1));
-	pEnemyThumbnail->setTag(tagEnemyThumbnail);
-	this->addChild(pEnemyThumbnail,2);
-
-	//自他サムネイル
-	Node* pThumbnail1 = Sprite::create("mycat.png");
-	pThumbnail1->setPosition(Point(visibleSize.width * 0.5, origin.y + 100));
-	pThumbnail1->setAnchorPoint(Point(0,0));
-	pThumbnail1->setTag(500);
-	this->addChild(pThumbnail1,2);
 
 	//敵初期ステータス設定
     setup();
@@ -187,26 +214,36 @@ void HelloWorld::setup()
 	enemyType = arc4random() % 5;
 	switch (enemyType){
 		case 0:
-			enemyStrongLv = enemyStrongLv + 1;
-			enemypowerLv = enemypowerLv + 1;
-			enemySpeedLv = enemySpeedLv + 1;
-			enemyTechniqueLv = enemyTechniqueLv + 1;
+			enemyStrongLv = enemyStrongLv + 2;
+			enemypowerLv = enemypowerLv + 4;
+			enemySpeedLv = enemySpeedLv + 3;
+			enemyTechniqueLv = enemyTechniqueLv + 5;
 			break;
 		case 1:
-			enemyStrongLv = enemyStrongLv + 3;
-			break;
 		case 2:
+			enemyStrongLv = enemyStrongLv + 2;
 			enemypowerLv = enemypowerLv + 3;
+			enemyType = 1;
 			break;
 		case 3:
-			enemySpeedLv = enemySpeedLv + 3;
-			break;
 		case 4:
-			enemyTechniqueLv = enemyTechniqueLv + 3 ;
+			enemySpeedLv = enemySpeedLv + 3;
+			enemyTechniqueLv = enemyTechniqueLv + 2 ;
+			enemyType = 2;
 			break;
 	}
 	catChenge(0);
+	enemyCatChenge(0);
 
+	Node* pEnemyImg = this->getChildByTag(tagEnemyImg);
+	pEnemyImg->runAction(KSAnimation::enemyJump());
+
+	//敵サムネイル
+	Node* pEnemyThumbnail = Sprite::create(String::createWithFormat("enemy_%d.png", enemyType)->getCString());
+	pEnemyThumbnail->setPosition(Point(visibleSize.width, origin.y + 890));
+	pEnemyThumbnail->setAnchorPoint(Point(1,1));
+	pEnemyThumbnail->setTag(tagEnemyThumbnail);
+	this->addChild(pEnemyThumbnail,2);
 
     //HP表示
 	createLabel(String::createWithFormat("残りHP:%d", NowHp)->getCString(),
@@ -259,6 +296,19 @@ void HelloWorld::setup()
 	rushStack	= false;
 	rush_flag	= false;
 	startRush	= startRushConst;
+
+	//サブ攻撃ゲージ変動
+	Node* pTarget = this->getChildByTag(tagTargetImgSub1);
+	subTargetPoint =baseSubPoint + playerTechniqueLv - enemyTechniqueLv;
+	if (subTargetPoint > 70) {
+		subTargetPoint = 70;
+	} else if (subTargetPoint < 1) {
+		subTargetPoint = 1;
+	}
+	pTarget->runAction(MoveBy::create(0.7, ccp( 0 - subTargetPoint, 0)));
+	pTarget = this->getChildByTag(tagTargetImgSub2);
+	pTarget->runAction(MoveBy::create(0.7, ccp( subTargetPoint, 0)));
+
 
 	//LV相殺
 	enemySpeedLv	   -= playerSpeedLv / 2;
@@ -326,11 +376,11 @@ void HelloWorld::showArrow(float time)
 
 	pArrow->setPosition(Point(visibleSize.width, visibleSize.height * 0.80));
 	pArrow->setTag(atkCount++);
-	this->addChild(pArrow,2);
+	this->addChild(pArrow,9);
 	Node* pArrow1 = Sprite::create(String::createWithFormat("%s.png",arrowArray[randum].getCString())->getCString());
 	Size bgSize = pArrow->getContentSize();
 	pArrow1->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.5));
-	pArrow->addChild(pArrow1,3);
+	pArrow->addChild(pArrow1,10);
 
 	CallFunc* callFunction = CallFunc::create(this, callfunc_selector(HelloWorld::timeOver));
 //    Sequence* callAction = Sequence::create(KSAnimation::vibrationAnimation((float)defaultEnemySpeed - enemySpeedLv / 10.0), callFunction, RemoveSelf::create(true), NULL);
@@ -341,13 +391,13 @@ void HelloWorld::showArrow(float time)
 
 
 
-	randum = arc4random() % 6;
+	randum = arc4random() % 7;
 	Spawn* spawn;
 	float base_time = (float)defaultEnemySpeed - enemySpeedLv / 10.0;
 	auto base_move = Sequence::create(KSAnimation::vibrationAnimation(base_time), callFunction, RemoveSelf::create(true), NULL);
 	switch (randum){
 		case 0:
-			//拡大
+			//通常
 			pArrow->runAction(base_move);
 			break;
 		case 1:
@@ -389,6 +439,14 @@ void HelloWorld::showArrow(float time)
 					Sequence::create(Blink::create(base_time,6), NULL)
 			);
 			pArrow->runAction(spawn);
+			break;
+		case 6:
+			//急発進＆バックして再進行
+			pArrow->runAction(Sequence::create(EaseBackOut::create(MoveTo::create(time/3*2, ccp(300.0, visibleSize.height * 0.80))), MoveTo::create(time/3, ccp(0.0, visibleSize.height * 0.80)), callFunction, RemoveSelf::create(true), NULL));
+			break;
+		case 7:
+			//ゴムゴム
+			pArrow->runAction(Sequence::create(EaseElasticOut::create(MoveTo::create(time/2, ccp(300.0, visibleSize.height * 0.80))), EaseExponentialInOut::create(MoveTo::create(time/2, ccp(0.0, visibleSize.height * 0.80))), callFunction, RemoveSelf::create(true), NULL));
 			break;
 	}
 
@@ -506,7 +564,7 @@ void HelloWorld::timeOver()
 	arrowLabel->setString("timeOut");
 
 	//敵攻撃エフェクト
-	enemyAtk();
+	enemyAtk(true);
 
 
 	rushPoint(false);		//ラッシュポイント低下
@@ -703,10 +761,12 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 
 			if (nowGesture == moveArrow[0])
 			{
-				if ((targetPoint.x - 50.0 <= arrowPoint.x) && (targetPoint.x + 50.0 >= arrowPoint.x))
+//				if ((targetPoint.x - 50.0 <= arrowPoint.x) && (targetPoint.x + 50.0 >= arrowPoint.x))
+				if ((targetPoint.x - subTargetPoint <= arrowPoint.x) && (targetPoint.x + subTargetPoint >= arrowPoint.x))
 				{
 					wkGesture = true;
-					if ((targetPoint.x - 5.0 <= arrowPoint.x) && (targetPoint.x + 5.0 >= arrowPoint.x))
+//					if ((targetPoint.x - 5.0 <= arrowPoint.x) && (targetPoint.x + 5.0 >= arrowPoint.x))
+					if ((targetPoint.x - subTargetPoint/10 <= arrowPoint.x) && (targetPoint.x + subTargetPoint/10 >= arrowPoint.x))
 					{
 						flag = 1;
 					}
@@ -742,7 +802,7 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 				NowEnemyRush += 1;
 			} else {
 				//敵攻撃エフェクト
-				enemyAtk();
+				enemyAtk(true);
 				miss(wkAtkDef);
 				NowEnemyRush += 5;
 
@@ -801,41 +861,23 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 			this->unschedule(schedule_selector(HelloWorld::rushEnd));
 			this->scheduleOnce(schedule_selector(HelloWorld::rushEnd), 0.0f);
 
-//			LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
-//			int randum = arc4random() % 4;
-//			switch (randum){
-//				case 0:
-//					enemyStrongLv++;
-//					break;
-//				case 1:
-//					enemypowerLv++;
-//					break;
-//				case 2:
-//					enemySpeedLv++;
-//					break;
-//				case 3:
-//					enemyTechniqueLv++;
-//					break;
-//			}
-
-//			//相手レベルUP
-//			UserDefault* userDefault = UserDefault::sharedUserDefault();
-//			enemyLv = userDefault->getIntegerForKey(key_enemyLv, 1) + 1;
-//			userDefault->setIntegerForKey(key_enemyLv, enemyLv);
+			enemyDef(false);
 
 			//HP回復
 			NowHp += 20;
 			if (MaxHp < NowHp)
 			{
-				NowHp = MaxHp;
+				NowHp = MaxHp + playerStrongLv * lvStrong;
 			}
 			Node* pHpImg = this->getChildByTag(tagHpImg);
-			float wk_a = (float)NowHp / MaxHp;
+			float wk_a = (float)NowHp / (MaxHp + playerStrongLv * lvStrong);
 			pHpImg->runAction(KSAnimation::hpAction());
 			pHpImg->setScaleX(wk_a);
 
 //			this->scheduleOnce(schedule_selector(HelloWorld::nextStage), 0.1);
 			moveWinner();
+		} else {
+			enemyRushDef();
 		}
 
 	}
@@ -904,7 +946,7 @@ void HelloWorld::attack(int flag)
 	    	NowHp = MaxHp;
 	    }
 		Node* pHpImg = this->getChildByTag(tagHpImg);
-		float wk_a = (float)NowHp / MaxHp;
+		float wk_a = (float)NowHp / (MaxHp + playerStrongLv * lvStrong);
 		pHpImg->runAction(KSAnimation::hpAction());
 		pHpImg->setScaleX(wk_a);
 
@@ -927,6 +969,10 @@ void HelloWorld::defense(int flag)
 
 	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 	arrowLabel->setString("ガード");
+
+	//敵攻撃エフェクト
+	enemyAtk(false);
+
 
 }
 
@@ -1037,7 +1083,7 @@ void HelloWorld::meDamage()
 	hpLabel->setString(String::createWithFormat("残りHP:%d", NowHp)->getCString());
 
 	Node* pHpImg = this->getChildByTag(tagHpImg);
-	float wk_a = (float)NowHp / MaxHp;
+	float wk_a = (float)NowHp / (MaxHp + playerStrongLv * lvStrong);
 	pHpImg->runAction(KSAnimation::hpAction());
 	pHpImg->setScaleX(wk_a);
 }
@@ -1051,9 +1097,10 @@ void HelloWorld::meDamage()
 //void HelloWorld::menuStartRush(Object* sender)
 void HelloWorld::menuStartRush()
 {
-	arrowRefresh();			// 攻防の矢印をリフレッシュ
-	rush_flag = true;		// ラッシュフラグをtrueにする
-	NowRush = 0;			// ラッシュポイントを初期化
+	arrowRefresh();					// 攻防の矢印をリフレッシュ
+	rush_flag		= true;			// ラッシュフラグをtrueにする
+	rushAtk_flag	= false;		// ラッシュ初回攻撃
+	NowRush			= 0;			// ラッシュポイントを初期化
 
 //	//ラッシュ開始ボタン削除
 //	Node* pRushMenu   = this->getChildByTag(tagRushMenu);
@@ -1150,6 +1197,9 @@ void HelloWorld::rushEnd(float time){
 	Node* pHpImg = this->getChildByTag(tagRushCutin);
 	pHpImg->removeFromParentAndCleanup(true);
 
+	//敵のステップ再開
+	Node* pEnemyImg = this->getChildByTag(tagEnemyImg);
+	pEnemyImg->runAction(KSAnimation::enemyJump());
 
 	//通常ゲーム再開
 //	this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 0.1);
@@ -1246,6 +1296,39 @@ void HelloWorld::catChenge(int flag)
 	String img_name = "";
 	switch (flag){
 		case 0:
+			img_name = "myCatCombat.png";
+			break;
+		case 1:
+			img_name = "myCatAtk.png";
+			break;
+		case 2:
+			img_name = "myCatDown.png";
+			break;
+	}
+
+	Node* pEnemyImg = this->getChildByTag(tagCatImg);
+	if (pEnemyImg)
+	{
+		Animation *animation = Animation::create();
+		animation->addSpriteFrameWithFileName(img_name.getCString());
+		animation->setDelayPerUnit( 0.1f );
+		animation->setRestoreOriginalFrame(false);
+		pEnemyImg->runAction(Animate::create(animation));
+	} else {
+		Node* pTarget = Sprite::create(img_name.getCString());
+		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + pTarget->getContentSize().height/2));
+		pTarget->setTag(tagCatImg);
+		this->addChild(pTarget,2);
+	}
+
+}
+
+void HelloWorld::enemyCatChenge(int flag)
+{
+
+	String img_name = "";
+	switch (flag){
+		case 0:
 //			String* img_name = "cat_";String::createWithFormat(
 			img_name = String::createWithFormat("cat_%d.png",enemyType)->getCString();
 			break;
@@ -1270,114 +1353,147 @@ void HelloWorld::catChenge(int flag)
 		pEnemyImg->runAction(Animate::create(animation));
 	} else {
 		Node* pTarget = Sprite::create(img_name.getCString());
-		pTarget->setPosition(Point(pTarget->getContentSize().width * 0.5, origin.y + pTarget->getContentSize().height/2));
+//		pTarget->setPosition(Point(pTarget->getContentSize().width * 0.5, origin.y + pTarget->getContentSize().height/2));
+		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + pTarget->getContentSize().height/2+200));
 		pTarget->setTag(tagEnemyImg);
 		this->addChild(pTarget,1);
 	}
 
 }
-//アニメーション中に引数のある処理の動かし方がわからなかったので書いた処理
-//解決方法がわかったら直すべ
-void HelloWorld::catChenge0()
+
+/*
+ * 敵攻撃　flag：true 攻撃命中　False 攻撃回避
+ */
+void HelloWorld::enemyAtk(bool flag)
 {
-	catChenge(0);
-//	img_name = String::createWithFormat("cat_%d.png",enemyType)->getCString();
-//	Animation *animation = Animation::create();
-//	animation->addSpriteFrameWithFileName(img_name.getCString());
-//	animation->setDelayPerUnit( 0.1f );
-//	animation->setRestoreOriginalFrame(false);
-//	RepeatForever *action = RepeatForever::create( Animate::create(animation) );
-}
-void HelloWorld::catChenge1()
-{
-	catChenge(1);
-//	img_name = String::createWithFormat("catAtk_%d.png",enemyType)->getCString();
-//	Animation *animation = Animation::create();
-//	animation->addSpriteFrameWithFileName(img_name.getCString());
-//	animation->setDelayPerUnit( 0.1f );
-//	animation->setRestoreOriginalFrame(false);
-//	return *action = RepeatForever::create( Animate::create(animation) );
-}
-void HelloWorld::catChenge2()
-{
-	catChenge(2);
-//	img_name = String::createWithFormat("catDown_%d.png",enemyType)->getCString();
-//	Animation *animation = Animation::create();
-//	animation->addSpriteFrameWithFileName(img_name.getCString());
-//	animation->setDelayPerUnit( 0.1f );
-//	animation->setRestoreOriginalFrame(false);
-//	return *action = RepeatForever::create( Animate::create(animation) );
-}
-void HelloWorld::enemyAtk()
-{
-	//敵攻撃エフェクト
-	Node* pEnemyImg = this->getChildByTag(tagEnemyImg);
-	String img_name = String::createWithFormat("cat_%d.png",enemyType)->getCString();
+	//自攻撃エフェクト
+	Node* pMyCatImg = this->getChildByTag(tagCatImg);
+	String img_name = "myCatCombat.png";
 	Animation *animation = Animation::create();
 	animation->addSpriteFrameWithFileName(img_name.getCString());
 	animation->setDelayPerUnit( 0.01f );
 	animation->setRestoreOriginalFrame(false);
-//	RepeatForever *action = RepeatForever::create( Animate::create(animation) );
 
-
-	img_name = String::createWithFormat("catAtk_%d.png",enemyType)->getCString();
+	img_name = "myCatDown.png";
 	Animation *animation1 = Animation::create();
 	animation1->addSpriteFrameWithFileName(img_name.getCString());
 	animation1->setDelayPerUnit( 0.01f );
 	animation1->setRestoreOriginalFrame(false);
-//	RepeatForever *action1 = RepeatForever::create( Animate::create(animation1) );
 
+	//敵攻撃エフェクト
+	Node* pEnemyImg = this->getChildByTag(tagEnemyImg);
+	img_name = String::createWithFormat("cat_%d.png",enemyType)->getCString();
+	Animation *enemyAnimation = Animation::create();
+	enemyAnimation->addSpriteFrameWithFileName(img_name.getCString());
+	enemyAnimation->setDelayPerUnit( 0.01f );
+	enemyAnimation->setRestoreOriginalFrame(false);
 
-//	Spawn::createWithTwoActions(EaseInOut::create(ScaleTo::create(1.0f, 0.8f),0.3),EaseInOut::create(MoveBy::create(0.3, ccp( -30, 50)),0.3)),
-//	Animate::create(animation1),
-//	Spawn::createWithTwoActions(EaseInOut::create(ScaleTo::create(0.8f, 1.2f),0.3),EaseInOut::create(MoveTo::create(0.3, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2 - 50)),0.3)),
-//	Animate::create(animation),
-//	Spawn::createWithTwoActions(EaseInOut::create(ScaleTo::create(1.2f, 1.0f),0.3),EaseInOut::create(MoveTo::create(0.3, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2)),0.3)),
-//	NULL
+	img_name = String::createWithFormat("catAtk_%d.png",enemyType)->getCString();
+	Animation *enemyAnimation1 = Animation::create();
+	enemyAnimation1->addSpriteFrameWithFileName(img_name.getCString());
+	enemyAnimation1->setDelayPerUnit( 0.01f );
+	enemyAnimation1->setRestoreOriginalFrame(false);
 
-//	MoveBy::create(0.03, ccp( -30, 50)),
-//	Animate::create(animation1),
-//	MoveTo::create(0.03, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2 - 50)),
-//	Animate::create(animation),
-//	MoveTo::create(0.03, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2)),
-//	NULL
-
+	pEnemyImg->stopAllActions();
 	pEnemyImg->runAction(
 			Sequence::create(
 				MoveBy::create(0.1, ccp( -30, 50)),
-				Animate::create(animation1),
-				MoveTo::create(0.2, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2 - 100)),
-				Animate::create(animation),
-				MoveTo::create(0.02, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2)),
+				Animate::create(enemyAnimation1),
+				MoveTo::create(0.2, ccp( visibleSize.width * 0.5, origin.y + pEnemyImg->getContentSize().height/2+100)),
+				Animate::create(enemyAnimation),
+				MoveTo::create(0.02, ccp( visibleSize.width * 0.5, origin.y + pEnemyImg->getContentSize().height/2+200)),
 				NULL
 			)
 	);
 
+	if (flag) {
+		pMyCatImg->runAction(
+				Sequence::create(
+					DelayTime::create(0.25f),
+					Animate::create(animation1),
+					EaseOut::create(MoveBy::create(0.3, ccp( 20, -35)),2),
+					Animate::create(animation),
+					MoveTo::create(0.02, ccp( visibleSize.width * 0.5, origin.y + pMyCatImg->getContentSize().height/2)),
+					NULL
+				)
+		);
+	} else {
+		int move;
+		if (arc4random() % 2 == 1) {
+			move = 150;
+		} else {
+			move = -150;
+		}
+		pMyCatImg->runAction(
+				Sequence::create(
+					JumpBy::create(0.2, ccp( move, 0),150,1),
+					JumpBy::create(0.2, ccp( 0 - move, 0),150,1),
+					NULL
+				)
+		);
+	}
+
+	pEnemyImg->runAction(KSAnimation::enemyJump());
+
 }
 void HelloWorld::enemyDef(bool flag)
 {
-	//敵攻撃エフェクト
-	Node* pEnemyImg = this->getChildByTag(tagEnemyImg);
-	String img_name = String::createWithFormat("cat_%d.png",enemyType)->getCString();
+	//自攻撃エフェクト
+	Node* pMyCatImg = this->getChildByTag(tagCatImg);
+	String img_name = "myCatCombat.png";
 	Animation *animation = Animation::create();
 	animation->addSpriteFrameWithFileName(img_name.getCString());
 	animation->setDelayPerUnit( 0.01f );
 	animation->setRestoreOriginalFrame(false);
 
-	img_name = String::createWithFormat("catDown_%d.png",enemyType)->getCString();
+	img_name = "myCatAtk.png";
 	Animation *animation1 = Animation::create();
 	animation1->addSpriteFrameWithFileName(img_name.getCString());
 	animation1->setDelayPerUnit( 0.01f );
 	animation1->setRestoreOriginalFrame(false);
 
+	//敵攻撃エフェクト
+	Node* pEnemyImg = this->getChildByTag(tagEnemyImg);
+	img_name = String::createWithFormat("cat_%d.png",enemyType)->getCString();
+	Animation *enemyAnimation = Animation::create();
+	enemyAnimation->addSpriteFrameWithFileName(img_name.getCString());
+	enemyAnimation->setDelayPerUnit( 0.01f );
+	enemyAnimation->setRestoreOriginalFrame(false);
+
+	img_name = String::createWithFormat("catDown_%d.png",enemyType)->getCString();
+	Animation *enemyAnimation1 = Animation::create();
+	enemyAnimation1->addSpriteFrameWithFileName(img_name.getCString());
+	enemyAnimation1->setDelayPerUnit( 0.01f );
+	enemyAnimation1->setRestoreOriginalFrame(false);
+
+	pEnemyImg->stopAllActions();
+
+	int move;
+	if (arc4random() % 2 == 1) {
+		move = 50;
+	} else {
+		move = -50;
+	}
+
+	pMyCatImg->runAction(
+			Sequence::create(
+				Animate::create(animation1),
+				MoveBy::create(0.1, ccp( move, 150)),
+				Animate::create(animation),
+				MoveTo::create(0.1, ccp( visibleSize.width * 0.5, origin.y + pMyCatImg->getContentSize().height/2)),
+				NULL
+			)
+	);
+
 	if (flag) {
 		pEnemyImg->runAction(
 				Sequence::create(
+					DelayTime::create(0.1f),
 					MoveBy::create(0.15, ccp( 30, 50)),
-					Animate::create(animation1),
+					Animate::create(enemyAnimation1),
 					DelayTime::create(0.3f),
-					Animate::create(animation),
-					MoveTo::create(0.02, ccp( pEnemyImg->getContentSize().width * 0.5, origin.y + pEnemyImg->getContentSize().height/2)),
+					Animate::create(enemyAnimation),
+					MoveTo::create(0.02, ccp( visibleSize.width * 0.5, origin.y + pEnemyImg->getContentSize().height/2+200)),
 					NULL
 				)
 		);
@@ -1385,10 +1501,74 @@ void HelloWorld::enemyDef(bool flag)
 		pEnemyImg->runAction(
 				Sequence::create(
 					MoveBy::create(0.15, ccp( 30, 50)),
-					Animate::create(animation1),
+					Animate::create(enemyAnimation1),
 					NULL
 				)
 		);
 	}
+	pEnemyImg->runAction(KSAnimation::enemyJump());
+
+}
+
+void HelloWorld::enemyRushDef()
+{
+	//自攻撃エフェクト
+	Node* pMyCatImg = this->getChildByTag(tagCatImg);
+	String img_name = "myCatCombat.png";
+	Animation *animation = Animation::create();
+	animation->addSpriteFrameWithFileName(img_name.getCString());
+	animation->setDelayPerUnit( 0.01f );
+	animation->setRestoreOriginalFrame(false);
+
+	img_name = "myCatAtk.png";
+	Animation *animation1 = Animation::create();
+	animation1->addSpriteFrameWithFileName(img_name.getCString());
+	animation1->setDelayPerUnit( 0.01f );
+	animation1->setRestoreOriginalFrame(false);
+
+	//敵攻撃エフェクト
+	Node* pEnemyImg = this->getChildByTag(tagEnemyImg);
+	img_name = String::createWithFormat("cat_%d.png",enemyType)->getCString();
+	Animation *enemyAnimation = Animation::create();
+	enemyAnimation->addSpriteFrameWithFileName(img_name.getCString());
+	enemyAnimation->setDelayPerUnit( 0.01f );
+	enemyAnimation->setRestoreOriginalFrame(false);
+
+	img_name = String::createWithFormat("catDown_%d.png",enemyType)->getCString();
+	Animation *enemyAnimation1 = Animation::create();
+	enemyAnimation1->addSpriteFrameWithFileName(img_name.getCString());
+	enemyAnimation1->setDelayPerUnit( 0.01f );
+	enemyAnimation1->setRestoreOriginalFrame(false);
+
+	pEnemyImg->stopAllActions();
+
+	int move;
+	if (arc4random() % 2 == 1) {
+		move = 50;
+	} else {
+		move = -50;
+	}
+
+	pMyCatImg->runAction(
+			Sequence::create(
+				Animate::create(animation1),
+				MoveBy::create(0.1, ccp( move, 150)),
+				Animate::create(animation),
+				MoveTo::create(0.1, ccp( visibleSize.width * 0.5, origin.y + pMyCatImg->getContentSize().height/2)),
+				NULL
+			)
+	);
+
+	pEnemyImg->runAction(
+			Sequence::create(
+				DelayTime::create(0.1f),
+				Animate::create(enemyAnimation1),
+				MoveBy::create(0.03, ccp( -20, 0)),
+				MoveBy::create(0.06, ccp( 40, 0)),
+				MoveBy::create(0.03, ccp( -20, 0)),
+				Animate::create(enemyAnimation),
+				NULL
+			)
+	);
 
 }

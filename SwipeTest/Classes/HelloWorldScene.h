@@ -29,11 +29,10 @@ protected:
 	void tapReturnMenu(Object* pSender);
 	void tapNextLv(Object* pSender);
 	void catChenge(int flag);
-	void catChenge0();
-	void catChenge1();
-	void catChenge2();
-	void enemyAtk();
+	void enemyCatChenge(int flag);
+	void enemyAtk(bool flag);
 	void enemyDef(bool flag);
+	void enemyRushDef();
 	void moveGameOver();
 	void moveWinner();
 
@@ -49,6 +48,7 @@ protected:
 
 	const int tagThumbnailImg		= 30;	//自キャラサムネイル
 	const int tagEnemyThumbnail	= 31;   //敵キャラサムネイル
+	const int tagCatImg		= 40;		//自猫戦闘画像
 	const int tagEnemyImg		= 50;		//敵戦闘画像
 
 	const int tagTargetImg	 	= 80;		//ターゲットタグ
@@ -92,6 +92,7 @@ protected:
 
 	//HP関連
 	const int MaxHp			= 100;          //最大HP
+	const int lvStrong 		= 10;		//体力
 	int NowHp;                              //現在HP
 	int NowRush;							//現在ラッシュポイント
 	int NowEnemyHp;                         //敵現在HP
@@ -103,11 +104,13 @@ protected:
 	std::string hidari = "1";				//入力中ジェスチャ
 	std::string ue = "2";                   //入力中ジェスチャ
 	std::string sita = "3";                 //入力中ジェスチャ
+	const int baseSubPoint = 50;			//補助攻撃エリアの幅基本値
 	const int startRushConst = 7;			//自ラッシュ開始ポイント
 	int		startRush;						//自ラッシュ開始ポイント
 	int		startEnemyRush = 20;			//敵ラッシュ開始ポイント
 	bool	rushStack = false;				//ラッシュ開始可能状況判定フラグ
 	bool	rush_flag = false;				//ラッシュ判定フラグ
+	bool	rushAtk_flag = false;			//ラッシュ初回攻撃フラグ
 	float	rushTime  = 6.0;				//ラッシュ時間
 	bool	noMissFlag  = true;				//ノーミスフラグ
 	int		conboCount = 0;					//コンボカウント
@@ -122,6 +125,7 @@ protected:
 	int atkCount;                          //攻撃数
 	int frontArrowTag;                     //先頭矢印タグ
 	int rushCount;							//残りラッシュ数
+	int subTargetPoint;						//攻撃受付誤差
 
 	//配置
 	cocos2d::Point	origin;										//使用端末の(0,0)地点

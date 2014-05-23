@@ -14,6 +14,7 @@ public:
     static FiniteTimeAction* move1(float time);
     static FiniteTimeAction* hpAction();
     static FiniteTimeAction* rushCutin();
+    static FiniteTimeAction* enemyJump();
 };
 
 #endif // __KSANIMATION_H__

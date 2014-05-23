@@ -68,8 +68,8 @@ FiniteTimeAction* KSAnimation::rushCutin()
 	Size  visibleSize		= Director::getInstance()->getVisibleSize();
 
 //	EaseInOut* move1 = EaseInOut::create(MoveTo::create(0.2, ccp( origin.x, visibleSize.height * 0.45)), 2);
-	MoveTo* move1 = MoveTo::create(0.2, ccp( origin.x, visibleSize.height * 0.45));
-    DelayTime* move2 = DelayTime::create(0.6f);
+	MoveTo* move1 = MoveTo::create(0.3, ccp( origin.x, visibleSize.height * 0.45));
+    DelayTime* move2 = DelayTime::create(1.0f);
     MoveTo* move3 = MoveTo::create(0.2, ccp( -800, visibleSize.height * 0.45));
 
     Sequence* moves = Sequence::create(move1, move2, move3, NULL);
@@ -77,3 +77,13 @@ FiniteTimeAction* KSAnimation::rushCutin()
     return Repeat::create(moves, 1);
 }
 
+FiniteTimeAction* KSAnimation::enemyJump()
+{
+
+	JumpBy* move1 = JumpBy::create(0.7, ccp( 100, 0),50,1);
+	JumpBy* move2 = JumpBy::create(0.7, ccp(-100, 0),50,1);
+
+    Sequence* moves = Sequence::create(move1, move2, NULL);
+
+    return RepeatForever::create(moves);
+}

@@ -39,36 +39,54 @@ bool TitleScene::init()
 
     srand((unsigned int)time(NULL));
 
-    Size size = Director::sharedDirector()->getWinSize();
-    Point origin			= Director::getInstance()->getVisibleOrigin();
+    size = Director::sharedDirector()->getWinSize();
+    origin			= Director::getInstance()->getVisibleOrigin();
 
 
     // 背景
-    Sprite* pBG = Sprite::create("title_bg.png");
+    Sprite* pBG = Sprite::create("background_0.png");
     pBG->setPosition(Point(size.width * 0.5, size.height * 0.5));
     this->addChild(pBG);
 
     Size bgSize = pBG->getContentSize();
 
-    // スタートボタン
-    MenuItemImage* pStartItem;
-    pStartItem = MenuItemImage::create("start_1.png",
-                                         "start_2.png",
-                                         CC_CALLBACK_1(TitleScene::menuStartCallback, this));
-    pStartItem->setPosition(Point(size.width * 0.5, size.height * 0.70));
-    pStartItem->setTag(kTag_StartButton);
+    //タイトル
+    pBG = Sprite::create("title.png");
+    pBG->setPosition(Point(size.width * 0.5, size.height * 0.70));
+    this->addChild(pBG);
 
-    Menu* pMenu = Menu::create(pStartItem, NULL);
-    pMenu->setPosition(Point::ZERO);
-    pMenu->setTag(kTag_Menu);
-    this->addChild(pMenu);
+
+    // スタートボタン
+    MenuItemImage* pStart = MenuItemImage::create("button_1.png",
+										 "button_2.png",
+										 CC_CALLBACK_1(TitleScene::menuStartCallback, this));
+    pStart->setPosition(Point(size.width * 0.5, origin.y + 270));
+	Menu* pMenu = Menu::create(pStart, NULL);
+	pMenu->setPosition(Point::ZERO);
+	pMenu->setTag(kTag_StartButton);
+	this->addChild(pMenu,1);
+	LabelTTF* wkLabel = LabelTTF::create("スタート", MISAKI_FONT, 40.0);
+	wkLabel->setPosition(Point(size.width * 0.5, origin.y + 270));
+	wkLabel->setTag(kTag_StartButtonLabel);
+	this->addChild(wkLabel,2);
+//    MenuItemImage* pStartItem;
+//    pStartItem = MenuItemImage::create("start_1.png",
+//                                         "start_2.png",
+//                                         CC_CALLBACK_1(TitleScene::menuStartCallback, this));
+//    pStartItem->setPosition(Point(size.width * 0.5, size.height * 0.70));
+//    pStartItem->setTag(kTag_StartButton);
+//
+//    Menu* pMenu = Menu::create(pStartItem, NULL);
+//    pMenu->setPosition(Point::ZERO);
+//    pMenu->setTag(kTag_Menu);
+//    this->addChild(pMenu);
 
     // パワーアップボタン
     MenuItemImage* pPowerUp;
     pPowerUp = MenuItemImage::create("powerup_1.png",
                                          "powerup_2.png",
                                          CC_CALLBACK_1(TitleScene::menuPowerUpCallback, this));
-    pPowerUp->setPosition(Point(size.width * 0.5, size.height * 0.50));
+    pPowerUp->setPosition(Point(size.width * 0.5, size.height * 0.40));
     pMenu = Menu::create(pPowerUp, NULL);
     pMenu->setPosition(Point::ZERO);
     pMenu->setTag(kTag_PowerUpButton);
@@ -79,7 +97,7 @@ bool TitleScene::init()
     	MenuItemImage* pGameOver;
     	Menu* pMenu;
     	Node* pTarget;
-    	LabelTTF* wkLabel;
+
 
     	// 初期化
     	pGameOver = MenuItemImage::create("button_1.png",
@@ -93,13 +111,13 @@ bool TitleScene::init()
     										 				userDefault->setIntegerForKey(key_playerSpeedLv, 1);
     										 				userDefault->setIntegerForKey(key_playerTechniqueLv, 1);
     										 			});
-    	pGameOver->setPosition(Point(size.width * 0.5, origin.y + 200));
+    	pGameOver->setPosition(Point(size.width * 0.5, origin.y + 100));
     	pMenu = Menu::create(pGameOver, NULL);
     	pMenu->setPosition(Point::ZERO);
     	pMenu->setTag(800);
     	this->addChild(pMenu,1);
         wkLabel = LabelTTF::create("初期化", "Arial", 40.0);
-    	wkLabel->setPosition(Point(size.width * 0.5, origin.y + 200));
+    	wkLabel->setPosition(Point(size.width * 0.5, origin.y + 100));
     	wkLabel->setTag(801);
     	this->addChild(wkLabel,2);
 
@@ -148,15 +166,103 @@ bool TitleScene::init()
 void TitleScene::menuStartCallback(Object* sender)
 {
 
+	gameStart(1);
+	return;
+
+	Menu* pMenu;
 	//相手レベル記録
 	UserDefault* userDefault = UserDefault::sharedUserDefault();
 	int enemyLv = userDefault->getIntegerForKey(key_enemyLv, 1);
-	userDefault->setIntegerForKey(key_playEnemyLv, enemyLv);
 
-    // ゲーム画面の表示
-    Scene* scene = HelloWorld::createScene();
-    TransitionFlipX* tran = TransitionFlipX::create(0.2, scene);
-    Director::sharedDirector()->replaceScene(tran);
+	if (enemyLv == 1) {
+		gameStart(1);
+	} else {
+		//難易度ボード
+	    //タイトル
+		Sprite* board = Sprite::create("levelBoard.png");
+//		board->setPosition(Point(origin.x + 70, origin.y + 200));
+		board->setPosition(Point(size.width * 0.5, origin.y + 500));
+//		board->setAnchorPoint(Point(0,0));
+	    this->addChild(board,5);
+	    Size bgSize = board->getContentSize();
+	    MenuItemImage* pMaxLevel = MenuItemImage::create("difficulty_button_1.png",
+	                                         "difficulty_button_2.png",
+	                                         [&](Object* sender){
+	    											TitleScene::gameStart(enemyLv);
+	    										}
+	                                         );
+//	                                         CC_CALLBACK_1(TitleScene::gameStart, enemyLv));
+
+	    CCLOG("x = %f  y = %f",bgSize.width * 0.5 ,bgSize.height * 0.7);
+	    CCLOG("x = %f  y = %f",bgSize.width ,bgSize.height);
+	    if (enemyLv <= 5) {
+	    	MenuItemImage* pMidLevel = MenuItemImage::create("difficulty_button_1.png",
+	    		                                         "difficulty_button_2.png",
+	    		                                         [&](Object* sender){
+	    		    											TitleScene::gameStart(1);
+	    		    										}
+	    		                                         );
+//	    		                                         CC_CALLBACK_1(TitleScene::gameStart, 1));
+
+	    	pMaxLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.7));
+	    	pMidLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.5));
+//	    	pMaxLevel->setPosition(bgSize / 2);
+//	    	pMidLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.5));
+
+	    	pMenu = Menu::create(pMaxLevel, NULL);
+	    	board->addChild(pMenu,6);
+		    pMenu = Menu::create(pMidLevel, NULL);
+		    board->addChild(pMenu,6);
+	    } else if (enemyLv <= 10) {
+	    	MenuItemImage* pMidLevel = MenuItemImage::create("difficulty_button_1.png",
+	    		                                         "difficulty_button_2.png",
+	    		                                         [&](Object* sender){
+	    		    											TitleScene::gameStart(enemyLv - 5);
+	    		    										}
+	    		                                         );
+//	    		                                         CC_CALLBACK_1(TitleScene::gameStart, enemyLv - 5));
+
+//	    	pMaxLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.7));
+//	    	pMidLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.5));
+	    	pMaxLevel->setPosition(Point(0, 0));
+	    	pMidLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.5));
+
+	    	pMenu = Menu::create(pMaxLevel, NULL);
+	    	board->addChild(pMenu,6);
+		    pMenu = Menu::create(pMidLevel, NULL);
+		    board->addChild(pMenu,6);
+	    } else {
+	    	MenuItemImage* pMidLevel = MenuItemImage::create("difficulty_button_1.png",
+	    		                                         "difficulty_button_2.png",
+	    		                                         [&](Object* sender){
+	    		    											TitleScene::gameStart(enemyLv - 5);
+	    		    										}
+	    		                                         );
+//	    		                                         CC_CALLBACK_1(TitleScene::gameStart, enemyLv - 5));
+	    	MenuItemImage* plowLevel = MenuItemImage::create("difficulty_button_1.png",
+	    		                                         "difficulty_button_2.png",
+	    		                                         [&](Object* sender){
+	    		    											TitleScene::gameStart(enemyLv - 10);
+	    		    										}
+	    		                                         );
+//	    		                                         CC_CALLBACK_1(TitleScene::gameStart, enemyLv - 10));
+
+	    	pMaxLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.8));
+	    	pMidLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.6));
+	    	plowLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.4));
+
+	    	pMenu = Menu::create(pMaxLevel, NULL);
+	    	board->addChild(pMenu,6);
+		    pMenu = Menu::create(pMidLevel, NULL);
+		    board->addChild(pMenu,6);
+		    pMenu = Menu::create(plowLevel, NULL);
+		    board->addChild(pMenu,6);
+	    }
+
+	}
+
+
+
 }
 void TitleScene::menuPowerUpCallback(Object* sender)
 {
@@ -165,3 +271,17 @@ void TitleScene::menuPowerUpCallback(Object* sender)
     TransitionFlipX* tran = TransitionFlipX::create(1, scene);
     Director::sharedDirector()->replaceScene(tran);
 }
+
+void TitleScene::gameStart(int enemyLv)
+{
+
+	//相手レベル記録
+	UserDefault* userDefault = UserDefault::sharedUserDefault();
+	userDefault->setIntegerForKey(key_playEnemyLv, enemyLv);
+
+    // ゲーム画面の表示
+    Scene* scene = HelloWorld::createScene();
+    TransitionFlipX* tran = TransitionFlipX::create(0.2, scene);
+    Director::sharedDirector()->replaceScene(tran);
+}
+

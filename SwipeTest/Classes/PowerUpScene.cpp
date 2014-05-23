@@ -33,6 +33,8 @@ bool PowerUp::init()
     origin			= Director::getInstance()->getVisibleOrigin();		//使用端末の(0,0)地点
 	visibleSize		= Director::getInstance()->getVisibleSize();		//使用端末の画面サイズ
 
+	//背景色
+
 	// 現在の経験値やレベル取得
 	UserDefault* userDefault = UserDefault::sharedUserDefault();
 	int playerExp = userDefault->getIntegerForKey(key_playerExp, 0);

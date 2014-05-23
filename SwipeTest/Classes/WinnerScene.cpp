@@ -22,9 +22,24 @@ Scene* Winner::createScene()
 // on "init" you need to initialize your instance
 bool Winner::init()
 {
+
+	//背景色
+//	if (!LayerColor::initWithColor(ccc4(240, 200, 150, 255))) {
+//		return false;;
+//	}
     //サイズ取得を行う
     origin			= Director::getInstance()->getVisibleOrigin();		//使用端末の(0,0)地点
 	visibleSize		= Director::getInstance()->getVisibleSize();		//使用端末の画面サイズ
+
+
+//    cell = new TableViewCell();
+//    cell->autorelease();
+//    Sprite* bg = Sprite::create();
+//    bg->setAnchorPoint(Point(0, 0));
+//    bg->setTextureRect(Rect(0, 0, visibleSize.width, visibleSize.height));
+//    bg->setColor(Color3B(240, 200, 150));
+//    bg->setTag(100);
+//    cell->addChild(bg);
 
 
 	MenuItemImage* pWinner;
@@ -74,13 +89,13 @@ bool Winner::init()
 	pWinner = MenuItemImage::create("button_1.png",
 										 "button_2.png",
 										 CC_CALLBACK_1(Winner::tapRetry, this));
-	pWinner->setPosition(Point(visibleSize.width * 0.5, origin.y + 290));
+	pWinner->setPosition(Point(visibleSize.width * 0.5, origin.y + 270));
 	pMenu = Menu::create(pWinner, NULL);
 	pMenu->setPosition(Point::ZERO);
 	pMenu->setTag(kTag_Retry);
 	this->addChild(pMenu,1);
-    wkLabel = LabelTTF::create("リトライ", MISAKI_FONT, 40.0);
-	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 290));
+    wkLabel = LabelTTF::create("つぎのレベル", MISAKI_FONT, 40.0);
+	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 270));
 	wkLabel->setTag(kTag_Retry_Label);
 	this->addChild(wkLabel,2);
 
@@ -88,13 +103,13 @@ bool Winner::init()
 	pWinner = MenuItemImage::create("button_1.png",
 										 "button_2.png",
 										 CC_CALLBACK_1(Winner::tapReturnMenu, this));
-	pWinner->setPosition(Point(visibleSize.width * 0.5, origin.y + 180));
+	pWinner->setPosition(Point(visibleSize.width * 0.5, origin.y + 160));
 	pMenu = Menu::create(pWinner, NULL);
 	pMenu->setPosition(Point::ZERO);
 	pMenu->setTag(kTag_Menu);
 	this->addChild(pMenu,1);
     wkLabel = LabelTTF::create("タイトルにもどる", MISAKI_FONT, 40.0);
-	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 180));
+	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 160));
 	wkLabel->setTag(kTag_Menu_Label);
 	this->addChild(wkLabel,2);
 
@@ -123,15 +138,18 @@ void Winner::showScore(float time)
 	case 0:
 	    wkLabel = LabelTTF::create(String::createWithFormat("きほんボーナス　%dポイント",playEnemyLv)->getCString(), MISAKI_FONT, 30.0);
 		wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 520));
+		wkLabel->setColor(ccc3(0, 0, 0));
 		wkLabel->setTag(kTag_Exp_Label);
 		this->addChild(wkLabel,2);
 		break;
 	case 1:
 		wkLabel = (LabelTTF*)this->getChildByTag(kTag_Exp_Label);
 		wkLabel->setString(String::createWithFormat("きほんボーナス　%dポイント\nMAXコンボボーナス　%dポイント",playEnemyLv, maxCombo)->getCString());
+		wkLabel->setColor(ccc3(0, 0, 0));
 		break;
 	case 2:
 		wkLabel = (LabelTTF*)this->getChildByTag(kTag_Exp_Label);
+		wkLabel->setColor(ccc3(0, 0, 0));
 		if (noMissFlag) {
 			wkLabel->setString(String::createWithFormat("きほんボーナス　%dポイント\nMAXコンボボーナス　%dポイント\nノーミスボーナス　%d",playEnemyLv, maxCombo, 20)->getCString());
 		} else {
@@ -142,6 +160,7 @@ void Winner::showScore(float time)
 	case 3:
 		wkLabel = (LabelTTF*)this->getChildByTag(kTag_Exp_Label);
 		wkLabel->setString(String::createWithFormat("きほんボーナス　%dポイント\nMAXコンボボーナス　%dポイント\nノーミスボーナス　%d\n%d　→　%d",playEnemyLv, maxCombo, 20, playerExp, wk_enemyExp)->getCString());
+		wkLabel->setColor(ccc3(0, 0, 0));
 		this->unschedule(schedule_selector(Winner::showScore));
 		break;
 	}

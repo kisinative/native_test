@@ -8,13 +8,16 @@ class TitleScene : public cocos2d::Layer
 protected:
 
 	void menuPowerUpCallback(Object* sender);
+	void gameStart(int enemyLv);
 
     enum kTag
     {
         kTag_Menu = 1,
         kTag_StartButton,
+        kTag_StartButtonLabel,
         kTag_HelpButton,
         kTag_Help,
+        kTag_Title,
         kTag_PowerUpButton,
     };
 
@@ -28,6 +31,8 @@ protected:
 	const char* key_playerTechniqueLv	= "PlayerTechnique";	//プレイヤーテクニック
 
 	bool debug_flag = true;
+	cocos2d::Point	origin;										//使用端末の(0,0)地点
+	cocos2d::Size	size;										//使用端末の画面サイズ
 
 public:
 

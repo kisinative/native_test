@@ -37,7 +37,7 @@ bool GameOver::init()
 	pTarget->setTag(kTag_GameOver);
 	this->addChild(pTarget,1);
 
-	pTarget = Sprite::create("catDown_2.png");
+	pTarget = Sprite::create("lose_cat.png");
 	pTarget->setPosition(Point(visibleSize.width * 0.5, visibleSize.height * 0.5));
 	pTarget->setTag(kTag_Cat);
 	this->addChild(pTarget,1);
