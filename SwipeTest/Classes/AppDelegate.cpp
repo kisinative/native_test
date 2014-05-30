@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "TitleScene.h"
 #include "SimpleAudioEngine.h"
+#include "Android/AdViewManager.h"
 
 USING_NS_CC;
 
@@ -31,6 +32,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // run
     director->runWithScene(scene);
+
+	UserDefault* userDefault = UserDefault::sharedUserDefault();
+	int enemyLv = userDefault->getIntegerForKey(key_enemyLv, 1);
+
+	if (enemyLv > 4) {
+		//AIDの広告表示
+		AdViewManager::setAidAdView();
+	}
 
     return true;
 }

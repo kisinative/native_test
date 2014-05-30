@@ -126,6 +126,12 @@ void Winner::tapReturnMenu(Object* pSender)
 // TOPページへ
 void Winner::tapRetry(Object* pSender)
 {
+	//相手レベル記録
+	UserDefault* userDefault = UserDefault::sharedUserDefault();
+	enemyLv = userDefault->getIntegerForKey(key_playEnemyLv, 1);
+	userDefault->setIntegerForKey(key_playEnemyLv, enemyLv+1);
+
+
 	Scene* gameScene = (Scene*)HelloWorld::create();
 	Director::getInstance()->replaceScene(gameScene);
 }

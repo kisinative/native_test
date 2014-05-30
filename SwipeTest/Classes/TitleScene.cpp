@@ -3,11 +3,16 @@
 #include "PowerUpScene.h"
 #include "SimpleAudioEngine.h"
 //#include "NendModule.h"
+#include "Android/AdViewManager.h"
+#include "Android/AdGameFeat.h"
 #include "NendIconModule.h"
 #include "platform/android/jni/JniHelper.h"
 #include <jni.h>
+//#include "Define.h"
 //#define  CLASS_NAME  "org/cocos2dx/cpp/Cocos2dxActivity"
 //#define  METHOD_NAME "adViewOn"
+//#define  CLASS_NAME  "com/loopsessions/TestProject/TestProject"
+//#define  METHOD_NAME "setAidAdView"
 
 USING_NS_CC;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -36,6 +41,7 @@ bool TitleScene::init()
     pDirector->setOpenGLView(pEGLView);
 //    pEGLView->setDesignResolutionSize(320, 480, kResolutionShowAll);
     pEGLView->setDesignResolutionSize(540, 960, kResolutionShowAll);
+
 
     srand((unsigned int)time(NULL));
 
@@ -156,6 +162,30 @@ bool TitleScene::init()
 //    jstring jpath  = (jstring)methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID);
 //    methodInfo.env->DeleteLocalRef(methodInfo.classID);
 
+//        cocos2d::JniMethodInfo methodInfo;
+//        cocos2d::JniHelper::getStaticMethodInfo( methodInfo, "com/loopsessions/TestProject/TestProject",  "setAidAdView", "()V" );
+//        jstring jpath  = (jstring)methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID);
+//        methodInfo.env->DeleteLocalRef(methodInfo.classID);
+
+//    //AIDの広告表示
+//	AdViewManager::setAidAdView();
+
+//    CCLOG("#############################################");
+//    		//初期化ボタンを作成する
+//    		LabelTTF* retryLabel = LabelTTF::create("初期化", "Arial", 80.0);
+//    		retryLabel->setColor(ccc3(255, 255, 255));
+//    		MenuItemLabel* retryItem = MenuItemLabel::create(retryLabel, [&](Object *sender) {AdGameFeat::showGameFeat();});
+//
+//
+//    		retryItem->setPosition(Point(size.width * 0.8,size.height *0.4));
+//
+//    		//メニューを作成する
+//    		Menu* menu = Menu::create(retryItem, NULL);
+//    		menu->setPosition(Point::ZERO);
+//    		this->addChild(menu,2);
+////    AdGameFeat::showGameFeat();
+////    AdGameFeat::showAllGameFeat();
+//    CCLOG("#############################################");
 
 	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("harunopayapaya.mp3");
 	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("harunopayapaya.mp3", true);
@@ -166,13 +196,16 @@ bool TitleScene::init()
 void TitleScene::menuStartCallback(Object* sender)
 {
 
-	gameStart(1);
-	return;
+//	gameStart(1);
+//	return;
 
 	Menu* pMenu;
+
 	//相手レベル記録
 	UserDefault* userDefault = UserDefault::sharedUserDefault();
 	int enemyLv = userDefault->getIntegerForKey(key_enemyLv, 1);
+
+	CCLOG("Levelaaaaa = %d",enemyLv);
 
 	if (enemyLv == 1) {
 		gameStart(1);
@@ -185,78 +218,92 @@ void TitleScene::menuStartCallback(Object* sender)
 //		board->setAnchorPoint(Point(0,0));
 	    this->addChild(board,5);
 	    Size bgSize = board->getContentSize();
+
+//	    MenuItemLabel *pMaxLevel = MenuItemFont::create(String::createWithFormat("レベル %d から",enemyLv)->getCString(), [&](Object* sender){TitleScene::gameStart(enemyLv);});
+//	    MenuItemFont::setFontName( MISAKI_FONT );
+//	    pMaxLevel->setColor(ccc3(0, 0, 0));
+
 	    MenuItemImage* pMaxLevel = MenuItemImage::create("difficulty_button_1.png",
 	                                         "difficulty_button_2.png",
 	                                         [&](Object* sender){
-	    											TitleScene::gameStart(enemyLv);
+	    											TitleScene::gameStart(4);
 	    										}
 	                                         );
-//	                                         CC_CALLBACK_1(TitleScene::gameStart, enemyLv));
+		LabelTTF* wkLabel1 = LabelTTF::create(String::createWithFormat("レベル %d から",enemyLv)->getCString(), MISAKI_FONT, 40.0);
 
-	    CCLOG("x = %f  y = %f",bgSize.width * 0.5 ,bgSize.height * 0.7);
-	    CCLOG("x = %f  y = %f",bgSize.width ,bgSize.height);
 	    if (enemyLv <= 5) {
+//		    MenuItemLabel *pMidLevel = MenuItemFont::create("レベル 1 から", [&](Object* sender){TitleScene::gameStart(1);});
+//		    MenuItemFont::setFontName( MISAKI_FONT );
+//		    pMidLevel->setColor(ccc3(0, 0, 0));
 	    	MenuItemImage* pMidLevel = MenuItemImage::create("difficulty_button_1.png",
 	    		                                         "difficulty_button_2.png",
 	    		                                         [&](Object* sender){
 	    		    											TitleScene::gameStart(1);
 	    		    										}
 	    		                                         );
-//	    		                                         CC_CALLBACK_1(TitleScene::gameStart, 1));
+			LabelTTF* wkLabel2 = LabelTTF::create("レベル 1 から", MISAKI_FONT, 40.0);
 
-	    	pMaxLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.7));
-	    	pMidLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.5));
-//	    	pMaxLevel->setPosition(bgSize / 2);
-//	    	pMidLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.5));
+	    	pMaxLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.6));
+			wkLabel1->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.6));
+	    	pMidLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.35));
+			wkLabel2->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.35));
 
-	    	pMenu = Menu::create(pMaxLevel, NULL);
+	    	pMenu = Menu::create(pMaxLevel,pMidLevel, NULL);
+	    	pMenu->setPosition(Point::ZERO);
 	    	board->addChild(pMenu,6);
-		    pMenu = Menu::create(pMidLevel, NULL);
-		    board->addChild(pMenu,6);
+	    	board->addChild(wkLabel1,7);
+	    	board->addChild(wkLabel2,7);
+
 	    } else if (enemyLv <= 10) {
 	    	MenuItemImage* pMidLevel = MenuItemImage::create("difficulty_button_1.png",
 	    		                                         "difficulty_button_2.png",
 	    		                                         [&](Object* sender){
-	    		    											TitleScene::gameStart(enemyLv - 5);
+	    		    											TitleScene::gameStart(2);
 	    		    										}
 	    		                                         );
-//	    		                                         CC_CALLBACK_1(TitleScene::gameStart, enemyLv - 5));
+	    	LabelTTF* wkLabel2 = LabelTTF::create(String::createWithFormat("レベル %d から",enemyLv - 5)->getCString(), MISAKI_FONT, 40.0);
 
-//	    	pMaxLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.7));
-//	    	pMidLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.5));
-	    	pMaxLevel->setPosition(Point(0, 0));
-	    	pMidLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.5));
+	    	pMaxLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.6));
+	    	wkLabel1->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.6));
+	    	pMidLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.35));
+	    	wkLabel2->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.35));
 
-	    	pMenu = Menu::create(pMaxLevel, NULL);
+	    	pMenu = Menu::create(pMaxLevel,pMidLevel, NULL);
+	    	pMenu->setPosition(Point::ZERO);
 	    	board->addChild(pMenu,6);
-		    pMenu = Menu::create(pMidLevel, NULL);
-		    board->addChild(pMenu,6);
+	    	board->addChild(wkLabel1,7);
+	    	board->addChild(wkLabel2,7);
+
 	    } else {
 	    	MenuItemImage* pMidLevel = MenuItemImage::create("difficulty_button_1.png",
 	    		                                         "difficulty_button_2.png",
 	    		                                         [&](Object* sender){
-	    		    											TitleScene::gameStart(enemyLv - 5);
+	    		    											TitleScene::gameStart(2);
 	    		    										}
 	    		                                         );
-//	    		                                         CC_CALLBACK_1(TitleScene::gameStart, enemyLv - 5));
-	    	MenuItemImage* plowLevel = MenuItemImage::create("difficulty_button_1.png",
+	    	LabelTTF* wkLabel2 = LabelTTF::create(String::createWithFormat("レベル %d から",enemyLv - 5)->getCString(), MISAKI_FONT, 40.0);
+
+	    	MenuItemImage* pLowLevel = MenuItemImage::create("difficulty_button_1.png",
 	    		                                         "difficulty_button_2.png",
 	    		                                         [&](Object* sender){
-	    		    											TitleScene::gameStart(enemyLv - 10);
+	    		    											TitleScene::gameStart(3);
 	    		    										}
 	    		                                         );
-//	    		                                         CC_CALLBACK_1(TitleScene::gameStart, enemyLv - 10));
+	    	LabelTTF* wkLabel3 = LabelTTF::create(String::createWithFormat("レベル %d から",enemyLv - 10)->getCString(), MISAKI_FONT, 40.0);
 
-	    	pMaxLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.8));
-	    	pMidLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.6));
-	    	plowLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.4));
+	    	pMaxLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.65));
+	    	wkLabel1->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.65));
+	    	pMidLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.5));
+	    	wkLabel2->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.5));
+	    	pLowLevel->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.35));
+	    	wkLabel3->setPosition(Point(bgSize.width * 0.5, bgSize.height * 0.35));
 
-	    	pMenu = Menu::create(pMaxLevel, NULL);
+	    	pMenu = Menu::create(pMaxLevel, pMidLevel, pLowLevel, NULL);
+	    	pMenu->setPosition(Point::ZERO);
 	    	board->addChild(pMenu,6);
-		    pMenu = Menu::create(pMidLevel, NULL);
-		    board->addChild(pMenu,6);
-		    pMenu = Menu::create(plowLevel, NULL);
-		    board->addChild(pMenu,6);
+	    	board->addChild(wkLabel1,7);
+	    	board->addChild(wkLabel2,7);
+	    	board->addChild(wkLabel3,7);
 	    }
 
 	}
@@ -274,14 +321,31 @@ void TitleScene::menuPowerUpCallback(Object* sender)
 
 void TitleScene::gameStart(int enemyLv)
 {
-
 	//相手レベル記録
 	UserDefault* userDefault = UserDefault::sharedUserDefault();
-	userDefault->setIntegerForKey(key_playEnemyLv, enemyLv);
+	int wkEnemyLv = userDefault->getIntegerForKey(key_enemyLv, 1);
+	switch (enemyLv){
+	case 1:
+		wkEnemyLv = 1;
+		break;
+	case 2:
+		wkEnemyLv -= 5;
+		break;
+	case 3:
+		wkEnemyLv -= 10;
+		break;
+	}
+	userDefault->setIntegerForKey(key_playEnemyLv, wkEnemyLv);
 
     // ゲーム画面の表示
     Scene* scene = HelloWorld::createScene();
     TransitionFlipX* tran = TransitionFlipX::create(0.2, scene);
     Director::sharedDirector()->replaceScene(tran);
+}
+
+bool TitleScene::onTouchBegan(Touch* touch, Event* event)
+{
+    // can not touch on back layers
+    return true;
 }
 

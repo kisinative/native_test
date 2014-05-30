@@ -13,8 +13,9 @@ public:
     static FiniteTimeAction* vibrationAnimation(float time);
     static FiniteTimeAction* move1(float time);
     static FiniteTimeAction* hpAction();
+    static FiniteTimeAction* bgAction();
     static FiniteTimeAction* rushCutin();
-    static FiniteTimeAction* enemyJump();
+    static FiniteTimeAction* enemyJump(int enemyType);
 };
 
 #endif // __KSANIMATION_H__

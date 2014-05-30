@@ -20,12 +20,13 @@ protected:
 	void makeRetryButton();
 	void tapRetryButton(Object* pSender);
 	void arrowRefresh();
-	void meDamage();
+	void meDamage(bool flag);
 	void rushPoint(bool flag);
 	void menuStartRush();
 	void firstRandomTarget(float time);
 	void randomTarget();
 	void rushEnd(float time);
+	void rushEndFlag(float time);
 	void tapReturnMenu(Object* pSender);
 	void tapNextLv(Object* pSender);
 	void catChenge(int flag);
@@ -33,15 +34,18 @@ protected:
 	void enemyAtk(bool flag);
 	void enemyDef(bool flag);
 	void enemyRushDef();
-	void moveGameOver();
-	void moveWinner();
+	void moveGameOver(float time);
+	void moveWinner(float time);
+	void meLifeAction(float time);
+	void enemyLifeAction(float time);
 
 	// tag
+	const int tagBg				= 5;		//背景タグ
 	const int tagHp				= 10;		//HPタグ
 	const int tagHpImg			= 11;		//HPタグ
 	const int tagEnemyHp		= 20;		//敵HPタグ
 	const int tagEnemyHpImg		= 21;		//敵HPタグ
-	const int tagEnemyStrong	= 22;		//敵体力タグ
+	const int tagEnemyStrong	= 23;		//敵体力タグ
 	const int tagEnemyPower		= 24;		//敵攻撃力タグ
 	const int tagEnemySpeed		= 26;		//敵スピードタグ
 	const int tagEnemyTechnique	= 28;		//敵テクニックタグ
@@ -64,6 +68,7 @@ protected:
 	const int tagMenutButton	= 160;		//メニューボタン
 	const int tagArrowImg	 	= 1000;		//矢印タグ
 	const int tagComboCount	= 170;		//コンボ数タグ
+	const int tagMessage		= 180;		//メッセージタグ
 
 	//敵基本能力
 	const int defaultEnemyStrong = 40;		//体力
@@ -75,6 +80,7 @@ protected:
 	const int normalAtk 			= 3;	//通常攻撃
 	const int justAtk				= 5;	//ジャストヒット
 	const int rushAtk				= 1;	//ラッシュ攻撃
+	const int crisisRushAtk		= 2;	//ラッシュ攻撃
 
 	//プレイヤーレベル
 	int playerStrongLv;
@@ -94,6 +100,7 @@ protected:
 	const int MaxHp			= 100;          //最大HP
 	const int lvStrong 		= 10;		//体力
 	int NowHp;                              //現在HP
+	int NowMaxHp;                           //現在MaxHP
 	int NowRush;							//現在ラッシュポイント
 	int NowEnemyHp;                         //敵現在HP
 	int MaxEnemyHp;                         //敵最大HP
@@ -111,10 +118,15 @@ protected:
 	bool	rushStack = false;				//ラッシュ開始可能状況判定フラグ
 	bool	rush_flag = false;				//ラッシュ判定フラグ
 	bool	rushAtk_flag = false;			//ラッシュ初回攻撃フラグ
+	bool	rushEndAtk_flag = false;		//ラッシュ終了時攻撃ミス猶予フラグ
 	float	rushTime  = 6.0;				//ラッシュ時間
+	bool	rush_crisis = false;			//ピンチ時ラッシュフラグ
 	bool	noMissFlag  = true;				//ノーミスフラグ
 	int		conboCount = 0;					//コンボカウント
 	int		maxConboCount = 0;				//MAXコンボカウント
+	int		actionNum1 = 99;				//矢印の動き方履歴1つ前
+	int		actionNum2 = 99;				//矢印の動き方履歴2つ前
+
 
 	std::string targetGesture;              //現在ジェスチャ
 	std::string nowGesture;                 //入力中ジェスチャ

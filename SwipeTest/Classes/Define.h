@@ -9,8 +9,8 @@ class Define
 {
 public:
 //	const std::string key_enemyLv = "EnemyLv";
-	static const char* key_enemyLv = "EnemyLv";
-//	static const int key_enemyLv = 11;
+//	static const char* key_enemyLv = "EnemyLv";
+//	static int key_enemyLv = 1;
 
 
 };

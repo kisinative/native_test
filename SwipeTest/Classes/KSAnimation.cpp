@@ -50,12 +50,22 @@ FiniteTimeAction* KSAnimation::move1(float time)
 
 FiniteTimeAction* KSAnimation::hpAction()
 {
-    MoveBy* move1 = MoveBy::create(0.03, ccp( 0, -5));
-    MoveBy* move2 = MoveBy::create(0.06, ccp( 0, 10));
-    MoveBy* move3 = MoveBy::create(0.03, ccp( 0, -5));
+    MoveBy* move1 = MoveBy::create(0.04, ccp( 0, -5));
+    MoveBy* move2 = MoveBy::create(0.08, ccp( 0, 10));
+    MoveBy* move3 = MoveBy::create(0.04, ccp( 0, -5));
 //    ActionInterval* move4  = ScaleTo::create(0.5, pointScale);
 
 //    Sequence* moves = Sequence::create(move1, move2, move3, move4, NULL);
+    Sequence* moves = Sequence::create(move1, move2, move3, NULL);
+
+    return Repeat::create(moves, 2);
+}
+FiniteTimeAction* KSAnimation::bgAction()
+{
+    MoveBy* move1 = MoveBy::create(0.04, ccp( -10, -5));
+    MoveBy* move2 = MoveBy::create(0.08, ccp(  20, 10));
+    MoveBy* move3 = MoveBy::create(0.04, ccp( -10, -5));
+
     Sequence* moves = Sequence::create(move1, move2, move3, NULL);
 
     return Repeat::create(moves, 2);
@@ -77,13 +87,43 @@ FiniteTimeAction* KSAnimation::rushCutin()
     return Repeat::create(moves, 1);
 }
 
-FiniteTimeAction* KSAnimation::enemyJump()
+FiniteTimeAction* KSAnimation::enemyJump(int enemyType)
 {
 
-	JumpBy* move1 = JumpBy::create(0.7, ccp( 100, 0),50,1);
-	JumpBy* move2 = JumpBy::create(0.7, ccp(-100, 0),50,1);
-
-    Sequence* moves = Sequence::create(move1, move2, NULL);
+	Sequence* moves;
+	JumpBy* jump1;
+	JumpBy* jump2;
+	MoveBy* move1;
+	MoveBy* move2;
+	CCLOG("enemyType = %d",enemyType);
+	switch (enemyType){
+		case 0:			//ボス
+			jump1 = JumpBy::create(0.7, ccp( 100, 0),50,2);
+		    move1 = MoveBy::create(0.5, ccp(-100, 0));
+		    moves = Sequence::create(jump1, move1, NULL);
+			break;
+		case 1:			//サビ
+			jump1 = JumpBy::create(0.7, ccp( 100, 0),50,1);
+			jump2 = JumpBy::create(0.7, ccp(-100, 0),50,1);
+		    moves = Sequence::create(jump1, jump2, NULL);
+			break;
+		case 2:			//三毛
+		    move1 = MoveBy::create(1, ccp( 50, 0));
+		    move2 = MoveBy::create(1, ccp(-50, 0));
+		    moves = Sequence::create(move1, move2, NULL);
+			break;
+		case 3:			//クロ
+			jump1 = JumpBy::create(1, ccp( -60, 0),30,2);
+			jump2 = JumpBy::create(1, ccp( 120, 0),40,3);
+			jump1 = JumpBy::create(1, ccp( -60, 0),30,2);
+		    moves = Sequence::create(jump1, jump2, NULL);
+			break;
+		case 4:			//シャム
+		    move1 = MoveBy::create(0.5, ccp( 90, 0));
+			jump1 = JumpBy::create(0.7, ccp(-90, 0),30,3);
+		    moves = Sequence::create(move1, jump1, NULL);
+			break;
+	}
 
     return RepeatForever::create(moves);
 }

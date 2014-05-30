@@ -40,7 +40,7 @@ public:
     static cocos2d::Scene* scene();
     CREATE_FUNC(TitleScene);
     virtual void menuStartCallback(Object* sender);
-
+    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
 
 };
 

@@ -16,9 +16,12 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/BFSprite.cpp \
                    ../../Classes/NendIconModule.cpp \
                    ../../Classes/NendModule.cpp \
+                   ../../Classes/Android/AdViewManager.cpp \
+                   ../../Classes/Android/AdGameFeat.cpp \
                    ../../Classes/HelloWorldScene.cpp
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../Classes/Android
 
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocosdenshion_static

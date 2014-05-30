@@ -13,6 +13,8 @@ class  AppDelegate : private cocos2d::Application
 public:
     AppDelegate();
     virtual ~AppDelegate();
+	//プリファレンス
+	const char* key_enemyLv			= "EnemyLv";			//敵レベル
 
     /**
     @brief    Implement Director and Scene init code here.
