@@ -87,6 +87,21 @@ FiniteTimeAction* KSAnimation::rushCutin()
     return Repeat::create(moves, 1);
 }
 
+FiniteTimeAction* KSAnimation::bossCutin()
+{
+
+	Point origin			= Director::getInstance()->getVisibleOrigin();
+	Size  visibleSize		= Director::getInstance()->getVisibleSize();
+
+	MoveTo* move1 = MoveTo::create(0.3, ccp( origin.x, visibleSize.height * 0.5));
+    DelayTime* move2 = DelayTime::create(1.5f);
+    MoveTo* move3 = MoveTo::create(0.2, ccp( -800, visibleSize.height * 0.5));
+
+    Sequence* moves = Sequence::create(move1, move2, move3, NULL);
+
+    return Repeat::create(moves, 1);
+}
+
 FiniteTimeAction* KSAnimation::enemyJump(int enemyType)
 {
 

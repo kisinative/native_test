@@ -11,6 +11,8 @@ protected:
 
 	void showArrow(float time);
 	void nextStage(float time);
+	void bossSetup(float time);
+	void bossSetup1(float time);
 	void timeOver();
 	void attack(int flag);
 	void defense(int flag);
@@ -126,6 +128,7 @@ protected:
 	int		maxConboCount = 0;				//MAXコンボカウント
 	int		actionNum1 = 99;				//矢印の動き方履歴1つ前
 	int		actionNum2 = 99;				//矢印の動き方履歴2つ前
+	int		atk_num_flag = 0;				//攻撃種類
 
 
 	std::string targetGesture;              //現在ジェスチャ
@@ -157,6 +160,7 @@ protected:
 	const char* key_playerTechniqueLv	= "PlayerTechnique";	//プレイヤーテクニック
 	const char* key_maxComboCount		= "MaxConboCount";		//MAXコンボ数
 	const char* key_noMissFlag			= "NoMissFlag";			//ノーミスフラグ
+	const char* key_bossFlag			= "BossFlag";			//ボスフラグ
 
 
 //	int enemyStrongLv;

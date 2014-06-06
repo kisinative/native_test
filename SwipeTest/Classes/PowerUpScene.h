@@ -12,6 +12,7 @@ protected:
 	void tapPowerButton(Object* pSender);
 	void tapSpeedButton(Object* pSender);
 	void tapTechniqueButton(Object* pSender);
+	void tapHelpButton(Object* pSender);
 	int Calculation(int lv);
 	void redisplay();
 
@@ -34,12 +35,14 @@ protected:
 	cocos2d::Size	visibleSize;								//使用端末の画面サイズ
 
 	//プリファレンス
-	const char* key_enemyLv			= "EnemyLv";
+	const char* key_enemyLv = "EnemyLv";
+	const char* key_playEnemyLv		= "PlayEnemyLv";		//対戦中敵レベル
 	const char* key_playerExp			= "PlayerExp";			//プレイヤー経験値
 	const char* key_playerStrongLv		= "PlayerStrong";		//プレイヤー体力
 	const char* key_playerPowerLv		= "PlayerPower";		//プレイヤー攻撃力
 	const char* key_playerSpeedLv		= "PlayerSpeed";		//プレイヤースピード
 	const char* key_playerTechniqueLv	= "PlayerTechnique";	//プレイヤーテクニック
+	const char* key_tutorialFlag 		= "TutorialFlag";
 
 	bool debug_flag = true;
 

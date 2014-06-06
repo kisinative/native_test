@@ -32,6 +32,7 @@ public:
     static cocos2d::Scene* scene();
     virtual bool init();
     CREATE_FUNC(GameOver);
+    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event);
 
 };
 

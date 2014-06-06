@@ -5,7 +5,9 @@
 #include "WinnerScene.h"
 //#include "Define.h"
 #include <unistd.h>
+#include "SimpleAudioEngine.h"
 
+using namespace CocosDenshion;
 USING_NS_CC;
 //String arrowArray[] = {"右", "左", "上", "下"};
 String arrowArray[] = {"0", "1", "2", "3","02","03","12","13","20","21","30","31"};
@@ -70,6 +72,13 @@ bool HelloWorld::init()
 //    menu->setPosition(Point::ZERO);
 //    this->addChild(menu, 1);
 
+
+	//効果音を読み込む
+	SimpleAudioEngine::sharedEngine()->preloadEffect("mp3/combat_enemy.mp3");
+	SimpleAudioEngine::sharedEngine()->preloadEffect("mp3/combat_normal.mp3");
+	SimpleAudioEngine::sharedEngine()->preloadEffect("mp3/combat_just.mp3");
+	SimpleAudioEngine::sharedEngine()->preloadEffect("mp3/combat_rush.mp3");
+
     //プレイヤーの各種レベル取得
 	UserDefault* userDefault = UserDefault::sharedUserDefault();
 	playerStrongLv 		= userDefault->getIntegerForKey(key_playerStrongLv, 1);
@@ -116,11 +125,11 @@ bool HelloWorld::init()
 
 
 //    CCLOG("visible = %f,visible = %f",visibleSize.width,visibleSize.height);
-	//矢印ラベルを生成する
-    LabelTTF* arrowLabel = LabelTTF::create("れでぃ", "Arial", 90.0*TEXT_SCALE);
-	arrowLabel->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-	arrowLabel->setTag(tagArrowLabel);
-	this->addChild(arrowLabel,2);
+//	//矢印ラベルを生成する
+//    LabelTTF* arrowLabel = LabelTTF::create("れでぃ", "Arial", 90.0*TEXT_SCALE);
+//	arrowLabel->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+//	arrowLabel->setTag(tagArrowLabel);
+//	this->addChild(arrowLabel,2);
 //    CCLOG("aaaaaaa = %f,bbbbbbb = %f",origin.x,origin.y);
 
 	Node* pTarget = Sprite::create("target_0.png");
@@ -180,13 +189,15 @@ bool HelloWorld::init()
                       ccc4FFromccc3B(ccBLACK)  // 枠線の色
                       );
     draw = CCDrawNode::create();
-    draw->setPosition(ccp(origin.x + 115, origin.y + 890));
-    draw->setAnchorPoint(Point(0,1));
+//    draw->setPosition(ccp(origin.x + 115, origin.y + 890));
+    draw->setPosition(ccp(origin.x + 465, origin.y + 890));
+    draw->setAnchorPoint(Point(1,1));
 //    draw->setPosition(ccp(0, 0));
 //    draw->setAnchorPoint(Point(0,0));
     draw->setTag(tagEnemyHpImg+1);
     this->addChild(draw,2);
-    draw->drawPolygon(points,                  // 頂点の座標のデータ
+    static Point points2[] = {ccp(0, 0),ccp(0, -50),ccp(-350, -50),ccp(-350, 0)};
+    draw->drawPolygon(points2,                  // 頂点の座標のデータ
                       4,                       // 角数
                       ccc4FFromccc3B(ccc3(255, 0, 0)), // 図形の色
                       1,                       // 枠線の太さ
@@ -222,12 +233,19 @@ void HelloWorld::setup()
 	enemySpeedLv		= enemyLv;
 	enemyTechniqueLv	= enemyLv;
 	enemyType = arc4random() % 9;
+//	enemyType = 0;
+
+	//低レベルの時はボス猫は出ない
+	if (enemyLv < 6 && enemyType == 0){
+		enemyType = 3;
+	}
+
 	switch (enemyType){
 		case 0:			//ボス
-			enemyStrongLv = enemyStrongLv + 3;
-			enemypowerLv = enemypowerLv + 5;
+			enemyStrongLv = enemyStrongLv + 4;
+			enemypowerLv = enemypowerLv + 6;
 			enemySpeedLv = enemySpeedLv + 4;
-			enemyTechniqueLv = enemyTechniqueLv + 5;
+			enemyTechniqueLv = enemyTechniqueLv + 6;
 			break;
 		case 1:			//サビ
 		case 2:
@@ -345,9 +363,40 @@ void HelloWorld::setup()
 //	pHpImg->runAction(KSAnimation::hpAction(1.0));
 
 //    this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 2);
-    this->schedule(schedule_selector(HelloWorld::showArrow), 2);
+	if (enemyType == 0) {
+		//カットイン作成
+		Node* pCutin = Sprite::create("boss_cutin.png");
+		pCutin->setPosition(Point(visibleSize.width, visibleSize.height * 0.5));
+		pCutin->setTag(tagRushCutin);
+		pCutin->setAnchorPoint(Point(0,0));
+		this->addChild(pCutin,4);
+		//カットインアニメーション
+//		pCutin->runAction(KSAnimation::rushCutin());
+		Sequence* callAction = Sequence::create(KSAnimation::rushCutin(), RemoveSelf::create(true), NULL);
+		pCutin->runAction(callAction);
+
+		this->scheduleOnce(schedule_selector(HelloWorld::bossSetup), 0.5);
+	} else {
+		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("mp3/harunopayapaya.mp3", true);
+
+		this->schedule(schedule_selector(HelloWorld::showArrow), 2);
+	}
 
 }
+
+void HelloWorld::bossSetup(float time)
+{
+	SimpleAudioEngine::sharedEngine()->setEffectsVolume(0.4);
+	SimpleAudioEngine::sharedEngine()->playEffect("mp3/boss_cutin.mp3");
+
+	this->scheduleOnce(schedule_selector(HelloWorld::bossSetup1), 1.2);
+    this->schedule(schedule_selector(HelloWorld::showArrow), 1.4);
+}
+void HelloWorld::bossSetup1(float time)
+{
+	CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("mp3/boss.mp3", true);
+}
+
 
 void HelloWorld::createLabel(std::string labelString, float labelSize, float labelWidth, float labelHeight, int labelTag)
 {
@@ -378,8 +427,8 @@ void HelloWorld::showArrow(float time)
     targetGesture = arrowArray[randum].getCString();
     moveArrow.push_back(arrowArray[randum].getCString());
 
-	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
-	arrowLabel->setString("");
+//	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(tagArrowLabel);
+//	arrowLabel->setString("");
 
     Node* pArrow = this->getChildByTag(atkCount);
     if (pArrow)
@@ -559,7 +608,11 @@ void HelloWorld::showArrow(float time)
 		{
 			NowEnemyRush = 0;
 			this->unschedule(schedule_selector(HelloWorld::showArrow));
-			this->schedule(schedule_selector(HelloWorld::showArrow), 2);
+			if (enemyType == 0) {
+				this->schedule(schedule_selector(HelloWorld::showArrow), 1.4);
+			} else {
+				this->schedule(schedule_selector(HelloWorld::showArrow), 2);
+			}
 		}
 	}
 
@@ -623,11 +676,11 @@ void HelloWorld::timeOver()
 //	targetGesture = "99";
 //	LabelTTF* arrowLabel = (LabelTTF*)this->getChildByTag(100);
 //	arrowLabel->setString("timeOut");
-	createLabel("フリックミス",
+	createLabel("フリックしてね",
 				40,
-				visibleSize.width * 0.5,
-				origin.y + 130,
-				tagMessage);
+				visibleSize.width * 0.75,
+				origin.y + 700,
+				tagComboCount);
 
 	//敵攻撃エフェクト
 	enemyAtk(true);
@@ -675,10 +728,10 @@ void HelloWorld::timeOver()
 	//コンボ表記削除
 	noMissFlag = false;
 	conboCount = 0;
-	Node* pConboTarget	= getChildByTag(tagComboCount);
-	if (pConboTarget){
-		pConboTarget->removeFromParentAndCleanup(true);
-	}
+//	Node* pConboTarget	= getChildByTag(tagComboCount);
+//	if (pConboTarget){
+//		pConboTarget->removeFromParentAndCleanup(true);
+//	}
 
 
 }
@@ -842,25 +895,26 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 					}
 				} else {
 					if (targetPoint.x - subTargetPoint <= arrowPoint.x) {
-						createLabel("タイミングがはやいよー",
+						createLabel("はやいよー",
 									40,
-									visibleSize.width * 0.5,
-									origin.y + 130,
-									tagMessage);
+									visibleSize.width * 0.75,
+									origin.y + 700,
+									tagComboCount);
 					} else {
-						createLabel("タイミングがおそいよー",
+						createLabel("おそいよー",
 									40,
-									visibleSize.width * 0.5,
-									origin.y + 130,
-									tagMessage);
+									visibleSize.width * 0.75,
+									origin.y + 700,
+									tagComboCount);
 					}
 				}
 			} else {
 				createLabel("フリックミス",
 							40,
-							visibleSize.width * 0.5,
-							origin.y + 130,
-							tagMessage);
+							visibleSize.width * 0.75,
+							origin.y + 700,
+							tagComboCount);
+//							tagMessage);
 			}
 
 			moveArrow.erase(moveArrow.begin());
@@ -871,13 +925,19 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 				if (++conboCount > 1) {
 					createLabel(String::createWithFormat("%dこんぼ", conboCount)->getCString(),
 								40,
-								visibleSize.width * 0.85,
-								origin.y + 750,
+								visibleSize.width * 0.75,
+								origin.y + 700,
 								tagComboCount);
 
 					Node* pHpImg = this->getChildByTag(tagComboCount);
 					pHpImg->runAction(KSAnimation::hpAction());
 
+				} else {
+					createLabel(" ",
+								40,
+								visibleSize.width * 0.75,
+								origin.y + 700,
+								tagComboCount);
 				}
 				if (conboCount > maxConboCount) {
 					maxConboCount = conboCount;
@@ -899,17 +959,21 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 				//コンボ表記削除
 				noMissFlag = false;
 				conboCount = 0;
-				Node* pConboTarget	= getChildByTag(tagComboCount);
-				if (pConboTarget){
-					pConboTarget->removeFromParentAndCleanup(true);
-				}
+//				Node* pConboTarget	= getChildByTag(tagComboCount);
+//				if (pConboTarget){
+//					pConboTarget->removeFromParentAndCleanup(true);
+//				}
 			}
 
 			if (NowEnemyRush >= startEnemyRush && rushCount == 0 && NowEnemyHp > 0)
 			{
 				rushCount = 5;
 				this->unschedule(schedule_selector(HelloWorld::showArrow));
-				this->schedule(schedule_selector(HelloWorld::showArrow), 1);
+				if (enemyType == 0) {
+					this->schedule(schedule_selector(HelloWorld::showArrow), 0.8);
+				} else {
+					this->schedule(schedule_selector(HelloWorld::showArrow), 1);
+				}
 			} else {
 				if (!(rushCount >  5 && wkGesture)){
 					rushPoint(wkGesture);
@@ -950,6 +1014,7 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 //		pHpImg = this->getChildByTag(tagEnemyHpImg+1);
 //		pHpImg->runAction(KSAnimation::hpAction());
 //		pHpImg->setScaleX(wk_a);
+		atk_num_flag = 2;
 		this->scheduleOnce(schedule_selector(HelloWorld::enemyLifeAction), 0.1);
 
 		//HP更新
@@ -961,6 +1026,10 @@ void HelloWorld::onTouchEnded(Touch* touch, Event* event)
 
 			arrowRefresh();					// 攻防の矢印をリフレッシュ
 			enemyDef(false);
+
+			//現在のターゲットを消す
+			Node* pRushTarget	= getChildByTag(tagRushTarget);
+			pRushTarget->removeFromParentAndCleanup(true);
 
 //			//HP回復
 //			NowHp += 20;
@@ -999,11 +1068,22 @@ void HelloWorld::attack(int flag)
 	{
 //		arrowLabel->setString("ぬこぱーんち");
 //		arrowLabel->setColor(ccc3(0, 0, 0));
-		NowEnemyHp -= normalAtk;
+		atk_num_flag = 0;
+		NowEnemyHp -= normalAtk + playerPowerLv;
 	} else {
 //		arrowLabel->setString("ジャスト！！");
 //		arrowLabel->setColor(ccc3(0, 0, 0));
-		NowEnemyHp -= justAtk;
+		atk_num_flag = 1;
+
+		CCLOG("playerPowerLv = %d",playerPowerLv);
+		int aaa = (justAtk + (playerPowerLv / 2)) + playerPowerLv;
+		CCLOG("aaaaaaaaaaaaa = %d",aaa);
+		aaa = (justAtk + (1 / 2)) + 1;
+		CCLOG("bbbbbbbbbbbbb = %d",aaa);
+		aaa = (justAtk + (playerPowerLv / 4)) + playerPowerLv;
+		CCLOG("ccccccccccccc = %d",aaa);
+
+		NowEnemyHp -= (justAtk + (playerPowerLv / 2)) + playerPowerLv;
 	}
 	if (NowEnemyHp < 0) {
 		NowEnemyHp = 0;
@@ -1204,6 +1284,11 @@ void HelloWorld::meLifeAction(float time){
 	pHpImg->setScaleX(wk_a);
 	pHpImg = this->getChildByTag(tagBg);
 	pHpImg->runAction(KSAnimation::bgAction());
+
+	//効果音を鳴らす
+	SimpleAudioEngine::sharedEngine()->setEffectsVolume(0.4);
+	SimpleAudioEngine::sharedEngine()->playEffect("mp3/combat_enemy.mp3");
+
 }
 void HelloWorld::enemyLifeAction(float time){
 	Node* pHpImg = this->getChildByTag(tagEnemyHpImg);
@@ -1212,6 +1297,15 @@ void HelloWorld::enemyLifeAction(float time){
 	pHpImg = this->getChildByTag(tagEnemyHpImg+1);
 	pHpImg->runAction(KSAnimation::hpAction());
 	pHpImg->setScaleX(wk_a);
+
+	SimpleAudioEngine::sharedEngine()->setEffectsVolume(0.4);
+	if (atk_num_flag == 0){
+		SimpleAudioEngine::sharedEngine()->playEffect("mp3/combat_normal.mp3");
+	} else if (atk_num_flag == 1){
+		SimpleAudioEngine::sharedEngine()->playEffect("mp3/combat_just.mp3");
+	} else {
+		SimpleAudioEngine::sharedEngine()->playEffect("mp3/combat_rush.mp3");
+	}
 }
 
 /*****************************************************************************************
@@ -1347,7 +1441,11 @@ void HelloWorld::rushEnd(float time){
 
 	//通常ゲーム再開
 //	this->scheduleOnce(schedule_selector(HelloWorld::showArrow), 0.1);
-	this->schedule(schedule_selector(HelloWorld::showArrow), 2);
+	if (enemyType == 0) {
+		this->schedule(schedule_selector(HelloWorld::showArrow), 1.4);
+	} else {
+		this->schedule(schedule_selector(HelloWorld::showArrow), 2);
+	}
 
 	this->scheduleOnce(schedule_selector(HelloWorld::rushEndFlag), 0.3);
 
@@ -1405,6 +1503,8 @@ void HelloWorld::tapNextLv(Object* pSender)
 void HelloWorld::moveGameOver(float time)
 {
 
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+
 	//ゲームのシーンを新しく用意する
 	Scene* gameScene = (Scene*)GameOver::create();
 //	TransitionSlideInL* tran = TransitionSlideInL::create(1, gameScene);
@@ -1420,11 +1520,17 @@ void HelloWorld::moveGameOver(float time)
 void HelloWorld::moveWinner(float time)
 {
 
+	CocosDenshion::SimpleAudioEngine::getInstance()->stopBackgroundMusic(true);
+
 
 	UserDefault* userDefault = UserDefault::sharedUserDefault();
 	userDefault->setIntegerForKey(key_maxComboCount, maxConboCount);
 	userDefault->setBoolForKey(key_noMissFlag, noMissFlag);
-
+	if (enemyType == 0){
+		userDefault->setBoolForKey(key_bossFlag, true);
+	} else {
+		userDefault->setBoolForKey(key_bossFlag, false);
+	}
 
 	//ゲームのシーンを新しく用意する
 	Scene* gameScene = (Scene*)Winner::create();

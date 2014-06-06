@@ -8,6 +8,8 @@ class TitleScene : public cocos2d::Layer
 protected:
 
 	void menuPowerUpCallback(Object* sender);
+	void menuClose(Object* sender);
+	void menuTutorial(Object* sender);
 	void gameStart(int enemyLv);
 
     enum kTag
@@ -19,6 +21,7 @@ protected:
         kTag_Help,
         kTag_Title,
         kTag_PowerUpButton,
+        kTag_OsusumeButton,
     };
 
 	//プリファレンス
@@ -29,8 +32,9 @@ protected:
 	const char* key_playerPowerLv		= "PlayerPower";		//プレイヤー攻撃力
 	const char* key_playerSpeedLv		= "PlayerSpeed";		//プレイヤースピード
 	const char* key_playerTechniqueLv	= "PlayerTechnique";	//プレイヤーテクニック
+	const char* key_tutorialFlag 		= "TutorialFlag";
 
-	bool debug_flag = true;
+	bool debug_flag = false;
 	cocos2d::Point	origin;										//使用端末の(0,0)地点
 	cocos2d::Size	size;										//使用端末の画面サイズ
 
@@ -41,6 +45,7 @@ public:
     CREATE_FUNC(TitleScene);
     virtual void menuStartCallback(Object* sender);
     bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event);
 
 };
 

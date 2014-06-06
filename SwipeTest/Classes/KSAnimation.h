@@ -15,6 +15,7 @@ public:
     static FiniteTimeAction* hpAction();
     static FiniteTimeAction* bgAction();
     static FiniteTimeAction* rushCutin();
+    static FiniteTimeAction* bossCutin();
     static FiniteTimeAction* enemyJump(int enemyType);
 };
 

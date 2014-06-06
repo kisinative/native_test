@@ -2,6 +2,7 @@
 #include "TitleScene.h"
 #include <unistd.h>
 #include "SimpleAudioEngine.h"
+#include "TutorialScene.h"
 
 using namespace CocosDenshion;
 USING_NS_CC;
@@ -34,6 +35,13 @@ bool PowerUp::init()
 	visibleSize		= Director::getInstance()->getVisibleSize();		//使用端末の画面サイズ
 
 	//背景色
+    Sprite* bg = Sprite::create();
+    bg->setAnchorPoint(Point(0, 0));
+    bg->setTextureRect(Rect(0, 0, visibleSize.width, visibleSize.height));
+    bg->setColor(Color3B(240, 210, 190));
+//    bg->setColor(Color3B(143, 146, 148));
+    bg->setTag(100);
+    this->addChild(bg);
 
 	// 現在の経験値やレベル取得
 	UserDefault* userDefault = UserDefault::sharedUserDefault();
@@ -53,7 +61,7 @@ bool PowerUp::init()
 											 "levelup_2.png",
 											 CC_CALLBACK_1(PowerUp::tapStrongButton, this));
 	//    pPowerUp->setPosition(Point(visibleSize.width * 0.5 - 10, visibleSize.height * 0.50 + 10));
-		pPowerUp->setPosition(Point(visibleSize.width * 0.5, origin.y + 720));
+		pPowerUp->setPosition(Point(visibleSize.width * 0.5, origin.y + 740));
 		Menu* pMenu = Menu::create(pPowerUp, NULL);
 		pMenu->setPosition(Point::ZERO);
 	//    pMenu->setAnchorPoint(Point(1,0));
@@ -61,12 +69,12 @@ bool PowerUp::init()
 		this->addChild(pMenu,1);
 	} else {
 		pTarget = Sprite::create("levelup_2.png");
-		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 720));
+		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 740));
 		pTarget->setTag(kTag_StrongButton);
 		this->addChild(pTarget,1);
 	}
     wkLabel = LabelTTF::create(String::createWithFormat("タフネス LV%d\n必要ポイント：%d", playerStr, Calculation(playerStr))->getCString(), MISAKI_FONT, 40.0);
-	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 720));
+	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 740));
 	wkLabel->setTag(kTag_StrongLabel);
 	this->addChild(wkLabel,2);
 
@@ -77,7 +85,7 @@ bool PowerUp::init()
 											 "levelup_2.png",
 											 CC_CALLBACK_1(PowerUp::tapPowerButton, this));
 	//    pPowerUp->setPosition(Point(visibleSize.width * 0.5 + 10, visibleSize.height * 0.50 + 10));
-		pPowerUp->setPosition(Point(visibleSize.width * 0.5, origin.y + 570));
+		pPowerUp->setPosition(Point(visibleSize.width * 0.5, origin.y + 590));
 		pMenu = Menu::create(pPowerUp, NULL);
 		pMenu->setPosition(Point::ZERO);
 	//    pMenu->setAnchorPoint(Point(0,0));
@@ -85,12 +93,12 @@ bool PowerUp::init()
 		this->addChild(pMenu,1);
 	} else {
 		pTarget = Sprite::create("levelup_2.png");
-		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 570));
+		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 590));
 		pTarget->setTag(kTag_PowerButton);
 		this->addChild(pTarget,1);
 	}
     wkLabel = LabelTTF::create(String::createWithFormat("パワー LV%d\n必要ポイント：%d", playerPow, Calculation(playerPow))->getCString(), MISAKI_FONT, 40.0);
-	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 570));
+	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 590));
 	wkLabel->setTag(kTag_PowerLabel);
 	this->addChild(wkLabel,2);
 
@@ -101,7 +109,7 @@ bool PowerUp::init()
 											 "levelup_2.png",
 											 CC_CALLBACK_1(PowerUp::tapSpeedButton, this));
 	//    pPowerUp->setPosition(Point(visibleSize.width * 0.5 - 10, visibleSize.height * 0.50 - 10));
-		pPowerUp->setPosition(Point(visibleSize.width * 0.5, origin.y + 420));
+		pPowerUp->setPosition(Point(visibleSize.width * 0.5, origin.y + 440));
 		pMenu = Menu::create(pPowerUp, NULL);
 		pMenu->setPosition(Point::ZERO);
 	//    pMenu->setAnchorPoint(Point(1,1));
@@ -109,12 +117,12 @@ bool PowerUp::init()
 		this->addChild(pMenu,1);
 	} else {
 		pTarget = Sprite::create("levelup_2.png");
-		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 420));
+		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 440));
 		pTarget->setTag(kTag_SpeedButton);
 		this->addChild(pTarget,1);
 	}
     wkLabel = LabelTTF::create(String::createWithFormat("スピード LV%d\n必要ポイント：%d", playerSpd, Calculation(playerSpd))->getCString(), MISAKI_FONT, 40.0);
-	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 420));
+	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 440));
 	wkLabel->setTag(kTag_SpeedLabel);
 	this->addChild(wkLabel,2);
 
@@ -125,7 +133,7 @@ bool PowerUp::init()
 											 "levelup_2.png",
 											 CC_CALLBACK_1(PowerUp::tapTechniqueButton, this));
 	//    pPowerUp->setPosition(Point(visibleSize.width * 0.5 + 10, visibleSize.height * 0.50 - 10));
-		pPowerUp->setPosition(Point(visibleSize.width * 0.5, origin.y + 270));
+		pPowerUp->setPosition(Point(visibleSize.width * 0.5, origin.y + 290));
 		pMenu = Menu::create(pPowerUp, NULL);
 		pMenu->setPosition(Point::ZERO);
 	//    pMenu->setAnchorPoint(Point(0,1));
@@ -133,34 +141,49 @@ bool PowerUp::init()
 		this->addChild(pMenu,1);
 	} else {
 		pTarget = Sprite::create("levelup_2.png");
-		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 270));
+		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 290));
 		pTarget->setTag(kTag_TechniqueButton);
 		this->addChild(pTarget,1);
 	}
     wkLabel = LabelTTF::create(String::createWithFormat("テクニック LV%d\n必要ポイント：%d", playerTec, Calculation(playerTec))->getCString(), MISAKI_FONT, 40.0);
-	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 270));
+	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 290));
 	wkLabel->setTag(kTag_TechniqueLabel);
 	this->addChild(wkLabel,2);
 
 
+    // はてなボタン
+    pPowerUp = MenuItemImage::create("button_htn.png",
+                                         "button_htn.png",
+                                         CC_CALLBACK_1(PowerUp::tapHelpButton, this));
+    pPowerUp->setPosition(Point(origin.x + 320, origin.y + 150));
+    pMenu = Menu::create(pPowerUp, NULL);
+    pMenu->setPosition(Point::ZERO);
+    pMenu->setTag(kTag_Menu);
+    this->addChild(pMenu,1);
+
     // 戻るボタン
-    pPowerUp = MenuItemImage::create("backhome_1.png",
-                                         "backhome_2.png",
+    pPowerUp = MenuItemImage::create("button_home.png",
+                                         "button_home.png",
                                          CC_CALLBACK_1(PowerUp::tapReturnMenu, this));
 //    pPowerUp->setPosition(Point(visibleSize.width * 0.5, visibleSize.height * 0.30));
-    pPowerUp->setPosition(Point(origin.x + 480, origin.y + 150));
+    pPowerUp->setPosition(Point(origin.x + 430, origin.y + 150));
     pMenu = Menu::create(pPowerUp, NULL);
     pMenu->setPosition(Point::ZERO);
     pMenu->setTag(kTag_Menu);
     this->addChild(pMenu,1);
 
     //現在経験値
+//    Sprite* pBG = Sprite::create("tegami_mini1.png");
+//    pBG->setPosition(Point(visibleSize.width * 0.1, origin.y + 820));
+//    pBG->setAnchorPoint(Point(0,0));
+//    this->addChild(pBG,2);
+
     wkLabel = LabelTTF::create(String::createWithFormat("ポイント：%d",playerExp)->getCString(), MISAKI_FONT, 40.0);
-	wkLabel->setPosition(Point(visibleSize.width * 0.1, origin.y + 900));
-	wkLabel->setColor(ccc3(255, 0, 50));
+	wkLabel->setPosition(Point(visibleSize.width * 0.1, origin.y + 830));
+	wkLabel->setColor(ccc3(0, 0, 0));
 	wkLabel->setAnchorPoint(Point(0,0));
 	wkLabel->setTag(kTag_ExpLabel);
-	this->addChild(wkLabel,2);
+	this->addChild(wkLabel,3);
 
     return true;
 }
@@ -309,6 +332,18 @@ void PowerUp::redisplay()
     //現在経験値
 	wkLabel = (LabelTTF*)this->getChildByTag(kTag_ExpLabel);
 	wkLabel->setString(String::createWithFormat("ポイント：%d",playerExp)->getCString());
+
+}
+void PowerUp::tapHelpButton(Object* pSender)
+{
+
+	UserDefault* userDefault = UserDefault::sharedUserDefault();
+	userDefault->setIntegerForKey(key_tutorialFlag, 3);
+
+    // ゲーム画面の表示
+    Scene* scene = Tutorial::createScene();
+    TransitionFlipX* tran = TransitionFlipX::create(0.2, scene);
+    Director::sharedDirector()->replaceScene(tran);
 
 }
 

@@ -32,6 +32,7 @@ protected:
 	const char* key_playerTechniqueLv	= "PlayerTechnique";	//プレイヤーテクニック
 	const char* key_maxComboCount		= "MaxConboCount";		//MAXコンボ数
 	const char* key_noMissFlag			= "NoMissFlag";			//ノーミスフラグ
+	const char* key_bossFlag			= "BossFlag";			//ボスフラグ
 
 
 	//配置
@@ -44,6 +45,7 @@ protected:
 	int playerExp;
 	int maxCombo;
 	bool noMissFlag;
+	bool bossFlag;
 	int wk_enemyExp;
 	int showCount = 0;
 
@@ -53,6 +55,7 @@ public:
     static cocos2d::Scene* scene();
     virtual bool init();
     CREATE_FUNC(Winner);
+    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event);
 
 };
 

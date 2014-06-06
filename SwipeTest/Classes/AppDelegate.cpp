@@ -41,6 +41,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
 		AdViewManager::setAidAdView();
 	}
 
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("mp3/harunopayapaya.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("mp3/winner.mp3");
+
     return true;
 }
 
