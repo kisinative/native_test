@@ -73,7 +73,7 @@ bool TitleScene::init()
     MenuItemImage* pStart = MenuItemImage::create("button_start.png",
 										 "button_start.png",
 										 CC_CALLBACK_1(TitleScene::menuStartCallback, this));
-    pStart->setPosition(Point(size.width * 0.5, origin.y + 450));
+    pStart->setPosition(Point(size.width * 0.5, origin.y + 465));
 	Menu* pMenu = Menu::create(pStart, NULL);
 	pMenu->setPosition(Point::ZERO);
 	pMenu->setTag(kTag_StartButton);

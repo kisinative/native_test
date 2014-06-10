@@ -7,12 +7,28 @@ class Tutorial : public cocos2d::Layer
 {
 protected:
 
+	void tapSaiseiMenu(Object* pSender);
+	void msg2(float time);
+
+    enum kTag
+    {
+        kTag_Saisei = 1,
+        tagTargetImg,
+        tagTargetImgSub1,
+        tagTargetImgSub2,
+        tagArrow,
+        tagMsg,
+        tagYubi,
+        tagTap,
+        tagTap2,
+    };
 
 	//プリファレンス
 	const char* key_tutorialFlag = "TutorialFlag";
 	const char* key_playEnemyLv		= "PlayEnemyLv";		//対戦中敵レベル
 
 	int wk_count = 1;
+	int scene_flag = 0;
 
 	bool debug_flag = true;
 	cocos2d::Point	origin;										//使用端末の(0,0)地点

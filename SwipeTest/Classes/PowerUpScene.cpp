@@ -57,8 +57,8 @@ bool PowerUp::init()
 	LabelTTF* wkLabel;
     // 体力
 	if (playerExp >= Calculation(playerStr)) {
-		pPowerUp = MenuItemImage::create("levelup_1.png",
-											 "levelup_2.png",
+		pPowerUp = MenuItemImage::create("button_tf.png",
+											 "button_tf2.png",
 											 CC_CALLBACK_1(PowerUp::tapStrongButton, this));
 	//    pPowerUp->setPosition(Point(visibleSize.width * 0.5 - 10, visibleSize.height * 0.50 + 10));
 		pPowerUp->setPosition(Point(visibleSize.width * 0.5, origin.y + 740));
@@ -68,21 +68,22 @@ bool PowerUp::init()
 		pMenu->setTag(kTag_StrongButton);
 		this->addChild(pMenu,1);
 	} else {
-		pTarget = Sprite::create("levelup_2.png");
+		pTarget = Sprite::create("button_tf2.png");
 		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 740));
 		pTarget->setTag(kTag_StrongButton);
 		this->addChild(pTarget,1);
 	}
-    wkLabel = LabelTTF::create(String::createWithFormat("タフネス LV%d\n必要ポイント：%d", playerStr, Calculation(playerStr))->getCString(), MISAKI_FONT, 40.0);
-	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 740));
+    wkLabel = LabelTTF::create(String::createWithFormat("タフネス LV%d\n必要ポイント：%d", playerStr, Calculation(playerStr))->getCString(), MISAKI_FONT, 30.0);
+	wkLabel->setPosition(Point(visibleSize.width * 0.5+20, origin.y + 740));
+	wkLabel->setColor(ccc3(0, 0, 0));
 	wkLabel->setTag(kTag_StrongLabel);
 	this->addChild(wkLabel,2);
 
 
     // 攻撃力
 	if (playerExp >= Calculation(playerPow)) {
-		pPowerUp = MenuItemImage::create("levelup_1.png",
-											 "levelup_2.png",
+		pPowerUp = MenuItemImage::create("button_p.png",
+											 "button_p2.png",
 											 CC_CALLBACK_1(PowerUp::tapPowerButton, this));
 	//    pPowerUp->setPosition(Point(visibleSize.width * 0.5 + 10, visibleSize.height * 0.50 + 10));
 		pPowerUp->setPosition(Point(visibleSize.width * 0.5, origin.y + 590));
@@ -92,21 +93,22 @@ bool PowerUp::init()
 		pMenu->setTag(kTag_PowerButton);
 		this->addChild(pMenu,1);
 	} else {
-		pTarget = Sprite::create("levelup_2.png");
+		pTarget = Sprite::create("button_p2.png");
 		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 590));
 		pTarget->setTag(kTag_PowerButton);
 		this->addChild(pTarget,1);
 	}
-    wkLabel = LabelTTF::create(String::createWithFormat("パワー LV%d\n必要ポイント：%d", playerPow, Calculation(playerPow))->getCString(), MISAKI_FONT, 40.0);
-	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 590));
+    wkLabel = LabelTTF::create(String::createWithFormat("パワー LV%d\n必要ポイント：%d", playerPow, Calculation(playerPow))->getCString(), MISAKI_FONT, 30.0);
+	wkLabel->setPosition(Point(visibleSize.width * 0.5+20, origin.y + 590));
+	wkLabel->setColor(ccc3(0, 0, 0));
 	wkLabel->setTag(kTag_PowerLabel);
 	this->addChild(wkLabel,2);
 
 
     // スピード
 	if (playerExp >= Calculation(playerSpd)) {
-		pPowerUp = MenuItemImage::create("levelup_1.png",
-											 "levelup_2.png",
+		pPowerUp = MenuItemImage::create("button_s.png",
+											 "button_s2.png",
 											 CC_CALLBACK_1(PowerUp::tapSpeedButton, this));
 	//    pPowerUp->setPosition(Point(visibleSize.width * 0.5 - 10, visibleSize.height * 0.50 - 10));
 		pPowerUp->setPosition(Point(visibleSize.width * 0.5, origin.y + 440));
@@ -116,21 +118,22 @@ bool PowerUp::init()
 		pMenu->setTag(kTag_SpeedButton);
 		this->addChild(pMenu,1);
 	} else {
-		pTarget = Sprite::create("levelup_2.png");
+		pTarget = Sprite::create("button_s2.png");
 		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 440));
 		pTarget->setTag(kTag_SpeedButton);
 		this->addChild(pTarget,1);
 	}
-    wkLabel = LabelTTF::create(String::createWithFormat("スピード LV%d\n必要ポイント：%d", playerSpd, Calculation(playerSpd))->getCString(), MISAKI_FONT, 40.0);
-	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 440));
+    wkLabel = LabelTTF::create(String::createWithFormat("スピード LV%d\n必要ポイント：%d", playerSpd, Calculation(playerSpd))->getCString(), MISAKI_FONT, 30.0);
+	wkLabel->setPosition(Point(visibleSize.width * 0.5+20, origin.y + 440));
+	wkLabel->setColor(ccc3(0, 0, 0));
 	wkLabel->setTag(kTag_SpeedLabel);
 	this->addChild(wkLabel,2);
 
 
     // テクニック
 	if (playerExp >= Calculation(playerTec)) {
-		pPowerUp = MenuItemImage::create("levelup_1.png",
-											 "levelup_2.png",
+		pPowerUp = MenuItemImage::create("button_t.png",
+											 "button_t2.png",
 											 CC_CALLBACK_1(PowerUp::tapTechniqueButton, this));
 	//    pPowerUp->setPosition(Point(visibleSize.width * 0.5 + 10, visibleSize.height * 0.50 - 10));
 		pPowerUp->setPosition(Point(visibleSize.width * 0.5, origin.y + 290));
@@ -140,13 +143,14 @@ bool PowerUp::init()
 		pMenu->setTag(kTag_TechniqueButton);
 		this->addChild(pMenu,1);
 	} else {
-		pTarget = Sprite::create("levelup_2.png");
+		pTarget = Sprite::create("button_t2.png");
 		pTarget->setPosition(Point(visibleSize.width * 0.5, origin.y + 290));
 		pTarget->setTag(kTag_TechniqueButton);
 		this->addChild(pTarget,1);
 	}
-    wkLabel = LabelTTF::create(String::createWithFormat("テクニック LV%d\n必要ポイント：%d", playerTec, Calculation(playerTec))->getCString(), MISAKI_FONT, 40.0);
-	wkLabel->setPosition(Point(visibleSize.width * 0.5, origin.y + 290));
+    wkLabel = LabelTTF::create(String::createWithFormat("テクニック LV%d\n必要ポイント：%d", playerTec, Calculation(playerTec))->getCString(), MISAKI_FONT, 30.0);
+	wkLabel->setPosition(Point(visibleSize.width * 0.5+30, origin.y + 290));
+	wkLabel->setColor(ccc3(0, 0, 0));
 	wkLabel->setTag(kTag_TechniqueLabel);
 	this->addChild(wkLabel,2);
 
@@ -178,12 +182,17 @@ bool PowerUp::init()
 //    pBG->setAnchorPoint(Point(0,0));
 //    this->addChild(pBG,2);
 
-    wkLabel = LabelTTF::create(String::createWithFormat("ポイント：%d",playerExp)->getCString(), MISAKI_FONT, 40.0);
-	wkLabel->setPosition(Point(visibleSize.width * 0.1, origin.y + 830));
+    wkLabel = LabelTTF::create(String::createWithFormat("ポイント：%d",playerExp)->getCString(), MISAKI_FONT, 35.0);
+	wkLabel->setPosition(Point(visibleSize.width * 0.1+40, origin.y + 833));
 	wkLabel->setColor(ccc3(0, 0, 0));
 	wkLabel->setAnchorPoint(Point(0,0));
 	wkLabel->setTag(kTag_ExpLabel);
 	this->addChild(wkLabel,3);
+
+	Sprite* pBG = Sprite::create("p_frame.png");
+    pBG->setPosition(Point(visibleSize.width * 0.1, origin.y + 820));
+    pBG->setAnchorPoint(Point(0,0));
+    this->addChild(pBG,2);
 
     return true;
 }

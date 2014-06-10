@@ -106,12 +106,6 @@ bool HelloWorld::init()
     nowStage = 1;
     nowGesture = "";
 
-    // 背景を生成
-    int bg_num = arc4random() % 3;
-    Sprite* pBG = Sprite::create(String::createWithFormat("background_%d.png", bg_num)->getCString());
-    pBG->setPosition(Point(visibleSize.width * 0.5, visibleSize.height * 0.5));
-    pBG->setTag(tagBg);
-    this->addChild(pBG);
 
 
 //    Sprite* pBG = Sprite::create("testbackimg.png");
@@ -277,6 +271,21 @@ void HelloWorld::setup()
 	catChenge(0);
 	enemyCatChenge(0);
 
+	// 背景を生成
+	Sprite* pBG;
+	if (enemyType == 0){
+		pBG = Sprite::create("background_3.png");
+		pBG->setPosition(Point(visibleSize.width * 0.5, visibleSize.height * 0.5));
+		pBG->setTag(tagBg);
+		this->addChild(pBG);
+	} else {
+		int bg_num = arc4random() % 3;
+		pBG = Sprite::create(String::createWithFormat("background_%d.png", bg_num)->getCString());
+		pBG->setPosition(Point(visibleSize.width * 0.5, visibleSize.height * 0.5));
+		pBG->setTag(tagBg);
+		this->addChild(pBG);
+	}
+
 	Node* pEnemyImg = this->getChildByTag(tagEnemyImg);
 	pEnemyImg->runAction(KSAnimation::enemyJump(enemyType));
 
@@ -423,7 +432,18 @@ void HelloWorld::createLabel(std::string labelString, float labelSize, float lab
 void HelloWorld::showArrow(float time)
 {
 	//ジェスチャー抽選
-    int randum = arc4random() % 12;
+	int randum;
+	if (enemyType >= 3){
+		//スピード系の猫のジェスチャーを若干簡単なものが出やすいように修正する。
+		int randum_flag = arc4random() % 3;
+		if (randum_flag == 0){
+			randum = arc4random() % 4;
+		} else {
+			randum = arc4random() % 12;
+		}
+	} else {
+		randum = arc4random() % 12;
+	}
     targetGesture = arrowArray[randum].getCString();
     moveArrow.push_back(arrowArray[randum].getCString());
 
